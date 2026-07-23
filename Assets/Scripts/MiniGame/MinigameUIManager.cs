@@ -17,7 +17,8 @@ public class MinigameUIManager : MonoBehaviour
     [SerializeField] private Transform buttonContainer;  // 按鈕放這裡
     [SerializeField] private Transform panelContainer;   // 面板放這裡
 
-    private GameObject currentPanel; // 目前開著的面板
+    private GameObject currentPanel;        // 目前開著的面板
+    private MinigameInstance currentInstance; // 目前面板對應的 instance
 
     // ── Lifecycle ─────────────────────────────────────────
 
@@ -31,13 +32,17 @@ public class MinigameUIManager : MonoBehaviour
     {
         MinigameManager.Instance.OnMinigameSpawned += OnSpawned;
         MinigameManager.Instance.OnMinigameResolved += OnResolved;
+
     }
 
     private void OnDestroy()
     {
-        if (MinigameManager.Instance == null) return;
-        MinigameManager.Instance.OnMinigameSpawned -= OnSpawned;
-        MinigameManager.Instance.OnMinigameResolved -= OnResolved;
+        if (MinigameManager.Instance != null)
+        {
+            MinigameManager.Instance.OnMinigameSpawned -= OnSpawned;
+            MinigameManager.Instance.OnMinigameResolved -= OnResolved;
+        }
+
     }
 
     // ── Event Handlers ────────────────────────────────────
@@ -51,10 +56,13 @@ public class MinigameUIManager : MonoBehaviour
 
     private void OnResolved(MinigameInstance instance, bool success)
     {
-        // 按鈕會在自己的 Update 裡偵測 IsCompleted 然後自毀
-        // 這裡可以加成功/失敗的視覺回饋
+        // 如果玩家正在玩這個小遊戲，倒數結束時強制關閉面板
+        if (currentInstance == instance)
+            CloseCurrentPanel();
+
         Debug.Log($"[UI] {instance.Data.type} → {(success ? "✓" : "✗")}");
     }
+
 
     // ── Panel Control（由 MinigameButton 呼叫）────────────
 
@@ -71,6 +79,7 @@ public class MinigameUIManager : MonoBehaviour
         if (currentPanel != null) Destroy(currentPanel);
 
         currentPanel = Instantiate(instance.Data.panelPrefab, panelContainer);
+        currentInstance = instance;
 
         // 如果面板掛有 TmpGame（或之後 ibu 的正式腳本），呼叫 Init
         var tmpGame = currentPanel.GetComponent<TmpGame>();
@@ -85,5 +94,6 @@ public class MinigameUIManager : MonoBehaviour
             Destroy(currentPanel);
             currentPanel = null;
         }
+        currentInstance = null;
     }
 }

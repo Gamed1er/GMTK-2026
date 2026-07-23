@@ -9,6 +9,7 @@ public class TmpGame : MonoBehaviour
     public void Init(MinigameInstance instance)
     {
         myInstance = instance;
+        Debug.Log($"[TmpGame] Init — type: {instance.Data.type}, difficulty: {instance.Difficulty}");
     }
 
     // 當遊戲結束時呼叫以下函式
