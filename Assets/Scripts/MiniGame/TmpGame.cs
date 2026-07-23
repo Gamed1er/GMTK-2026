@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TmpGame : MonoBehaviour
+public class TmpGame : MonoBehaviour, IMinigamePanel
 {
     private MinigameInstance myInstance;
 
@@ -9,7 +9,6 @@ public class TmpGame : MonoBehaviour
     public void Init(MinigameInstance instance)
     {
         myInstance = instance;
-        Debug.Log($"[TmpGame] Init — type: {instance.Data.type}, difficulty: {instance.Difficulty}");
     }
 
     // 當遊戲結束時呼叫以下函式
@@ -18,9 +17,6 @@ public class TmpGame : MonoBehaviour
         MinigameManager.Instance.CompleteMinigame(myInstance);
     }
 
-    public void Exit()
-    {
-        MinigameUIManager.Instance.CloseCurrentPanel();
-    }
-    // MinigameManager.Instance.CompleteMinigame(myInstance);
+    // 玩家進入面板後不能中途取消，只能透過 Complete() 結束
+    // 倒數結束時面板會由 MinigameUIManager.OnResolved 自動關閉
 }

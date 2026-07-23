@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a464f1cb81c7555abbec4264fc4b0b38, type: 3}
-  m_Name: TmpGame
+  m_Name: Steeringminigame
   m_EditorClassIdentifier: 
   type: 0
   nameEN: TestName
@@ -28,7 +28,7 @@ MonoBehaviour:
     crew: 0
     shipHP: 0
     navProgress: 0
-  panelPrefab: {fileID: 3772869469118333730, guid: e887b900b7b99ea5cbe182604b7133e6, type: 3}
+  panelPrefab: {fileID: 2982232481384933966, guid: 1e3c2daee9a5fcd4ab93a7cfb8cc1058, type: 3}
   canSpawnRandomly: 1
   spawnWeight: 1
   onlyOneAtATime: 0

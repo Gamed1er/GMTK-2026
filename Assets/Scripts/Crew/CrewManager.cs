@@ -41,6 +41,8 @@ public class CrewManager : MonoBehaviour
     /// <summary>新小遊戲出現時，把閒置船員派過去</summary>
     public void OnNewMinigameAvailable(MinigameInstance minigame)
     {
+        if (minigame.IsPlayerAssigned) return; // 玩家正在做，不派船員
+
         foreach (var crew in allCrew)
         {
             if (!crew.IsIdle) continue;
@@ -96,6 +98,7 @@ public class CrewManager : MonoBehaviour
         foreach (var m in MinigameManager.Instance.ActiveMinigames)
         {
             if (m.IsCompleted) continue;
+            if (m.IsPlayerAssigned) continue;                   // 玩家正在做，不派船員
             if (m.HasEnoughCrew) continue;                    // 已夠人
             if (m.Data.type == MinigameType.Fishing) continue; // 釣魚由 idle 邏輯處理
 
