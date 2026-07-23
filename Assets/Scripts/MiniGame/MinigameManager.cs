@@ -10,6 +10,7 @@ public class MinigameInstance
 {
     public int Id;                 // 唯一識別碼，供 UI 按鈕對應
     public MinigameData Data;
+    public int Difficulty;         // 難度，0 = 最低，晚上事件可調整
     public float Timer;
     public List<CrewMember> AssignedCrew = new();
     public bool IsPlayerAssigned;  // 船長是否在做
@@ -51,6 +52,10 @@ public class MinigameManager : MonoBehaviour
 
     private float nextSpawnTimer;
     private int nextInstanceId = 0;
+
+    public int CurrentDifficulty { get; private set; } = 0; // 晚上事件呼叫 SetDifficulty() 來調整
+
+    public void SetDifficulty(int difficulty) => CurrentDifficulty = difficulty;
 
     // ── Lifecycle ─────────────────────────────────────────
 
@@ -114,6 +119,7 @@ public class MinigameManager : MonoBehaviour
         {
             Id = nextInstanceId++,
             Data = data,
+            Difficulty = CurrentDifficulty,
             Timer = data.countdownDuration,
             WorldPosition = worldPos
         };
