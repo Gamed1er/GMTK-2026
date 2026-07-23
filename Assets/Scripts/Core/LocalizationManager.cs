@@ -12,7 +12,7 @@ public class LocalizationManager : MonoBehaviour
 {
     public static LocalizationManager Instance { get; private set; }
 
-    public Language CurrentLanguage { get; private set; } = Language.ZH;
+    public Language CurrentLanguage { get; private set; } = Language.EN;
 
     public event Action OnLanguageChanged;
 
