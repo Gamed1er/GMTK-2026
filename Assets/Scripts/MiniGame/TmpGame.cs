@@ -12,5 +12,14 @@ public class TmpGame : MonoBehaviour
     }
 
     // 當遊戲結束時呼叫以下函式
+    public void Complete()
+    {
+        MinigameManager.Instance.CompleteMinigame(myInstance);
+    }
+
+    public void Exit()
+    {
+        MinigameUIManager.Instance.CloseCurrentPanel();
+    }
     // MinigameManager.Instance.CompleteMinigame(myInstance);
 }

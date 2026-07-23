@@ -8,6 +8,7 @@ using System;
 /// </summary>
 public class MinigameInstance
 {
+    public int Id;                 // 唯一識別碼，供 UI 按鈕對應
     public MinigameData Data;
     public float Timer;
     public List<CrewMember> AssignedCrew = new();
@@ -49,6 +50,7 @@ public class MinigameManager : MonoBehaviour
     public event Action<MinigameInstance, bool> OnMinigameResolved; // bool = success
 
     private float nextSpawnTimer;
+    private int nextInstanceId = 0;
 
     // ── Lifecycle ─────────────────────────────────────────
 
@@ -110,6 +112,7 @@ public class MinigameManager : MonoBehaviour
 
         var instance = new MinigameInstance
         {
+            Id = nextInstanceId++,
             Data = data,
             Timer = data.countdownDuration,
             WorldPosition = worldPos

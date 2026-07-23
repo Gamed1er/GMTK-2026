@@ -35,6 +35,9 @@ public class MinigameData : ScriptableObject
     public ResourceDelta successDelta;     // 完成後的資源變化
     public ResourceDelta failureDelta;     // 失敗後的資源變化
 
+    [Header("Panel")]
+    public GameObject panelPrefab;         // 這個小遊戲對應的 UI 面板 Prefab
+
     [Header("Spawn Settings")]
     public bool canSpawnRandomly = true;
     public float spawnWeight = 1f;         // 相對出現概率（數字越大越常出現）
