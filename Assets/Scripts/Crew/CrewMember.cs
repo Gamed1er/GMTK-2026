@@ -21,7 +21,7 @@ public class CrewMember : MonoBehaviour
 
     // ── Lifecycle ─────────────────────────────────────────
 
-    private void OnEnable()  => CrewManager.Instance?.RegisterCrew(this);
+    private void Start()     => CrewManager.Instance?.RegisterCrew(this);
     private void OnDisable() => CrewManager.Instance?.UnregisterCrew(this);
 
     private void Update()

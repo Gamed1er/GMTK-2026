@@ -22,6 +22,15 @@ public class CrewManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        // 保險：掃描場景裡所有已存在的船員
+        foreach (var crew in FindObjectsOfType<CrewMember>())
+            RegisterCrew(crew);
+
+        Debug.Log($"[CrewManager] 已註冊 {allCrew.Count} 個船員");
+    }
+
     // ── Registration ──────────────────────────────────────
 
     public void RegisterCrew(CrewMember crew)
