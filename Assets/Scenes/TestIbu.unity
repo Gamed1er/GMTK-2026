@@ -246,9 +246,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allMinigameData:
-  - {fileID: 11400000, guid: 1851b6cf92dcdee468b4fc80dcb7ef6b, type: 2}
-  minSpawnInterval: 5
-  maxSpawnInterval: 12
+  - {fileID: 11400000, guid: bd369a46e12b6f843a4e39e36a8fd9bf, type: 2}
+  minSpawnInterval: 3
+  maxSpawnInterval: 5
 --- !u!114 &229837038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,8 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c68f747df3e021bc286aa846fa4e7918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minigameButtonPrefab: {fileID: 4181247282650250219, guid: 844f4f872e5b47447a8d9b908d22618e, type: 3}
-  buttonContainer: {fileID: 1701872393}
+  worldObjectContainer: {fileID: 0}
   panelContainer: {fileID: 27739065}
 --- !u!1001 &404014532
 PrefabInstance:

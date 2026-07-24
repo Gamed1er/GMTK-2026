@@ -53,7 +53,6 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
         if (wheelTransform != null)
             wheelTransform.localRotation = Quaternion.identity;
 
-        UpdateProgressText();
         UpdateDirectionText();
 
         Debug.Log($"[SteeringMinigame] Init — direction: {targetDirection}, requiredLoops: {requiredLoops}");
@@ -124,7 +123,7 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
         if (isCorrectDirection)
         {
             accumulatedDegrees += Mathf.Abs(deltaAngle);
-            UpdateProgressText();
+            UpdateDirectionText();
             CheckComplete();
         }
     }
@@ -182,21 +181,19 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
 
     // ── UI ──────────────────────────────────────────────
 
-    private void UpdateProgressText()
-    {
-        if (progressText == null) return;
-        int loops = Mathf.Min(CurrentLoops, requiredLoops);
-        progressText.text = $"{loops} / {requiredLoops}";
-    }
-
     private void UpdateDirectionText()
     {
         if (directionText == null) return;
 
+        int loops = Mathf.Min(CurrentLoops, requiredLoops);
+        int remainingLoops = Mathf.Max(0, requiredLoops - loops);
+
         bool isZh = GameManager.Instance.lang == Language.ZH;
-        if (targetDirection == SteerDirection.Left)
-            directionText.text = isZh ? "向左轉" : "Turn Left";
+        bool isLeft = targetDirection == SteerDirection.Left;
+
+        if (isZh)
+            directionText.text = isLeft ? $"向左轉 {remainingLoops} 圈" : $"向右轉 {remainingLoops} 圈";
         else
-            directionText.text = isZh ? "向右轉" : "Turn Right";
+            directionText.text = isLeft ? $"Turn Left {remainingLoops} more" : $"Turn Right {remainingLoops} more";
     }
 }

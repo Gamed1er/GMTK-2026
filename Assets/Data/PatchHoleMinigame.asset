@@ -29,6 +29,9 @@ MonoBehaviour:
     shipHP: 0
     navProgress: 0
   panelPrefab: {fileID: 4755618347223801884, guid: a13daae21d148cb408498a902689f6a2, type: 3}
+  worldObjectPrefab: {fileID: 6451933085745357331, guid: 0d35e522f3a2c07dfae22d02784e065c, type: 3}
+  spawnPoints:
+  - {x: 0, y: 0}
   canSpawnRandomly: 1
   spawnWeight: 1
   onlyOneAtATime: 0
