@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     public event Action<GamePhase> OnPhaseChanged;
     public event Action<int> OnDayStarted;       // int = day number
+    public event Action OnDayEnded;              // 顯示結算畫面用
     public event Action OnNightStarted;
     public event Action<GameOverReason> OnGameOver;
 
@@ -50,15 +51,18 @@ public class GameManager : MonoBehaviour
     {
         CurrentPhase = GamePhase.Day;
         DayTimer = dayDuration;
+        ResourceManager.Instance.ResetDayTracking();
         OnPhaseChanged?.Invoke(GamePhase.Day);
         OnDayStarted?.Invoke(DayCount);
     }
 
     private void EndDay()
     {
-        // 白天結束 → 扣食物 → 進入黑夜
+        // 立刻切換 Phase，防止 Update 在玩家按確認前重複呼叫 EndDay
+        CurrentPhase = GamePhase.Night;
+
         ResourceManager.Instance.ApplyDailyConsumption();
-        StartNight();
+        OnDayEnded?.Invoke(); // DaySummaryUI 確認後才呼叫 StartNight
     }
 
     // ── Night ─────────────────────────────────────────────

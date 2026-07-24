@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_CrewAsBomb
+  m_EditorClassIdentifier: 
+  type: 5
+  titleZH: "\u70B8\u85E5\u4E8B\u6545"
+  titleEN: Human Torpedo
+  descriptionZH: "\u6D77\u76DC\u8239\u5728\u5F8C\u65B9\u7DCA\u8FFD\u4E0D\u6368\u3002\n\u6709\u5E7E\u500B\u8239\u54E1\u62FF\u8D77\u4E86\u70B8\u85E5\n\u4F60\u77E5\u9053\u9019\u4E9B\u7B28\u86CB\u8239\u54E1\u6709\u53EF\u80FD\u70B8\u5230\u81EA\u5DF1\n\u8981\u963B\u6B62\u4ED6\u5011\u55CE\uFF1F\n\n[\u7121\u8996]
+    \u8239\u9AD4 +40 / \u8239\u54E1 -2\n[\u963B\u6B62] \u8239\u9AD4 -20"
+  descriptionEN: 'Pirates are hot on our tail.
+
+    Some of the crew have grabbed
+    explosives.
+
+    You know these idiots might blow themselves up.
+
+    Do you
+    want to stop them?
+
+
+    [Ignore] Ship HP +40 / Crew -2
+
+    [Stop] Ship HP -20'
+  acceptLabelZH: "\u7121\u8996"
+  acceptLabelEN: Ignore
+  rejectLabelZH: "\u963B\u6B62"
+  rejectLabelEN: Stop
+  acceptDelta:
+    food: 0
+    crew: -2
+    shipHP: 40
+    navProgress: 0
+  rejectDelta:
+    food: 0
+    crew: 0
+    shipHP: -20
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

@@ -82,9 +82,21 @@ public class CrewManager : MonoBehaviour
         while (allCrew.Count > newCount)
         {
             int last = allCrew.Count - 1;
-            Destroy(allCrew[last].gameObject);
-            allCrew.RemoveAt(last);
+            var crew = allCrew[last];
+            allCrew.RemoveAt(last);   // 先移除，避免 OnDisable → UnregisterCrew 重複移除
+            Destroy(crew.gameObject);
         }
+    }
+
+    /// <summary>
+    /// 拖曳落海用：移除指定船員並更新資源數字，不觸發 SyncCrewCount。
+    /// </summary>
+    public void DropCrew(CrewMember crew)
+    {
+        if (!allCrew.Contains(crew)) return;
+        allCrew.Remove(crew);
+        ResourceManager.Instance.SetCrewCountDirect(allCrew.Count);
+        Destroy(crew.gameObject);
     }
 
     // ── Private ───────────────────────────────────────────
