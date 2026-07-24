@@ -8,7 +8,7 @@ using TMPro;
 /// </summary>
 public class MinigameObject : MonoBehaviour
 {
-    [SerializeField] private TextMesh timerText;   // 世界空間的計時器文字（非 UI）
+    [SerializeField] private TextMeshPro timerText; // 世界空間的計時器文字（TMP 世界空間版，非 UGUI）
 
     private MinigameInstance myInstance;
 

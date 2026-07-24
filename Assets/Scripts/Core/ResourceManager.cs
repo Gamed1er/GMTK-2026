@@ -38,6 +38,11 @@ public class ResourceManager : MonoBehaviour
     public float ShipHP { get; private set; }
     public float NavProgress { get; private set; } // 0–100
 
+    // 每日追蹤（結算用）
+    public float DayHPDelta { get; private set; } = 0f;
+    public int DayFoodConsumed { get; private set; } = 0;
+    public int FoodPerCrewPerDay => foodPerCrewPerDay;
+
     /// <summary>任何資源改變時觸發（供 UI 監聽）</summary>
     public event Action OnResourceChanged;
 
@@ -62,6 +67,7 @@ public class ResourceManager : MonoBehaviour
         Crew = Mathf.Max(0, Crew + delta.crew);
         ShipHP = Mathf.Clamp(ShipHP + delta.shipHP, 0f, maxShipHP);
         NavProgress = Mathf.Clamp(NavProgress + delta.navProgress, 0f, 100f);
+        DayHPDelta += delta.shipHP; // 累積每日 HP 變化
 
         OnResourceChanged?.Invoke();
 
@@ -76,7 +82,15 @@ public class ResourceManager : MonoBehaviour
     public void ApplyDailyConsumption()
     {
         int consumed = Crew * foodPerCrewPerDay;
+        DayFoodConsumed = consumed; // 記錄本日消耗（結算用）
         ApplyDelta(new ResourceDelta { food = -consumed });
+    }
+
+    /// <summary>新的一天開始時重置每日追蹤數據</summary>
+    public void ResetDayTracking()
+    {
+        DayHPDelta = 0f;
+        DayFoodConsumed = 0;
     }
 
     /// <summary>預估還有幾天糧食</summary>

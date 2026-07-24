@@ -59,8 +59,8 @@ public class MinigameManager : MonoBehaviour
     [SerializeField] private List<MinigameData> allMinigameData;
 
     [Header("Spawn Settings")]
-    [SerializeField] private float minSpawnInterval = 5f;
-    [SerializeField] private float maxSpawnInterval = 12f;
+    [SerializeField] private float minSpawnInterval = 3f;
+    [SerializeField] private float maxSpawnInterval = 5f;
 
     public List<MinigameInstance> ActiveMinigames { get; private set; } = new();
 
@@ -69,10 +69,17 @@ public class MinigameManager : MonoBehaviour
 
     private float nextSpawnTimer;
     private int nextInstanceId = 0;
-    private HashSet<Vector2> occupiedPoints = new(); // 目前被佔用的 spawn points
+    private HashSet<Vector2> occupiedPoints = new();
 
     public int CurrentDifficulty { get; private set; } = 0;
     public void SetDifficulty(int difficulty) => CurrentDifficulty = difficulty;
+
+    // 每日統計（結算用）
+    public int DayFailCount { get; private set; } = 0;
+    private int spawnWaveCount = 0; // 本日已生成幾波
+
+    [Header("Spawn Timing")]
+    [SerializeField] private float noSpawnThreshold = 10f; // 最後幾秒不刷新
 
     // ── Lifecycle ─────────────────────────────────────────
 
@@ -97,17 +104,23 @@ public class MinigameManager : MonoBehaviour
     private void HandlePhaseChanged(GamePhase phase)
     {
         if (phase == GamePhase.Night) FailAllActiveMinigames();
+        if (phase == GamePhase.Day)
+        {
+            DayFailCount = 0;
+            spawnWaveCount = 0;
+        }
     }
 
     private void Update()
     {
         if (GameManager.Instance.CurrentPhase != GamePhase.Day) return;
 
-        // 自動生成
+        // 自動生成（最後 noSpawnThreshold 秒不刷新）
         nextSpawnTimer -= Time.deltaTime;
         if (nextSpawnTimer <= 0f)
         {
-            TrySpawnRandom();
+            if (GameManager.Instance.DayTimer > noSpawnThreshold)
+                TrySpawnWave();
             ResetSpawnTimer();
         }
 
@@ -179,6 +192,8 @@ public class MinigameManager : MonoBehaviour
         if (m.IsCompleted) return;
         m.IsCompleted = true;
 
+        if (!success) DayFailCount++;
+
         var delta = success ? m.Data.successDelta : m.Data.failureDelta;
         ResourceManager.Instance.ApplyDelta(delta);
 
@@ -193,6 +208,20 @@ public class MinigameManager : MonoBehaviour
         ActiveMinigames.Remove(m);
 
         Debug.Log($"[MinigameManager] Resolved {m.Data.type} — {(success ? "SUCCESS" : "FAIL")}");
+    }
+
+    private void TrySpawnWave()
+    {
+        // 暖機邏輯
+        int count;
+        if (spawnWaveCount < 2)       count = 1;
+        else if (spawnWaveCount < 4)  count = UnityEngine.Random.Range(1, 3); // 1~2
+        else                           count = UnityEngine.Random.Range(1, 4); // 1~3
+
+        spawnWaveCount++;
+
+        for (int i = 0; i < count; i++)
+            TrySpawnRandom();
     }
 
     private void TrySpawnRandom()
