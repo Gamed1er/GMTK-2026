@@ -9,13 +9,12 @@ public class MinigameUIManager : MonoBehaviour
 {
     public static MinigameUIManager Instance { get; private set; }
 
-    [Header("Prefabs")]
-    [SerializeField] private GameObject minigameButtonPrefab; // 掛有 MinigameButton.cs 的 Prefab
-    // 面板 Prefab 現在存在各自的 MinigameData 裡，不在這裡
+    // 世界物件 Prefab 現在存在各自的 MinigameData.worldObjectPrefab 裡
+    // 面板 Prefab 現在存在各自的 MinigameData.panelPrefab 裡
 
-    [Header("Containers（Canvas 下的空物件）")]
-    [SerializeField] private Transform buttonContainer;  // 按鈕放這裡
-    [SerializeField] private Transform panelContainer;   // 面板放這裡
+    [Header("Containers")]
+    [SerializeField] private Transform worldObjectContainer; // 世界物件放這裡（Scene 根層或船的子物件）
+    [SerializeField] private Transform panelContainer;       // UI 面板放這裡（Canvas 下）
 
     private GameObject currentPanel; // 目前開著的面板
     private MinigameInstance currentInstance; // 目前面板對應的小遊戲實例
@@ -45,9 +44,15 @@ public class MinigameUIManager : MonoBehaviour
 
     private void OnSpawned(MinigameInstance instance)
     {
-        // 生成一個按鈕代表這個小遊戲
-        var go = Instantiate(minigameButtonPrefab, buttonContainer);
-        go.GetComponent<MinigameButton>().Init(instance, this);
+        if (instance.Data.worldObjectPrefab == null)
+        {
+            Debug.LogWarning($"[MinigameUIManager] {instance.Data.type} 沒有設定 worldObjectPrefab！");
+            return;
+        }
+
+        // 在世界空間生成物件
+        var go = Instantiate(instance.Data.worldObjectPrefab, worldObjectContainer);
+        go.GetComponent<MinigameObject>().Init(instance);
     }
 
     private void OnResolved(MinigameInstance instance, bool success)

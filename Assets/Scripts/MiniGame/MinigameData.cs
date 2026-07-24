@@ -37,6 +37,10 @@ public class MinigameData : ScriptableObject
 
     [Header("Panel")]
     public GameObject panelPrefab;         // 這個小遊戲對應的 UI 面板 Prefab
+    public GameObject worldObjectPrefab;   // 在 TileMap 上顯示的世界物件 Prefab（掛 MinigameObject.cs）
+
+    [Header("Spawn Points")]
+    public Vector2[] spawnPoints;          // 這個小遊戲可以出現的世界座標位置
 
     [Header("Spawn Settings")]
     public bool canSpawnRandomly = true;
