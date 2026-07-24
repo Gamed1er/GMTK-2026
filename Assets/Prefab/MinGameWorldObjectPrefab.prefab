@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5290432468794062536}
   - component: {fileID: 2418972260638837590}
   - component: {fileID: 9132609013480254827}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MinGameWorldObjectPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 4610639409209935036}
   - component: {fileID: 8485557073271349921}
   - component: {fileID: 8954697747140564216}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TimerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

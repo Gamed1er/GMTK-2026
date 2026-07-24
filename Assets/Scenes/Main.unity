@@ -293,7 +293,7 @@ GameObject:
   - component: {fileID: 314235442}
   - component: {fileID: 314235441}
   - component: {fileID: 314235440}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Crew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -496,7 +496,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -1990,7 +1990,7 @@ GameObject:
   - component: {fileID: 1574637211}
   - component: {fileID: 1574637213}
   - component: {fileID: 1574637212}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3094,7 +3094,7 @@ GameObject:
   - component: {fileID: 1893850393}
   - component: {fileID: 1893850392}
   - component: {fileID: 1893850394}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
