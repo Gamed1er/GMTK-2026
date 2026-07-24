@@ -84,11 +84,14 @@ public class MinigameUIManager : MonoBehaviour
         // 先關掉上一個（如果有）
         if (currentPanel != null) Destroy(currentPanel);
 
-        // 玩家接手：釋放原本分配的船員，並標記玩家正在做，避免船員又被派進來
-        foreach (var crew in instance.AssignedCrew)
-            CrewManager.Instance.FreeCrewMember(crew);
-        instance.AssignedCrew.Clear();
+        // 先標記玩家接手，避免釋放船員後又被重新派回這個任務
         instance.IsPlayerAssigned = true;
+
+        // 複製一份再遍歷，避免 FreeCrewMember 修改原 List 導致錯誤
+        var crewCopy = new System.Collections.Generic.List<CrewMember>(instance.AssignedCrew);
+        instance.AssignedCrew.Clear();
+        foreach (var crew in crewCopy)
+            CrewManager.Instance.FreeCrewMember(crew);
 
         currentPanel = Instantiate(instance.Data.panelPrefab, panelContainer);
         currentInstance = instance;
