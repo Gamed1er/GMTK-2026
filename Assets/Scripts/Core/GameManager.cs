@@ -58,9 +58,11 @@ public class GameManager : MonoBehaviour
 
     private void EndDay()
     {
-        // 先扣食物，再顯示結算（DaySummaryUI 確認後才呼叫 StartNight）
+        // 立刻切換 Phase，防止 Update 在玩家按確認前重複呼叫 EndDay
+        CurrentPhase = GamePhase.Night;
+
         ResourceManager.Instance.ApplyDailyConsumption();
-        OnDayEnded?.Invoke();
+        OnDayEnded?.Invoke(); // DaySummaryUI 確認後才呼叫 StartNight
     }
 
     // ── Night ─────────────────────────────────────────────

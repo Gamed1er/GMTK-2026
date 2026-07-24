@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_TradeCrewForFood
+  m_EditorClassIdentifier: 
+  type: 4
+  titleZH: "\u62FF\u4EBA\u63DB\u98DF\u7269"
+  titleEN: Trade Crew for Food
+  descriptionZH: "\u5CF6\u4E0A\u571F\u8457\u9858\u610F\u7528\u5927\u91CF\u98DF\u7269\u63DB\u53D6\u4E00\u540D\u8239\u54E1\u5B9A\u5C45\uFF0C\u8AAA\u662F\u300C\u806F\u59FB\u300D\u3002\n\n[\u540C\u610F]
+    \u98DF\u7269 +80 / \u8239\u54E1 -1\n[\u62D2\u7D55] \u7121\u5F71\u97FF"
+  descriptionEN: "Island natives offer plentiful food for one crew member to settle
+    with them \u2014 they call it \"marriage.\"\n\n[Agree] Food +80 / Crew -1\n[Decline]
+    No effect"
+  acceptLabelZH: "\u540C\u610F"
+  acceptLabelEN: Agree
+  rejectLabelZH: "\u62D2\u7D55"
+  rejectLabelEN: Decline
+  acceptDelta:
+    food: 80
+    crew: -1
+    shipHP: 0
+    navProgress: 0
+  rejectDelta:
+    food: 0
+    crew: 0
+    shipHP: 0
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

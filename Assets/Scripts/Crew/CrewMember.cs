@@ -24,14 +24,23 @@ public class CrewMember : MonoBehaviour
     private List<Vector2> currentPath = new();
     private int pathIndex = 0;
     private float wanderTimer = 0f;
+    private bool isDragging = false;
 
     // ── Lifecycle ─────────────────────────────────────────
 
     private void Start()     => CrewManager.Instance?.RegisterCrew(this);
     private void OnDisable() => CrewManager.Instance?.UnregisterCrew(this);
 
+    /// <summary>拖曳時暫停 AI；放下時恢復</summary>
+    public void SetDragging(bool dragging)
+    {
+        isDragging = dragging;
+        if (!dragging) ForceIdle();
+    }
+
     private void Update()
     {
+        if (isDragging) return;
         switch (State)
         {
             case CrewState.Idle:
@@ -94,12 +103,12 @@ public class CrewMember : MonoBehaviour
 
     private void StartWander()
     {
-        // 在半徑內隨機選一個點
         Vector2 randomOffset = Random.insideUnitCircle * wanderRadius;
         Vector2 target = (Vector2)transform.position + randomOffset;
 
-        var path = FindPathTo(target);
-        if (path.Count > 0)
+        // 遊走不使用 fallback 直線——找不到路就等一下再試，不穿牆
+        var path = FindWanderPath(target);
+        if (path != null && path.Count > 0)
         {
             currentPath = path;
             pathIndex = 0;
@@ -107,7 +116,6 @@ public class CrewMember : MonoBehaviour
         }
         else
         {
-            // 找不到就等一下再試
             wanderTimer = Random.Range(0.5f, 1.5f);
         }
     }
@@ -125,16 +133,23 @@ public class CrewMember : MonoBehaviour
             pathIndex++;
     }
 
+    /// <summary>遊走專用：路徑為空就回傳 null，不穿牆 fallback</summary>
+    private List<Vector2> FindWanderPath(Vector2 target)
+    {
+        if (SimplePathfinder.Instance == null) return null;
+        var path = SimplePathfinder.Instance.FindPath(transform.position, target);
+        return path.Count > 0 ? path : null;
+    }
+
+    /// <summary>任務移動：找不到路時 fallback 直線（確保一定能到達）</summary>
     private List<Vector2> FindPathTo(Vector2 target)
     {
         if (SimplePathfinder.Instance != null)
         {
             var path = SimplePathfinder.Instance.FindPath(transform.position, target);
-            if (path.Count == 0)
-                return new List<Vector2> { target }; // fallback 直線
-            return path;
+            if (path.Count > 0) return path;
         }
-        return new List<Vector2> { target }; // 沒有 pathfinder 直線走
+        return new List<Vector2> { target }; // fallback 只用於任務
     }
 
     private bool IsCloseEnoughToTask()

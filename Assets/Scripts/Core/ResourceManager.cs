@@ -74,7 +74,16 @@ public class ResourceManager : MonoBehaviour
         // 通知 CrewManager 同步船員數量
         if (delta.crew != 0)
             CrewManager.Instance.SyncCrewCount(Crew);
+    }
 
+    /// <summary>
+    /// 直接更新船員數字，不觸發 SyncCrewCount。
+    /// 供 CrewManager.DropCrew() 使用（拖曳落海時 GameObject 已自行處理）。
+    /// </summary>
+    public void SetCrewCountDirect(int count)
+    {
+        Crew = Mathf.Max(0, count);
+        OnResourceChanged?.Invoke();
         CheckGameOverConditions();
     }
 
