@@ -49,7 +49,15 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI hintText; // 顯示「按空白鍵拉」
 
+    [Header("Audio")]
+    [Tooltip("每次按下空白鍵時播放的音效")]
+    [SerializeField] private AudioClip spacePressSfx;
+    [Tooltip("按空白鍵音效音量")]
+    [Range(0f, 1f)]
+    [SerializeField] private float spacePressSfxVolume = 1f;
+
     private MinigameInstance myInstance;
+    private AudioSource audioSource;
 
     private float trackHeight;
     private float fishHalfHeight; // 魚圖標高度的一半，用來限制中心點移動範圍
@@ -69,6 +77,11 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
         myInstance = instance;
         isCompleted = false;
         holdTimer = 0f;
+
+        if (audioSource == null)
+            audioSource = gameObject.GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
 
         trackHeight = trackRect.rect.height;
         fishHalfHeight = fishIconSize.y * 0.5f;
@@ -156,6 +169,10 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
     {
         if (isCompleted) return;
 
+        // 每次「按下瞬間」播放音效（GetKeyDown 只在按下那一幀觸發一次，避免按住時瘋狂疊音效）
+        if (Input.GetKeyDown(KeyCode.Space))
+            PlaySfx(spacePressSfx, spacePressSfxVolume);
+
         bool isHoldingSpace = Input.GetKey(KeyCode.Space);
 
         if (isHoldingSpace)
@@ -226,6 +243,14 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
         {
             hintText.text = isZh ? "按空白鍵拉" : "Press Space";
         }
+    }
+
+    // ── Audio ─────────────────────────────────────────────
+
+    private void PlaySfx(AudioClip clip, float volume)
+    {
+        if (clip == null || audioSource == null) return;
+        audioSource.PlayOneShot(clip, volume);
     }
 
     // ── Completion ────────────────────────────────────────

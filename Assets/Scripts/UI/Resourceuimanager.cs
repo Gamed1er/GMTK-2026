@@ -9,7 +9,7 @@ using TMPro;
 public class ResourceUIManager : MonoBehaviour
 {
     [Header("Text References")]
-    [SerializeField] private TextMeshProUGUI foodText;
+    //[SerializeField] private TextMeshProUGUI foodText;
     [SerializeField] private TextMeshProUGUI foodDaysText;
     [SerializeField] private TextMeshProUGUI crewText;
     [SerializeField] private TextMeshProUGUI shipHPText;
@@ -43,13 +43,13 @@ public class ResourceUIManager : MonoBehaviour
         var loc = LocalizationManager.Instance;
 
         if (rm == null) return;
-
+        /*
         // 食物
         if (foodText != null)
         {
             string label = loc != null ? loc.Get("ui.food") : "Food";
             foodText.text = $"{label}: {rm.Food}";
-        }
+        }*/
 
         // 糧食還可撐幾天
         if (foodDaysText != null)
@@ -57,21 +57,24 @@ public class ResourceUIManager : MonoBehaviour
             string label = loc != null ? loc.Get("ui.fooddays") : "Days of food left";
             int days = rm.EstimatedDaysOfFood();
             string daysLabel = loc != null ? loc.Get("ui.days") : "days";
-            foodDaysText.text = $"{label}: {days} {daysLabel}";
+            //foodDaysText.text = $"{label}: {days} {daysLabel}";
+            foodDaysText.text = $"{days}";
         }
 
         // 船員人數
         if (crewText != null)
         {
             string label = loc != null ? loc.Get("ui.crew") : "Crew";
-            crewText.text = $"{label}: {rm.Crew}";
+            //crewText.text = $"{label}: {rm.Crew}";
+            crewText.text = $"{rm.Crew}";
         }
 
         // 船隻耐久
         if (shipHPText != null)
         {
             string label = loc != null ? loc.Get("ui.shiphp") : "Ship HP";
-            shipHPText.text = $"{label}: {rm.ShipHP:F0}";
+            //shipHPText.text = $"{label}: {rm.ShipHP:F0}";
+            shipHPText.text = $"{rm.ShipHP:F0}";
         }
     }
 }

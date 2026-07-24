@@ -12,6 +12,13 @@ public class WaterBucket : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 {
     [SerializeField] private CanvasGroup canvasGroup; // 拖曳時可調整透明度/擋raycast，非必填
 
+    [Header("Audio")]
+    [Tooltip("拖到火上放開（成功倒水）時播放的音效")]
+    [SerializeField] private AudioClip pourWaterSfx;
+    [Tooltip("倒水音效音量")]
+    [Range(0f, 1f)]
+    [SerializeField] private float pourWaterSfxVolume = 1f;
+
     private RectTransform rt;
     private RectTransform dragCanvasRect; // 用於座標換算的 Canvas RectTransform
     private RectTransform fireTarget;     // 火焰的 RectTransform，判定是否拖到上面
@@ -85,6 +92,15 @@ public class WaterBucket : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void PourOnFire()
     {
         isUsed = true;
+
+        // 用 PlayClipAtPoint 播放，避免這個物件被 Destroy 後音效被截斷；
+        // UI 音效不需要空間定位，位置隨意給一個即可（例如主攝影機位置）
+        if (pourWaterSfx != null)
+        {
+            Vector3 playPos = Camera.main != null ? Camera.main.transform.position : Vector3.zero;
+            AudioSource.PlayClipAtPoint(pourWaterSfx, playPos, pourWaterSfxVolume);
+        }
+
         onPouredOnFire?.Invoke(this);
         Destroy(gameObject);
     }

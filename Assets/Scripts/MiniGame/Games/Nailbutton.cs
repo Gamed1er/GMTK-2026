@@ -7,6 +7,7 @@ using System;
 /// 點滿指定次數後回報給 PatchHoleMinigame，並停用自己（不可再點）。
 /// </summary>
 [RequireComponent(typeof(Button))]
+[RequireComponent(typeof(AudioSource))]
 public class NailButton : MonoBehaviour
 {
     [Header("Visual")]
@@ -14,7 +15,15 @@ public class NailButton : MonoBehaviour
     [SerializeField] private Image nailImage;
     [SerializeField] private Sprite[] hitStageSprites; // index 0 = 初始, 最後一張 = 完全釘牢
 
+    [Header("Audio")]
+    [Tooltip("每次點擊（敲釘子）播放的音效")]
+    [SerializeField] private AudioClip hammerHitSfx;
+    [Tooltip("敲釘子音效音量")]
+    [Range(0f, 1f)]
+    [SerializeField] private float hammerHitSfxVolume = 1f;
+
     private Button button;
+    private AudioSource audioSource;
     private int hitsRequired;
     private int currentHits;
     private Action<NailButton> onFullyHammered;
@@ -22,6 +31,7 @@ public class NailButton : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
+        audioSource = GetComponent<AudioSource>();
         button.onClick.AddListener(OnClicked);
     }
 
@@ -39,6 +49,8 @@ public class NailButton : MonoBehaviour
     {
         if (currentHits >= hitsRequired) return; // 保險，理論上打滿後按鈕已停用
 
+        PlaySfx(hammerHitSfx, hammerHitSfxVolume);
+
         currentHits++;
         UpdateSprite();
 
@@ -47,6 +59,12 @@ public class NailButton : MonoBehaviour
             button.interactable = false;
             onFullyHammered?.Invoke(this);
         }
+    }
+
+    private void PlaySfx(AudioClip clip, float volume)
+    {
+        if (clip == null || audioSource == null) return;
+        audioSource.PlayOneShot(clip, volume);
     }
 
     private void UpdateSprite()

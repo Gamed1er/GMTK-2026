@@ -388,6 +388,7 @@ MonoBehaviour:
   topPaddingRatio: 0.05
   requiredHoldTime: 3
   hintText: {fileID: 4236239143212308023}
+  spacePressSfx: {fileID: 8300000, guid: 0adb2cdeea88e144e952064d75e92fe1, type: 3}
 --- !u!1 &9130686695886951859
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using TMPro;
 /// 開船小遊戲：玩家在轉舵輪上拖曳畫圓，依指定方向轉滿指定圈數即完成。
 /// 圈數 = baseLoops + instance.Difficulty（難度線性增加）。
 /// </summary>
+[RequireComponent(typeof(AudioSource))]
 public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     private enum SteerDirection { Left, Right }
@@ -29,7 +30,15 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
     [SerializeField] private TextMeshProUGUI progressText;   
     [SerializeField] private TextMeshProUGUI directionText;  
 
+    [Header("Audio")]
+    [Tooltip("轉動舵輪時持續播放的音效（迴圈），拖曳有效轉動時播放，放開或停止轉動時停止")]
+    [SerializeField] private AudioClip steeringLoopSfx;
+    [Tooltip("轉動音效音量")]
+    [Range(0f, 1f)]
+    [SerializeField] private float steeringLoopSfxVolume = 1f;
+
     private MinigameInstance myInstance;
+    private AudioSource audioSource;
     private SteerDirection targetDirection;
     private int requiredLoops;
     private float accumulatedDegrees; 
@@ -40,6 +49,14 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
     private float wheelAngle;
 
     // ── Init ──────────────────────────────────────────────
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
+        audioSource.volume = steeringLoopSfxVolume;
+    }
 
     public void Init(MinigameInstance instance)
     {
@@ -104,6 +121,9 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
         if (Mathf.Abs(deltaAngle) > maxDeltaAnglePerFrame)
             return;
 
+        // 轉動舵輪時播放音效（若尚未播放則開始播放，已在播放則持續，形成連續轉動音）
+        PlaySteeringLoopSfx();
+
         // 1. 更新舵輪視覺旋轉（極座標角度獨立於距離半徑，近遠轉幅皆 1:1 一致）
         wheelAngle += deltaAngle;
 
@@ -132,6 +152,7 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
     {
         isDragging = false;
         isPointerInValidZone = false;
+        StopSteeringLoopSfx();
     }
 
     /// <summary>
@@ -164,6 +185,26 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
         return true;
     }
 
+    // ── Audio ─────────────────────────────────────────────
+
+    private void PlaySteeringLoopSfx()
+    {
+        if (steeringLoopSfx == null || audioSource == null) return;
+
+        audioSource.volume = steeringLoopSfxVolume;
+
+        if (audioSource.isPlaying && audioSource.clip == steeringLoopSfx) return;
+
+        audioSource.clip = steeringLoopSfx;
+        audioSource.Play();
+    }
+
+    private void StopSteeringLoopSfx()
+    {
+        if (audioSource == null) return;
+        audioSource.Stop();
+    }
+
     // ── Progress / Completion ──────────────────────────────
 
     private int CurrentLoops => Mathf.FloorToInt(accumulatedDegrees / 360f);
@@ -176,6 +217,7 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
 
     public void Complete()
     {
+        StopSteeringLoopSfx();
         MinigameManager.Instance.CompleteMinigame(myInstance);
     }
 

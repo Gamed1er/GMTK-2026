@@ -7,6 +7,7 @@ using System;
 /// 被點擊指定次數後死亡，回報給 FightPirateMinigame。
 /// </summary>
 [RequireComponent(typeof(Button))]
+[RequireComponent(typeof(AudioSource))]
 public class PirateUnit : MonoBehaviour
 {
     [Header("Visual")]
@@ -17,9 +18,22 @@ public class PirateUnit : MonoBehaviour
     [SerializeField] private float minSpeed = 60f;  // 每秒移動像素
     [SerializeField] private float maxSpeed = 140f;
 
+    [Header("Audio")]
+    [Tooltip("每次點擊（攻擊）播放的音效")]
+    [SerializeField] private AudioClip hitSfx;
+    [Tooltip("被擊敗（死亡）時播放的音效，若未設定則沿用 hitSfx")]
+    [SerializeField] private AudioClip defeatSfx;
+    [Tooltip("點擊音效音量")]
+    [Range(0f, 1f)]
+    [SerializeField] private float hitSfxVolume = 1f;
+    [Tooltip("擊敗音效音量")]
+    [Range(0f, 1f)]
+    [SerializeField] private float defeatSfxVolume = 1f;
+
     private RectTransform rt;
     private RectTransform moveBounds;   // 移動範圍（通常等於容器）
     private Button button;
+    private AudioSource audioSource;
 
     private Vector2 velocity;
     private float halfWidth;
@@ -38,6 +52,7 @@ public class PirateUnit : MonoBehaviour
     {
         rt = GetComponent<RectTransform>();
         button = GetComponent<Button>();
+        audioSource = GetComponent<AudioSource>();
         button.onClick.AddListener(OnClicked);
 
         moveBounds = bounds;
@@ -107,6 +122,8 @@ public class PirateUnit : MonoBehaviour
     {
         if (isDead) return;
 
+        PlaySfx(hitSfx, hitSfxVolume);
+
         currentHits++;
         UpdateSprite();
 
@@ -118,8 +135,24 @@ public class PirateUnit : MonoBehaviour
     {
         isDead = true;
         button.interactable = false;
+
+        // 用 PlayClipAtPoint 播放擊敗音效，避免這個物件被 Destroy 後音效被截斷
+        AudioClip clip = defeatSfx != null ? defeatSfx : hitSfx;
+        float volume = defeatSfx != null ? defeatSfxVolume : hitSfxVolume;
+        if (clip != null)
+        {
+            Vector3 playPos = Camera.main != null ? Camera.main.transform.position : Vector3.zero;
+            AudioSource.PlayClipAtPoint(clip, playPos, volume);
+        }
+
         onDefeated?.Invoke(this);
         Destroy(gameObject);
+    }
+
+    private void PlaySfx(AudioClip clip, float volume)
+    {
+        if (clip == null || audioSource == null) return;
+        audioSource.PlayOneShot(clip, volume);
     }
 
     private void UpdateSprite()
