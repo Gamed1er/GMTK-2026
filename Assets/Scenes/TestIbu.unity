@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allMinigameData:
-  - {fileID: 11400000, guid: 2c0b36478ee6f6143b995bfe6383ff05, type: 2}
+  - {fileID: 11400000, guid: 2995e95c0d710474daedb6eb2c94b132, type: 2}
   minSpawnInterval: 3
   maxSpawnInterval: 5
 --- !u!114 &229837038

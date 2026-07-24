@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a464f1cb81c7555abbec4264fc4b0b38, type: 3}
+  m_Name: Fishingminigame
+  m_EditorClassIdentifier: 
+  type: 1
+  nameEN: 
+  nameCN: 
+  countdownDuration: 20
+  crewRequiredToComplete: 5
+  crewCompletionTime: 5
+  successDelta:
+    food: 5
+    crew: 0
+    shipHP: 0
+    navProgress: 0
+  failureDelta:
+    food: 0
+    crew: 0
+    shipHP: 0
+    navProgress: 0
+  panelPrefab: {fileID: 8008022427941643516, guid: 771ef8dc6f9218240a85ff183ff2b99b, type: 3}
+  worldObjectPrefab: {fileID: 6451933085745357331, guid: 0d35e522f3a2c07dfae22d02784e065c, type: 3}
+  spawnPoints:
+  - {x: 0, y: 0}
+  canSpawnRandomly: 1
+  spawnWeight: 1
+  onlyOneAtATime: 0
