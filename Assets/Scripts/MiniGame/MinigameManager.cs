@@ -15,9 +15,26 @@ public class MinigameInstance
     public List<CrewMember> AssignedCrew = new();
     public bool IsPlayerAssigned;  // 船長是否在做
     public bool IsCompleted;
-    public Vector3 WorldPosition;  // 在地圖上的位置（供船員尋路）
+    public Vector2 SpawnPoint;     // 佔用的 spawn point（結算時釋放）
+    public Vector3 WorldPosition => new Vector3(SpawnPoint.x, SpawnPoint.y, 0f);
 
     public bool HasEnoughCrew => AssignedCrew.Count >= Data.crewRequiredToComplete || IsPlayerAssigned;
+
+    // 船員工作進度（0 → 1）
+    public float CrewWorkProgress { get; set; } = 0f;
+
+    // 總共需要的船員工作量（crew-seconds）
+    // 公式：baseCrew * baseTime = 5 * 5 = 25 crew-seconds
+    public float TotalWorkRequired => Data.crewRequiredToComplete * Data.crewCompletionTime;
+
+    // 目前實際在工作（已抵達）的船員數，上限為 crewRequiredToComplete
+    public int WorkingCrewCount(System.Collections.Generic.List<CrewMember> crew)
+    {
+        int count = 0;
+        foreach (var c in crew)
+            if (c.IsWorking && c.AssignedMinigame == this) count++;
+        return Mathf.Min(count, Data.crewRequiredToComplete);
+    }
 
     public string GetStatusText()
     {
@@ -52,9 +69,9 @@ public class MinigameManager : MonoBehaviour
 
     private float nextSpawnTimer;
     private int nextInstanceId = 0;
+    private HashSet<Vector2> occupiedPoints = new(); // 目前被佔用的 spawn points
 
-    public int CurrentDifficulty { get; private set; } = 0; // 晚上事件呼叫 SetDifficulty() 來調整
-
+    public int CurrentDifficulty { get; private set; } = 0;
     public void SetDifficulty(int difficulty) => CurrentDifficulty = difficulty;
 
     // ── Lifecycle ─────────────────────────────────────────
@@ -94,24 +111,39 @@ public class MinigameManager : MonoBehaviour
             ResetSpawnTimer();
         }
 
-        // 更新所有倒數
+        // 更新所有倒數 + 船員工作進度
         for (int i = ActiveMinigames.Count - 1; i >= 0; i--)
         {
             var m = ActiveMinigames[i];
             if (m.IsCompleted) continue;
 
+            // 倒數計時
             m.Timer -= Time.deltaTime;
             if (m.Timer <= 0f)
+            {
                 ResolveMinigame(m, success: false);
+                continue;
+            }
+
+            // 玩家接手時跳過船員進度計算
+            if (m.IsPlayerAssigned) continue;
+
+            // 船員工作進度：每秒貢獻 workingCrew 個 crew-second
+            int working = m.WorkingCrewCount(m.AssignedCrew);
+            if (working > 0)
+            {
+                m.CrewWorkProgress += working * Time.deltaTime;
+                if (m.CrewWorkProgress >= m.TotalWorkRequired)
+                    ResolveMinigame(m, success: true); // 船員自動完成
+            }
         }
     }
 
     // ── Public API ────────────────────────────────────────
 
-    /// <summary>生成指定小遊戲（外部觸發用，例如海盜攻擊）</summary>
-    public MinigameInstance SpawnMinigame(MinigameData data, Vector3 worldPos = default)
+    /// <summary>在指定 spawn point 生成小遊戲</summary>
+    public MinigameInstance SpawnMinigame(MinigameData data, Vector2 spawnPoint)
     {
-        // 檢查 onlyOneAtATime
         if (data.onlyOneAtATime && ActiveMinigames.Exists(m => m.Data.type == data.type && !m.IsCompleted))
             return null;
 
@@ -121,19 +153,24 @@ public class MinigameManager : MonoBehaviour
             Data = data,
             Difficulty = CurrentDifficulty,
             Timer = data.countdownDuration,
-            WorldPosition = worldPos
+            SpawnPoint = spawnPoint
         };
 
+        occupiedPoints.Add(spawnPoint);
         ActiveMinigames.Add(instance);
         OnMinigameSpawned?.Invoke(instance);
         CrewManager.Instance.OnNewMinigameAvailable(instance);
 
-        Debug.Log($"[MinigameManager] Spawned: {data.type}");
+        Debug.Log($"[MinigameManager] Spawned {data.type} at {spawnPoint}");
         return instance;
     }
 
     /// <summary>小遊戲完成（由 UI/玩家呼叫）</summary>
     public void CompleteMinigame(MinigameInstance m) => ResolveMinigame(m, success: true);
+
+    /// <summary>依類型取得 MinigameData（供 CrewManager 使用）</summary>
+    public MinigameData GetMinigameData(MinigameType type) =>
+        allMinigameData.Find(d => d.type == type);
 
     // ── Internal ──────────────────────────────────────────
 
@@ -144,6 +181,9 @@ public class MinigameManager : MonoBehaviour
 
         var delta = success ? m.Data.successDelta : m.Data.failureDelta;
         ResourceManager.Instance.ApplyDelta(delta);
+
+        // 釋放 spawn point
+        occupiedPoints.Remove(m.SpawnPoint);
 
         // 釋放船員
         foreach (var crew in m.AssignedCrew)
@@ -157,21 +197,36 @@ public class MinigameManager : MonoBehaviour
 
     private void TrySpawnRandom()
     {
-        float totalWeight = 0f;
-        foreach (var d in allMinigameData)
-            if (d.canSpawnRandomly) totalWeight += d.spawnWeight;
+        // 收集所有「可生成」的 (data, point) 組合
+        var candidates = new List<(MinigameData data, Vector2 point, float weight)>();
 
-        float roll = UnityEngine.Random.Range(0f, totalWeight);
-        float cumulative = 0f;
         foreach (var d in allMinigameData)
         {
             if (!d.canSpawnRandomly) continue;
-            cumulative += d.spawnWeight;
+            if (d.spawnPoints == null || d.spawnPoints.Length == 0) continue;
+            if (d.onlyOneAtATime && ActiveMinigames.Exists(m => m.Data.type == d.type && !m.IsCompleted)) continue;
+
+            foreach (var point in d.spawnPoints)
+            {
+                if (!occupiedPoints.Contains(point))
+                    candidates.Add((d, point, d.spawnWeight));
+            }
+        }
+
+        if (candidates.Count == 0) return;
+
+        // 加權隨機選一個
+        float totalWeight = 0f;
+        foreach (var c in candidates) totalWeight += c.weight;
+
+        float roll = UnityEngine.Random.Range(0f, totalWeight);
+        float cumulative = 0f;
+        foreach (var c in candidates)
+        {
+            cumulative += c.weight;
             if (roll <= cumulative)
             {
-                // 隨機在地圖上選一個位置（你可以改成固定錨點）
-                Vector3 pos = new Vector3(UnityEngine.Random.Range(-5f, 5f), 0f, UnityEngine.Random.Range(-5f, 5f));
-                SpawnMinigame(d, pos);
+                SpawnMinigame(c.data, c.point);
                 return;
             }
         }

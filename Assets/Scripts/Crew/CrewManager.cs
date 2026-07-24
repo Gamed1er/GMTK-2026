@@ -3,16 +3,14 @@ using System.Collections.Generic;
 
 /// <summary>
 /// 管理所有船員：分配邏輯、AI 行為、數量同步
-/// Manages all crew: assignment logic, idle AI, count sync
 /// </summary>
-
 public class CrewManager : MonoBehaviour
 {
     public static CrewManager Instance { get; private set; }
 
     [Header("Idle Behavior")]
     [Range(0f, 1f)]
-    [SerializeField] private float fishingProbability = 0.3f; // 閒置時去釣魚的概率
+    [SerializeField] private float fishingProbability = 0.3f;
 
     private List<CrewMember> allCrew = new();
 
@@ -22,6 +20,15 @@ public class CrewManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+    }
+
+    private void Start()
+    {
+        // 保險：掃描場景裡所有已存在的船員
+        foreach (var crew in FindObjectsOfType<CrewMember>())
+            RegisterCrew(crew);
+
+        Debug.Log($"[CrewManager] 已註冊 {allCrew.Count} 個船員");
     }
 
     // ── Registration ──────────────────────────────────────
@@ -36,7 +43,7 @@ public class CrewManager : MonoBehaviour
         allCrew.Remove(crew);
     }
 
-    // ── Assignment (called by MinigameManager) ────────────
+    // ── Assignment ────────────────────────────────────────
 
     /// <summary>新小遊戲出現時，把閒置船員派過去</summary>
     public void OnNewMinigameAvailable(MinigameInstance minigame)
@@ -46,31 +53,32 @@ public class CrewManager : MonoBehaviour
         foreach (var crew in allCrew)
         {
             if (!crew.IsIdle) continue;
-            if (minigame.HasEnoughCrew) break; // 已夠人了
-
+            if (minigame.HasEnoughCrew) break;
             AssignCrew(crew, minigame);
         }
     }
 
-    /// <summary>船員完成任務後釋放，並嘗試找下一個</summary>
-    public void FreeCrewMember(CrewMember crew)
+    /// <summary>船員變閒置時（任務結束或被玩家接手）由 CrewMember 呼叫</summary>
+    public void OnCrewBecameIdle(CrewMember crew)
     {
-        crew.IsIdle = true;
-        crew.AssignedMinigame = null;
-
-        var nextMinigame = FindBestMinigameFor(crew);
-        if (nextMinigame != null)
-            AssignCrew(crew, nextMinigame);
+        var next = FindBestMinigameFor(crew);
+        if (next != null)
+            AssignCrew(crew, next);
         else
             DoIdleAction(crew);
     }
 
+    /// <summary>MinigameManager 結算後釋放船員</summary>
+    public void FreeCrewMember(CrewMember crew)
+    {
+        crew.ForceIdle();
+        OnCrewBecameIdle(crew);
+    }
+
     // ── Crew Count Sync ───────────────────────────────────
 
-    /// <summary>ResourceManager 扣船員後同步，移除多餘的 GameObject</summary>
     public void SyncCrewCount(int newCount)
     {
-        // 從最後面開始移除（閒置的優先被移除）
         while (allCrew.Count > newCount)
         {
             int last = allCrew.Count - 1;
@@ -79,17 +87,14 @@ public class CrewManager : MonoBehaviour
         }
     }
 
-    // ── Private Helpers ───────────────────────────────────
+    // ── Private ───────────────────────────────────────────
 
     private void AssignCrew(CrewMember crew, MinigameInstance minigame)
     {
-        crew.IsIdle = false;
-        crew.AssignedMinigame = minigame;
         minigame.AssignedCrew.Add(crew);
-        crew.MoveTo(minigame.WorldPosition);
+        crew.AssignTask(minigame);
     }
 
-    /// <summary>找「還需要人」且「距離最近」的小遊戲</summary>
     private MinigameInstance FindBestMinigameFor(CrewMember crew)
     {
         MinigameInstance best = null;
@@ -102,7 +107,7 @@ public class CrewManager : MonoBehaviour
             if (m.HasEnoughCrew) continue;                    // 已夠人
             if (m.Data.type == MinigameType.Fishing) continue; // 釣魚由 idle 邏輯處理
 
-            float dist = Vector3.Distance(crew.transform.position, m.WorldPosition);
+            float dist = Vector2.Distance(crew.transform.position, m.SpawnPoint);
             if (dist < bestDist) { bestDist = dist; best = m; }
         }
         return best;
@@ -112,30 +117,20 @@ public class CrewManager : MonoBehaviour
     {
         if (UnityEngine.Random.value < fishingProbability)
         {
-            // 嘗試去釣魚（如果還沒有釣魚任務）
             bool fishingExists = MinigameManager.Instance.ActiveMinigames
                 .Exists(m => m.Data.type == MinigameType.Fishing && !m.IsCompleted);
 
             if (!fishingExists)
             {
-                // 讓 MinigameManager 生成釣魚任務，然後派這個船員去
-                // Fishing 的生成可以傳入船員的位置
-                var fishingData = GetMinigameData(MinigameType.Fishing);
-                if (fishingData != null)
+                var fishingData = MinigameManager.Instance.GetMinigameData(MinigameType.Fishing);
+                if (fishingData != null && fishingData.spawnPoints.Length > 0)
                 {
-                    var m = MinigameManager.Instance.SpawnMinigame(fishingData, crew.transform.position);
+                    var point = fishingData.spawnPoints[Random.Range(0, fishingData.spawnPoints.Length)];
+                    var m = MinigameManager.Instance.SpawnMinigame(fishingData, point);
                     if (m != null) AssignCrew(crew, m);
                 }
             }
         }
-        // 否則就站著耍廢
-    }
-
-    // 暫存用，實際可以用 Dictionary 加速
-    private MinigameData GetMinigameData(MinigameType type)
-    {
-        // 需要 MinigameManager 提供一個 GetData(type) 方法，或自己在這裡維護一份
-        // 這裡先 return null，之後補上
-        return null;
+        // 否則站著耍廢
     }
 }
