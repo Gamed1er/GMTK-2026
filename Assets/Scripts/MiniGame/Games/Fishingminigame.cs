@@ -49,6 +49,10 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI hintText; // 顯示「按空白鍵拉」
 
+    [Header("Progress Bar")]
+    [Tooltip("停留在目標範圍內的累積進度條，Image Type 需設為 Filled")]
+    [SerializeField] private Image progressFillImage;
+
     [Header("Audio")]
     [Tooltip("每次按下空白鍵時播放的音效")]
     [SerializeField] private AudioClip spacePressSfx;
@@ -101,6 +105,7 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
         UpdateFishVisual();
 
         UpdateHintText();
+        UpdateProgressBar();
 
         Debug.Log($"[FishingMinigame] Init — difficulty: {instance.Difficulty}, zone: [{zoneBottomLocalY:F0}, {zoneTopLocalY:F0}] / trackHeight: {trackHeight:F0}");
     }
@@ -217,6 +222,15 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
         }
 
         UpdateHintText();
+        UpdateProgressBar();
+    }
+
+    private void UpdateProgressBar()
+    {
+        if (progressFillImage == null) return;
+
+        float progress = requiredHoldTime > 0f ? holdTimer / requiredHoldTime : 0f;
+        progressFillImage.fillAmount = Mathf.Clamp01(progress);
     }
 
     private void UpdateFishVisual()
@@ -232,17 +246,9 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
         if (hintText == null) return;
 
         bool isZh = GameManager.Instance.lang == Language.ZH;
-        bool isInZone = fishLocalY >= zoneBottomLocalY && fishLocalY <= zoneTopLocalY;
+        float remaining = Mathf.Max(0f, requiredHoldTime - holdTimer);
+        hintText.text = isZh ? $"按空白鍵拉 {remaining:F1}s" : $"Press Space To Pull {remaining:F1}s";
 
-        if (isInZone)
-        {
-            float remaining = Mathf.Max(0f, requiredHoldTime - holdTimer);
-            hintText.text = isZh ? $"按空白鍵拉 {remaining:F1}s" : $"Press Space {remaining:F1}s";
-        }
-        else
-        {
-            hintText.text = isZh ? "按空白鍵拉" : "Press Space";
-        }
     }
 
     // ── Audio ─────────────────────────────────────────────
