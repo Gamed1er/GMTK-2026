@@ -136,11 +136,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nailImage: {fileID: 1310277778081213417}
   hitStageSprites:
-  - {fileID: -244744797, guid: 0b8870f853cd952469fa9e706908d6e6, type: 3}
-  - {fileID: -2138557534, guid: f241b54608dad0c47a45b395ad311b73, type: 3}
-  - {fileID: -244744797, guid: 0b8870f853cd952469fa9e706908d6e6, type: 3}
-  - {fileID: -2138557534, guid: f241b54608dad0c47a45b395ad311b73, type: 3}
+  - {fileID: 21300000, guid: d92586e6c0ba05843bbd741f9f09fa7a, type: 3}
+  - {fileID: 21300000, guid: 5a8359e95285af54eac988cd6b56d49e, type: 3}
+  - {fileID: 21300000, guid: 79945626cbe4c074d8de9388a7568da3, type: 3}
+  - {fileID: 21300000, guid: 477685afe6fcb104489d7fa484f4c3b4, type: 3}
+  hitMoveDownPixels: 20
   hammerHitSfx: {fileID: 8300000, guid: 186c08df1c53461408db9df5dc6505af, type: 3}
+  hammerHitSfxVolume: 1
 --- !u!82 &6506595075295006046
 AudioSource:
   m_ObjectHideFlags: 0

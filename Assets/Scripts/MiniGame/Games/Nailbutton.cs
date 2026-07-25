@@ -3,7 +3,8 @@ using UnityEngine.UI;
 using System;
 
 /// <summary>
-/// 單根釘子的按鈕。每點一下切換一張「打入進度」圖片，
+/// 單根釘子的按鈕。每點一下切換一張「打入進度」圖片（套用該圖片原始尺寸），
+/// 並讓釘子圖片往下移動指定像素（模擬被敲進去的視覺效果），
 /// 點滿指定次數後回報給 PatchHoleMinigame，並停用自己（不可再點）。
 /// </summary>
 [RequireComponent(typeof(Button))]
@@ -11,9 +12,13 @@ using System;
 public class NailButton : MonoBehaviour
 {
     [Header("Visual")]
-    [Tooltip("釘子從『尚未打入』到『完全釘牢』的圖片序列，長度應等於 hitsRequired + 1（第0張=初始狀態）")]
+    [Tooltip("釘子從『尚未打入』到『完全釘牢』的圖片序列，長度應等於 hitsRequired + 1（第0張=初始狀態），每張圖會套用其原始尺寸")]
     [SerializeField] private Image nailImage;
     [SerializeField] private Sprite[] hitStageSprites; // index 0 = 初始, 最後一張 = 完全釘牢
+
+    [Header("Hammer Visual")]
+    [Tooltip("每次點擊時，釘子圖片往下移動的像素（模擬被敲進去）")]
+    [SerializeField] private float hitMoveDownPixels = 40f;
 
     [Header("Audio")]
     [Tooltip("每次點擊（敲釘子）播放的音效")]
@@ -24,6 +29,7 @@ public class NailButton : MonoBehaviour
 
     private Button button;
     private AudioSource audioSource;
+    private RectTransform nailImageRect;
     private int hitsRequired;
     private int currentHits;
     private Action<NailButton> onFullyHammered;
@@ -33,6 +39,9 @@ public class NailButton : MonoBehaviour
         button = GetComponent<Button>();
         audioSource = GetComponent<AudioSource>();
         button.onClick.AddListener(OnClicked);
+
+        if (nailImage != null)
+            nailImageRect = nailImage.rectTransform;
     }
 
     /// <summary>由 PatchHoleMinigame 生成後立刻呼叫</summary>
@@ -53,6 +62,7 @@ public class NailButton : MonoBehaviour
 
         currentHits++;
         UpdateSprite();
+        MoveNailDown();
 
         if (currentHits >= hitsRequired)
         {
@@ -74,5 +84,17 @@ public class NailButton : MonoBehaviour
         // 依目前打擊次數對應到圖片索引，並確保不超出陣列範圍
         int index = Mathf.Clamp(currentHits, 0, hitStageSprites.Length - 1);
         nailImage.sprite = hitStageSprites[index];
+
+        // 套用該圖片的原始尺寸（每個階段的圖片大小可能不同）
+        nailImage.SetNativeSize();
+    }
+
+    private void MoveNailDown()
+    {
+        if (nailImageRect == null) return;
+
+        Vector2 pos = nailImageRect.anchoredPosition;
+        pos.y -= hitMoveDownPixels;
+        nailImageRect.anchoredPosition = pos;
     }
 }
