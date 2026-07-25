@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CrewCloth1
+  m_Controller: {fileID: 9100000, guid: 34c495892d3d7a7f38695f8e1bee9a64, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: ef287e0c08e611832b9b6ee1aee62fcc, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2050c120c9209ee9ca2b150cd0312575, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 0984bfab683fa6adc8ea8132be5c1674, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1dad5d0c262d8b19fb55670e0c0abcab, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 6569791d4cac798c9ac7fba0f5200d74, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b0abff10f9febfa12885f60808dad64d, type: 2}
