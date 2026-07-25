@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  workRange: 2
+  workRange: 1
   wanderRadius: 4
   wanderIntervalMin: 1.5
   wanderIntervalMax: 3.5
