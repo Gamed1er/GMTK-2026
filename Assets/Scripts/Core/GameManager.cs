@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     public GamePhase CurrentPhase { get; private set; }
     public float DayTimer { get; private set; }
+    public float DayDuration => dayDuration;
     public int DayCount { get; private set; } = 1;
 
     public event Action<GamePhase> OnPhaseChanged;

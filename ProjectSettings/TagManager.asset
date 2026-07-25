@@ -41,3 +41,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Members
+    uniqueID: 434163495
+    locked: 0

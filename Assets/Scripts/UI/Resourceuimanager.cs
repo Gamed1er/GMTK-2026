@@ -14,6 +14,13 @@ public class ResourceUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI crewText;
     [SerializeField] private TextMeshProUGUI shipHPText;
 
+    [Header("時鐘指針")]
+    [SerializeField] private Transform clockHand;   // 指針 Transform
+
+    private const float DayStartAngle = -145f;
+    private const float DayEndAngle   =   90f;
+    private const float NightAngle    =  145f;
+
     // ── Lifecycle ─────────────────────────────────────────
 
     private void Start()
@@ -23,6 +30,10 @@ public class ResourceUIManager : MonoBehaviour
         if (LocalizationManager.Instance != null)
             LocalizationManager.Instance.OnLanguageChanged += Refresh;
 
+        GameManager.Instance.OnNightStarted += OnNightStarted;
+        GameManager.Instance.OnDayStarted   += OnDayStarted;
+
+        SetClockAngle(DayStartAngle);
         Refresh(); // 初始顯示
     }
 
@@ -33,6 +44,35 @@ public class ResourceUIManager : MonoBehaviour
 
         if (LocalizationManager.Instance != null)
             LocalizationManager.Instance.OnLanguageChanged -= Refresh;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnNightStarted -= OnNightStarted;
+            GameManager.Instance.OnDayStarted   -= OnDayStarted;
+        }
+    }
+
+    private void Update()
+    {
+        if (clockHand == null) return;
+        if (GameManager.Instance.CurrentPhase != GamePhase.Day) return;
+
+        float duration = GameManager.Instance.DayDuration;
+        if (duration <= 0f) return;
+
+        float t = 1f - Mathf.Clamp01(GameManager.Instance.DayTimer / duration);
+        SetClockAngle(Mathf.Lerp(DayStartAngle, DayEndAngle, t));
+    }
+
+    // ── Clock ─────────────────────────────────────────────
+
+    private void OnNightStarted()    => SetClockAngle(NightAngle);
+    private void OnDayStarted(int _) => SetClockAngle(DayStartAngle);
+
+    private void SetClockAngle(float z)
+    {
+        if (clockHand == null) return;
+        clockHand.localRotation = Quaternion.Euler(0f, 0f, z);
     }
 
     // ── Refresh ───────────────────────────────────────────

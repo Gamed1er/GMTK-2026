@@ -9,7 +9,7 @@ public enum CrewState { Idle, Wandering, MovingToTask, Working }
 public class CrewMember : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private float workRange = 2f;
+    [SerializeField] private float workRange = 1f;
 
     [Header("Wander Settings")]
     [SerializeField] private float wanderRadius = 4f;       // 遊走的最大半徑
