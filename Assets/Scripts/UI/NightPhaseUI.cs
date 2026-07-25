@@ -30,7 +30,6 @@ public class NightPhaseUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI exitLabel;
 
     private readonly List<GameObject> spawnedCards = new();
-    private int resolvedCount = 0;
 
     // ── Lifecycle ─────────────────────────────────────────
 
@@ -39,6 +38,12 @@ public class NightPhaseUI : MonoBehaviour
         nightPanel.SetActive(false);
         eventPanel.SetActive(false);
         exitButton.gameObject.SetActive(false);
+
+        if (NightEventManager.Instance == null)
+        {
+            Debug.LogError("[NightPhaseUI] NightEventManager.Instance 為 null！確認場景中有 NightEventManager。");
+            return;
+        }
 
         // 訂閱 OnEventsReady 而非 OnNightStarted，確保事件已抽完再生成卡片
         NightEventManager.Instance.OnEventsReady += OnEventsReady;
@@ -59,7 +64,6 @@ public class NightPhaseUI : MonoBehaviour
     /// <summary>夜晚開始時先把背景 Panel 顯示出來</summary>
     private void OnNightPhaseBegin()
     {
-        resolvedCount = 0;
         exitButton.gameObject.SetActive(false);
 
         bool zh = GameManager.Instance.lang == Language.ZH;
@@ -91,10 +95,7 @@ public class NightPhaseUI : MonoBehaviour
 
     private void OnCardResolved()
     {
-        resolvedCount++;
-        if (resolvedCount < spawnedCards.Count) return;
-
-        // 所有事件選完 → 關 EventPanel，開 ThrowCrewPanel
+        // 單一事件：選完立刻關 EventPanel，開 ThrowCrewPanel
         eventPanel.SetActive(false);
         throwCrewUI.Show(OnThrowCrewDone);
     }

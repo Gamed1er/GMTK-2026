@@ -10,7 +10,7 @@ public class NightEventManager : MonoBehaviour
     public static NightEventManager Instance { get; private set; }
 
     [SerializeField] private List<NightEventData> allEvents;
-    [SerializeField] private int eventsPerNight = 3;
+    [SerializeField] private int eventsPerNight = 1;
 
     public List<NightEventData> CurrentNightEvents { get; private set; } = new();
 
