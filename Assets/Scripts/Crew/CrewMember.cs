@@ -26,16 +26,34 @@ public class CrewMember : MonoBehaviour
     private float wanderTimer = 0f;
     private bool isDragging = false;
 
+    private CrewAnimatorController crewAnim;
+
     // ── Lifecycle ─────────────────────────────────────────
+
+    private void Awake()
+    {
+        crewAnim = GetComponent<CrewAnimatorController>();
+    }
 
     private void Start()     => CrewManager.Instance?.RegisterCrew(this);
     private void OnDisable() => CrewManager.Instance?.UnregisterCrew(this);
 
-    /// <summary>拖曳時暫停 AI；放下時恢復</summary>
+    /// <summary>拖曳時暫停 AI 並切換到 Idle 動畫；放下時恢復</summary>
     public void SetDragging(bool dragging)
     {
         isDragging = dragging;
-        if (!dragging) ForceIdle();
+        if (dragging)
+        {
+            // 暫停移動，強制 Idle 動畫
+            currentPath.Clear();
+            pathIndex = 0;
+            crewAnim?.SetWalking(false);
+            crewAnim?.SetWorking(false);
+        }
+        else
+        {
+            ForceIdle();
+        }
     }
 
     private void Update()
@@ -49,11 +67,9 @@ public class CrewMember : MonoBehaviour
                 break;
 
             case CrewState.Wandering:
-                // 被派任務時 AssignTask 會直接切換 state
                 if (pathIndex >= currentPath.Count)
                 {
-                    // 抵達目標，回 Idle 等下一次遊走
-                    State = CrewState.Idle;
+                    SetState(CrewState.Idle);
                     wanderTimer = Random.Range(wanderIntervalMin, wanderIntervalMax);
                     break;
                 }
@@ -62,7 +78,7 @@ public class CrewMember : MonoBehaviour
 
             case CrewState.MovingToTask:
                 if (ShouldAbandonTask()) { BecomeIdle(); return; }
-                if (IsCloseEnoughToTask()) { State = CrewState.Working; return; }
+                if (IsCloseEnoughToTask()) { SetState(CrewState.Working); return; }
                 FollowPath();
                 break;
 
@@ -82,11 +98,11 @@ public class CrewMember : MonoBehaviour
 
         if (IsCloseEnoughToTask())
         {
-            State = CrewState.Working;
+            SetState(CrewState.Working);
             return;
         }
 
-        State = CrewState.MovingToTask;
+        SetState(CrewState.MovingToTask);
         currentPath = FindPathTo(task.WorldPosition);
     }
 
@@ -95,7 +111,7 @@ public class CrewMember : MonoBehaviour
         AssignedMinigame = null;
         currentPath.Clear();
         pathIndex = 0;
-        State = CrewState.Idle;
+        SetState(CrewState.Idle);
         wanderTimer = Random.Range(wanderIntervalMin, wanderIntervalMax);
     }
 
@@ -106,13 +122,12 @@ public class CrewMember : MonoBehaviour
         Vector2 randomOffset = Random.insideUnitCircle * wanderRadius;
         Vector2 target = (Vector2)transform.position + randomOffset;
 
-        // 遊走不使用 fallback 直線——找不到路就等一下再試，不穿牆
         var path = FindWanderPath(target);
         if (path != null && path.Count > 0)
         {
             currentPath = path;
             pathIndex = 0;
-            State = CrewState.Wandering;
+            SetState(CrewState.Wandering);
         }
         else
         {
@@ -127,10 +142,21 @@ public class CrewMember : MonoBehaviour
         if (pathIndex >= currentPath.Count) return;
 
         Vector2 target = currentPath[pathIndex];
+        FaceDirection(target);
         transform.position = Vector2.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
 
         if (Vector2.Distance(transform.position, target) < 0.05f)
             pathIndex++;
+    }
+
+    private void FaceDirection(Vector2 target)
+    {
+        float dx = target.x - transform.position.x;
+        if (Mathf.Abs(dx) < 0.01f) return;
+
+        Vector3 s = transform.localScale;
+        s.x = dx > 0 ? Mathf.Abs(s.x) : -Mathf.Abs(s.x);
+        transform.localScale = s;
     }
 
     /// <summary>遊走專用：路徑為空就回傳 null，不穿牆 fallback</summary>
@@ -168,8 +194,17 @@ public class CrewMember : MonoBehaviour
         AssignedMinigame = null;
         currentPath.Clear();
         pathIndex = 0;
-        State = CrewState.Idle;
+        SetState(CrewState.Idle);
         wanderTimer = Random.Range(wanderIntervalMin, wanderIntervalMax);
         CrewManager.Instance.OnCrewBecameIdle(this);
+    }
+
+    /// <summary>統一切換 State 並同步動畫</summary>
+    private void SetState(CrewState newState)
+    {
+        State = newState;
+        if (crewAnim == null) return;
+        crewAnim.SetWalking(newState == CrewState.MovingToTask || newState == CrewState.Wandering);
+        crewAnim.SetWorking(newState == CrewState.Working);
     }
 }

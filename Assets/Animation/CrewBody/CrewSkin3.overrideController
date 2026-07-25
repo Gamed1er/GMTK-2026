@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CrewSkin3
+  m_Controller: {fileID: 9100000, guid: 0742d291c6e31322cb9f8a429e4bea06, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: a2a23310113e13420830ddef6e76f06c, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0f6031fd1261e04ce9acc2b63e0c621d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 34ce8628005c0b74792c02d3c8edf259, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 04f72251c72c2510295f23d0b76c36d2, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 59ae4b77ecf3d899cbc61db5877960ea, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 434720c1ad00834af830abf73e840359, type: 2}

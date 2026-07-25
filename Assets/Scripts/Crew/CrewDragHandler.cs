@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// 讓玩家用滑鼠拖曳船員。
@@ -15,14 +16,17 @@ public class CrewDragHandler : MonoBehaviour
     private Camera mainCamera;
     private bool isDragging = false;
     private Vector3 grabOffset;
+
+    private SortingGroup sortingGroup;
+    private CrewSortingOrder crewSortingOrder;
     private int originalSortingOrder;
-    private SpriteRenderer sr;
 
     private void Awake()
     {
-        crewMember  = GetComponent<CrewMember>();
-        mainCamera  = Camera.main;
-        sr          = GetComponent<SpriteRenderer>();
+        crewMember       = GetComponent<CrewMember>();
+        mainCamera       = Camera.main;
+        sortingGroup     = GetComponent<SortingGroup>();
+        crewSortingOrder = GetComponent<CrewSortingOrder>();
     }
 
     private void OnMouseDown()
@@ -31,11 +35,12 @@ public class CrewDragHandler : MonoBehaviour
         crewMember.SetDragging(true);
         grabOffset = transform.position - GetMouseWorld();
 
-        // 拖曳時置頂顯示
-        if (sr != null)
+        // 拖曳時置頂：停止 Y 軸自動排序，手動設超高 order
+        if (crewSortingOrder != null) crewSortingOrder.enabled = false;
+        if (sortingGroup != null)
         {
-            originalSortingOrder = sr.sortingOrder;
-            sr.sortingOrder = 999;
+            originalSortingOrder = sortingGroup.sortingOrder;
+            sortingGroup.sortingOrder = 30000;
         }
     }
 
@@ -50,7 +55,9 @@ public class CrewDragHandler : MonoBehaviour
         if (!isDragging) return;
         isDragging = false;
 
-        if (sr != null) sr.sortingOrder = originalSortingOrder;
+        // 恢復排序
+        if (sortingGroup != null) sortingGroup.sortingOrder = originalSortingOrder;
+        if (crewSortingOrder != null) crewSortingOrder.enabled = true;
 
         var tm = TilemapManager.Instance;
         if (tm == null) { crewMember.SetDragging(false); return; }

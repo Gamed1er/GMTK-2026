@@ -756,7 +756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be82d30159e7e4df48a91b8f74f71de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayDuration: 1
+  dayDuration: 90
   lang: 1
 --- !u!4 &229837034
 Transform:
@@ -828,7 +828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startFood: 1000
-  startCrew: 1
+  startCrew: 20
   startShipHP: 100
   maxShipHP: 100
   foodPerCrewPerDay: 10
