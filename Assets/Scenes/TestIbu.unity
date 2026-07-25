@@ -376,6 +376,7 @@ MonoBehaviour:
   startCrew: 20
   startShipHP: 100
   maxShipHP: 100
+  targetDays: 10
   foodPerCrewPerDay: 10
 --- !u!114 &229837039
 MonoBehaviour:
