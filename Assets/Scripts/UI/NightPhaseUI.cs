@@ -37,6 +37,7 @@ public class NightPhaseUI : MonoBehaviour
         "提示：標注為藍色圖示的任務代表船員正在執行",
         "提示：海盜其實沒有採木板處刑的環節，船長想殺人都直接把人丟下去",
         "提示：這艘船其實不是海盜船",
+        "提示：釣魚事件失敗不會減少船隻血量",
     };
 
     private static readonly string[] hintsEN =
@@ -47,6 +48,7 @@ public class NightPhaseUI : MonoBehaviour
         "Tip: Tasks with a blue icon have a crew member working on them",
         "Tip: Pirates don't actually plank-walk anyone — the captain just throws them overboard",
         "Tip: This ship is actually not a pirate ship",
+        "Tip: Failing the fishing event does not reduce ship HP",
     };
 
     private readonly List<GameObject> spawnedCards = new();
