@@ -17,6 +17,9 @@ public class DaySummaryUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI failText;         // 任務失敗次數
     [SerializeField] private TextMeshProUGUI daysLeftText;     // 還能航行幾天
 
+    [Header("按鈕文字")]
+    [SerializeField] private TextMeshProUGUI confirmLabel;   // 確認按鈕上的文字
+
     [Header("面板本體")]
     [SerializeField] private GameObject panel;
 
@@ -73,6 +76,10 @@ public class DaySummaryUI : MonoBehaviour
         failText.text = zh
             ? $"任務失敗 {mm.DayFailCount} 次"
             : $"Tasks Failed {mm.DayFailCount}";
+
+        // 按鈕文字
+        if (confirmLabel != null)
+            confirmLabel.text = zh ? "確認" : "Confirm";
 
         // 還能航行幾天
         int daysLeft = rm.EstimatedDaysOfFood();
