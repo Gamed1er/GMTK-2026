@@ -38,6 +38,17 @@ public class NightPhaseUI : MonoBehaviour
         "提示：海盜其實沒有採木板處刑的環節，船長想殺人都直接把人丟下去",
         "提示：這艘船其實不是海盜船",
         "提示：釣魚事件失敗不會減少船隻血量",
+        "提示：如果你看到船員沒在做事，你可以把他拖到任務圖示附近",
+        "提示：其實船員有隨機膚色、衣服和頭髮，所有可能的組合有 48 種",
+        "提示：海盜只會在固定的幾天來，但是一來就一堆！",
+        "提示：大部分的任務都可以由一個船員完成，但補洞可能需要多點人手",
+        "提示：什麼時候能抵達新大陸呢？",
+        "提示：本遊戲沒有任何的 Bug！希望是啦",
+        "提示：哥倫布在1492年10月12日抵達美洲",
+        "提示：補洞可以回復船的血量",
+        "提示：哥倫布曾經在牙買加受困擱淺了一整年",
+        "提示：麥哲倫的旅行比哥倫布更加「壯烈」，只有 10％ 的人成功活著回家",
+        "提示：壞血病是中世紀航海最大的死因，本遊戲沒有壞血病設定，還請放心",
     };
 
     private static readonly string[] hintsEN =
@@ -49,6 +60,17 @@ public class NightPhaseUI : MonoBehaviour
         "Tip: Pirates don't actually plank-walk anyone — the captain just throws them overboard",
         "Tip: This ship is actually not a pirate ship",
         "Tip: Failing the fishing event does not reduce ship HP",
+        "Tip: If a crew member is idle, drag them near a task icon to assign them",
+        "Tip: Crew members have random skin, clothes, and hair — 48 possible combinations in total",
+        "Tip: Pirates only show up on certain days, but they come in force!",
+        "Tip: Most tasks can be handled by one crew member, but patching holes may need more hands",
+        "Tip: I wonder when we'll reach the New World?",
+        "Tip: This game has zero bugs! Hopefully.",
+        "Tip: Columbus reached the Americas on October 12, 1492",
+        "Tip: Patching holes restores ship HP",
+        "Tip: Columbus was stranded in Jamaica for an entire year",
+        "Tip: Magellan's voyage was far more \"epic\" — only 10% of the crew made it home alive",
+        "Tip: Scurvy was the leading cause of death in medieval seafaring. No scurvy in this game, rest assured",
     };
 
     private readonly List<GameObject> spawnedCards = new();

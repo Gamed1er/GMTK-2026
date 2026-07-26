@@ -70,7 +70,7 @@ public class LocalizationManager : MonoBehaviour
         ["credits.huan"]         = ("Huan — Lead Artist, VFX",             "Huan — 主美術、特效"),
         ["credits.gdnb"]         = ("GDNB — Lead Programmer, Art Support",  "遊戲亡 — 主程式、副美術"),
         ["credits.ibu"]          = ("Ibuprofen — Associate Programmer",     "Ibuprofen — 副程式"),
-        ["credits.dirty"]        = ("DirtyShow — Music Composer",           "髒雪 — 配樂"),
+        ["credits.dirty"]        = ("DirtySnow — Music Composer",           "髒雪 — 配樂"),
         ["credits.egg"]          = ("EggOWO — Tester",                      "雞蛋(EggOWO) — 測試"),
         // credits.thanks / credits.anthropic 已移除
     };
