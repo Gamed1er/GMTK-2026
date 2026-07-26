@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public enum CrewState { Idle, Wandering, MovingToTask, Working }
 
 /// <summary>
-/// 船員 AI。走到任務附近 2 格即開始工作。閒置時隨機遊走。
+/// 船員 AI。走到任務附近即開始工作；閒置時隨機遊走。
 /// </summary>
 public class CrewMember : MonoBehaviour
 {
@@ -12,7 +12,7 @@ public class CrewMember : MonoBehaviour
     [SerializeField] private float workRange = 1f;
 
     [Header("Wander Settings")]
-    [SerializeField] private float wanderRadius = 4f;       // 遊走的最大半徑
+    [SerializeField] private float wanderRadius = 4f;
     [SerializeField] private float wanderIntervalMin = 1.5f;
     [SerializeField] private float wanderIntervalMax = 3.5f;
 
@@ -22,37 +22,40 @@ public class CrewMember : MonoBehaviour
     public MinigameInstance AssignedMinigame { get; private set; }
 
     private List<Vector2> currentPath = new();
-    private int pathIndex = 0;
+    private int   pathIndex  = 0;
     private float wanderTimer = 0f;
     private Vector2 lastPosition;
-    private float stuckTimer = 0f;
+    private float   stuckTimer = 0f;
+    private bool    isDragging = false;
+
     private const float StuckCheckInterval = 0.1f;
-    private const float StuckThreshold = 0.01f; // 位移小於此值視為卡住
-    private bool isDragging = false;
+    private const float StuckThreshold     = 0.01f;
 
     private CrewAnimatorController crewAnim;
 
     // ── Lifecycle ─────────────────────────────────────────
 
-    private void Awake()
-    {
-        crewAnim = GetComponent<CrewAnimatorController>();
-    }
+    private void Awake() => crewAnim = GetComponent<CrewAnimatorController>();
 
     private void Start()     => CrewManager.Instance?.RegisterCrew(this);
     private void OnDisable() => CrewManager.Instance?.UnregisterCrew(this);
 
-    /// <summary>拖曳時暫停 AI 並切換到 Idle 動畫；放下時恢復</summary>
+    // ── Drag ──────────────────────────────────────────────
+
+    /// <summary>
+    /// 拖曳開始：解除任務佔用（Bug 1 修復），暫停 AI。
+    /// 拖曳結束：恢復 Idle。
+    /// </summary>
     public void SetDragging(bool dragging)
     {
         isDragging = dragging;
         if (dragging)
         {
-            // 暫停移動，強制 Idle 動畫
+            // ★ Bug 1 修復：先從任務的 AssignedCrew 移除，避免任務永遠佔用
+            UnassignFromCurrentTask();
             currentPath.Clear();
             pathIndex = 0;
-            crewAnim?.SetWalking(false);
-            crewAnim?.SetWorking(false);
+            SetState(CrewState.Idle);
         }
         else
         {
@@ -60,9 +63,12 @@ public class CrewMember : MonoBehaviour
         }
     }
 
+    // ── Update ────────────────────────────────────────────
+
     private void Update()
     {
         if (isDragging) return;
+
         switch (State)
         {
             case CrewState.Idle:
@@ -82,7 +88,7 @@ public class CrewMember : MonoBehaviour
                 {
                     if (Vector2.Distance(transform.position, lastPosition) < StuckThreshold)
                     {
-                        // 卡住：取消遊走，待機到下一次
+                        // 卡住：取消遊走
                         currentPath.Clear();
                         pathIndex = 0;
                         SetState(CrewState.Idle);
@@ -98,6 +104,21 @@ public class CrewMember : MonoBehaviour
             case CrewState.MovingToTask:
                 if (ShouldAbandonTask()) { BecomeIdle(); return; }
                 if (IsCloseEnoughToTask()) { SetState(CrewState.Working); return; }
+
+                // ★ Bug 2 修復：MovingToTask 也加入卡牆偵測
+                stuckTimer -= Time.deltaTime;
+                if (stuckTimer <= 0f)
+                {
+                    if (Vector2.Distance(transform.position, lastPosition) < StuckThreshold)
+                    {
+                        // 卡住：放棄任務，讓 CrewManager 重新安排
+                        BecomeIdle();
+                        return;
+                    }
+                    lastPosition = transform.position;
+                    stuckTimer   = StuckCheckInterval;
+                }
+
                 FollowPath();
                 break;
 
@@ -114,6 +135,9 @@ public class CrewMember : MonoBehaviour
         AssignedMinigame = task;
         pathIndex = 0;
         currentPath.Clear();
+        // 初始化卡牆偵測
+        lastPosition = transform.position;
+        stuckTimer   = StuckCheckInterval;
 
         if (IsCloseEnoughToTask())
         {
@@ -127,7 +151,7 @@ public class CrewMember : MonoBehaviour
 
     public void ForceIdle()
     {
-        AssignedMinigame = null;
+        UnassignFromCurrentTask();
         currentPath.Clear();
         pathIndex = 0;
         SetState(CrewState.Idle);
@@ -138,9 +162,7 @@ public class CrewMember : MonoBehaviour
 
     private void StartWander()
     {
-        Vector2 randomOffset = Random.insideUnitCircle * wanderRadius;
-        Vector2 target = (Vector2)transform.position + randomOffset;
-
+        Vector2 target = (Vector2)transform.position + Random.insideUnitCircle * wanderRadius;
         var path = FindWanderPath(target);
         if (path != null && path.Count > 0)
         {
@@ -180,7 +202,15 @@ public class CrewMember : MonoBehaviour
         transform.localScale = s;
     }
 
-    /// <summary>遊走專用：路徑為空就回傳 null，不穿牆 fallback</summary>
+    /// <summary>從 minigame.AssignedCrew 移除自己，清除 AssignedMinigame 參考</summary>
+    private void UnassignFromCurrentTask()
+    {
+        if (AssignedMinigame == null) return;
+        AssignedMinigame.AssignedCrew.Remove(this);
+        AssignedMinigame = null;
+    }
+
+    /// <summary>遊走專用：找不到路就回傳 null</summary>
     private List<Vector2> FindWanderPath(Vector2 target)
     {
         if (SimplePathfinder.Instance == null) return null;
@@ -188,7 +218,7 @@ public class CrewMember : MonoBehaviour
         return path.Count > 0 ? path : null;
     }
 
-    /// <summary>任務移動：找不到路時 fallback 直線（確保一定能到達）</summary>
+    /// <summary>任務移動：找不到路時 fallback 直線（確保一定到達）</summary>
     private List<Vector2> FindPathTo(Vector2 target)
     {
         if (SimplePathfinder.Instance != null)
@@ -196,7 +226,7 @@ public class CrewMember : MonoBehaviour
             var path = SimplePathfinder.Instance.FindPath(transform.position, target);
             if (path.Count > 0) return path;
         }
-        return new List<Vector2> { target }; // fallback 只用於任務
+        return new List<Vector2> { target };
     }
 
     private bool IsCloseEnoughToTask()
@@ -212,7 +242,7 @@ public class CrewMember : MonoBehaviour
 
     private void BecomeIdle()
     {
-        AssignedMinigame = null;
+        UnassignFromCurrentTask(); // ★ 確保從 AssignedCrew 移除
         currentPath.Clear();
         pathIndex = 0;
         SetState(CrewState.Idle);
@@ -220,7 +250,6 @@ public class CrewMember : MonoBehaviour
         CrewManager.Instance.OnCrewBecameIdle(this);
     }
 
-    /// <summary>統一切換 State 並同步動畫</summary>
     private void SetState(CrewState newState)
     {
         State = newState;

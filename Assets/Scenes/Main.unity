@@ -2600,12 +2600,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allEvents:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: e943040189026f1c8b88617bce5b9c9e, type: 2}
+  - {fileID: 11400000, guid: eca5c983fce4e268f8ab862758c334c9, type: 2}
+  - {fileID: 11400000, guid: 738f6b7cbe26440a681998845693cacc, type: 2}
+  - {fileID: 11400000, guid: 8d1152aefcd57a04896ac04b921ea84f, type: 2}
+  - {fileID: 11400000, guid: 9363ff3125d0f9173b2811f915b9ba4d, type: 2}
+  - {fileID: 11400000, guid: afc76470dd2c40d259a91fcf6449b8bf, type: 2}
+  - {fileID: 11400000, guid: 75ee79eb2aaa2368a8fb00357c3afcc2, type: 2}
+  - {fileID: 11400000, guid: 9f2eb78b1a0a2887ab25fb73d83a014d, type: 2}
+  - {fileID: 11400000, guid: 81f81658d4a83519986901786f34bea0, type: 2}
+  - {fileID: 11400000, guid: 0ff8585824a7816e5b5b471e64f58b85, type: 2}
+  - {fileID: 11400000, guid: d19345b6b0d513e1f97c20d09617a8c6, type: 2}
+  - {fileID: 11400000, guid: 0d63b354f0d4e9acc80b3e1005fb257e, type: 2}
+  - {fileID: 11400000, guid: 75b84dcc2b3cd6e64b814ff554f18cb6, type: 2}
+  - {fileID: 11400000, guid: 67fbc2a38ba9505a38bdaa7be216bd37, type: 2}
+  - {fileID: 11400000, guid: a58cb9a89ab9f5017b69acf52b0a8527, type: 2}
+  - {fileID: 11400000, guid: 32ea098a5e28062c986f7e72a17de572, type: 2}
+  - {fileID: 11400000, guid: 701250e5aba34fc85947e71398b77a5d, type: 2}
+  - {fileID: 11400000, guid: 65de1028749f34809baac4278a2b1655, type: 2}
+  - {fileID: 11400000, guid: efa0b744a85f5c887bd374825154967b, type: 2}
+  - {fileID: 11400000, guid: 8e2f3df13de2f096698a978134a14a89, type: 2}
+  - {fileID: 11400000, guid: 0d465f5741ec6f770af8c3836abc3102, type: 2}
+  - {fileID: 11400000, guid: 9c8c5d8316c571e7fb40461da183e0b7, type: 2}
+  - {fileID: 11400000, guid: a90c7a1f45ea327d99cad0b3ee9ff2dc, type: 2}
+  - {fileID: 11400000, guid: 8c4b390c1c79a5c79af18e61cd6dbccb, type: 2}
+  - {fileID: 11400000, guid: 4fbb8100d3a90c8d2b3faaf5a804ed81, type: 2}
+  - {fileID: 11400000, guid: fbb58774ac6ea3631ac81eb60cecbf32, type: 2}
+  - {fileID: 11400000, guid: b243008351813bad7812812a02b90897, type: 2}
+  - {fileID: 11400000, guid: 6ff2c3538bc29c34cb4b199918823899, type: 2}
+  - {fileID: 11400000, guid: d62f355ea84de66e88061cb3f7d9a98f, type: 2}
+  - {fileID: 11400000, guid: dcc713301a1819c17afe2103cec71f6b, type: 2}
+  - {fileID: 11400000, guid: abcbfefbe98a083789fddf2e361167f1, type: 2}
+  - {fileID: 11400000, guid: 634b6f6dab87610269a755099522a0d4, type: 2}
   eventsPerNight: 1
 --- !u!1 &231223371
 GameObject:
@@ -7346,7 +7372,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0a55c3e748620f5aa2ce688f4238f50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallTilemap: {fileID: 1574637210}
+  referenceTilemap: {fileID: 0}
+  wallTilemaps: []
+  minX: -30
+  maxX: 30
+  minY: -7
+  maxY: 7
 --- !u!114 &666329108
 MonoBehaviour:
   m_ObjectHideFlags: 0
