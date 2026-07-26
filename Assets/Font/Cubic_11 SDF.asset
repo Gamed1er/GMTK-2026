@@ -126,8 +126,8 @@ MonoBehaviour:
   m_Version: 1.1.0
   m_SourceFontFileGUID: b281dda823d74cb4ea9b116bc6876630
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: b281dda823d74cb4ea9b116bc6876630, type: 3}
-  m_SourceFontFile: {fileID: 12800000, guid: b281dda823d74cb4ea9b116bc6876630, type: 3}
-  m_AtlasPopulationMode: 1
+  m_SourceFontFile: {fileID: 0}
+  m_AtlasPopulationMode: 0
   m_FaceInfo:
     m_FaceIndex: 0
     m_FamilyName: Cubic 11
