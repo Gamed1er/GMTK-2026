@@ -21,7 +21,7 @@ MonoBehaviour:
   successDelta:
     food: 0
     crew: 0
-    shipHP: 0
+    shipHP: 1
     navProgress: 0
   failureDelta:
     food: 0
