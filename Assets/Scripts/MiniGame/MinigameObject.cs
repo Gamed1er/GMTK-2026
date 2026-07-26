@@ -89,8 +89,8 @@ public class MinigameObject : MonoBehaviour
 
         if (isWorking)
         {
-            float total = myInstance.Data.crewRequiredToComplete * myInstance.Data.crewCompletionTime;
-            float progress = total > 0f ? myInstance.CrewWorkProgress / total : 0f;
+            float total = myInstance.TotalWorkRequired;
+            float progress = total > 0f ? 1 - myInstance.CrewWorkProgress / total : 0f;
             SetFill(workingFillMaskTransform, Mathf.Clamp01(progress));
         }
         else
