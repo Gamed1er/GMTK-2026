@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
         CurrentPhase = GamePhase.Day;
         DayTimer = dayDuration;
         ResourceManager.Instance.ResetDayTracking();
+        ResourceManager.Instance.NextDay();
         StopNightBGM();
         PlayDayStartMusic();
         OnPhaseChanged?.Invoke(GamePhase.Day);
