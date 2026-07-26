@@ -120,6 +120,41 @@ public class CrewManager : MonoBehaviour
         Destroy(crew.gameObject);
     }
 
+    // ── Drop-to-Assign ────────────────────────────────────
+
+    /// <summary>
+    /// 玩家拖放船員後呼叫：若落點在任何任務 maxDist 單位內，強制指派給該任務。
+    /// 不限制人數上限（遊戲特性：可超過 crewRequired）。
+    /// </summary>
+    public void TryForceAssignOnDrop(CrewMember crew, Vector2 dropPos, float maxDist = 2f)
+    {
+        MinigameInstance target = null;
+        float bestDist = maxDist;
+
+        foreach (var m in MinigameManager.Instance.ActiveMinigames)
+        {
+            if (m.IsCompleted || m.IsPlayerAssigned || !m.CrewAllowed) continue;
+            float d = Vector2.Distance(dropPos, m.SpawnPoint);
+            if (d < bestDist) { bestDist = d; target = m; }
+        }
+
+        if (target == null) return;
+
+        // 解除 OnCrewBecameIdle 可能已分配的其他任務
+        if (crew.AssignedMinigame != null && crew.AssignedMinigame != target)
+        {
+            crew.AssignedMinigame.AssignedCrew.Remove(crew);
+            // AssignTask 會覆寫 AssignedMinigame，不需再手動清
+        }
+
+        // 強制加入（允許超過 crewRequired）
+        if (!target.AssignedCrew.Contains(crew))
+            target.AssignedCrew.Add(crew);
+
+        crew.AssignTask(target);
+        Debug.Log($"[CrewManager] 強制指派 {crew.name} → {target.Data.type}（距離 {bestDist:F2}，共 {target.AssignedCrew.Count} 人）");
+    }
+
     // ── Private ───────────────────────────────────────────
 
     private void AssignCrew(CrewMember crew, MinigameInstance minigame)

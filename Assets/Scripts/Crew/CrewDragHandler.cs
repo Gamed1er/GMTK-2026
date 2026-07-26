@@ -157,6 +157,7 @@ public class CrewDragHandler : MonoBehaviour,
         if (tm.IsGround(pos))
         {
             crewMember.SetDragging(false);
+            CrewManager.Instance?.TryForceAssignOnDrop(crewMember, pos);
         }
         else if (tm.IsWall(pos))
         {
@@ -165,6 +166,7 @@ public class CrewDragHandler : MonoBehaviour,
             {
                 transform.position = (Vector3)nearest.Value;
                 crewMember.SetDragging(false);
+                CrewManager.Instance?.TryForceAssignOnDrop(crewMember, nearest.Value);
             }
             else
             {

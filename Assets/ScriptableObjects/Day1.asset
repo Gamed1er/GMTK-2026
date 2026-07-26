@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec84deef2cb147162b5e58eb81356618, type: 3}
   m_Name: Day1
   m_EditorClassIdentifier: 
-  minSpawnInterval: 3
-  maxSpawnInterval: 5
+  minSpawnInterval: 6
+  maxSpawnInterval: 7
   minSpawnCount: 1
   maxSpawnCount: 2
   steeringWeight: 1
