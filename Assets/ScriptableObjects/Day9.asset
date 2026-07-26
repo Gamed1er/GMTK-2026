@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec84deef2cb147162b5e58eb81356618, type: 3}
   m_Name: Day9
   m_EditorClassIdentifier: 
-  minSpawnInterval: 20
-  maxSpawnInterval: 25
-  minSpawnCount: 8
+  minSpawnInterval: 22.5
+  maxSpawnInterval: 27.5
+  minSpawnCount: 10
   maxSpawnCount: 12
   steeringWeight: 1
   fishingWeight: 1
   patchHoleWeight: 5
-  fightPirateWeight: 10
+  fightPirateWeight: 12
   firefightingWeight: 5

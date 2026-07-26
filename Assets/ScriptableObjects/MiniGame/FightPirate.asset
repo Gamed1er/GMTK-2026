@@ -15,9 +15,9 @@ MonoBehaviour:
   type: 3
   nameEN: Fight Pirate
   nameCN: "\u653B\u64CA\u6D77\u76DC"
-  countdownDuration: 12
-  crewRequiredToComplete: 2
-  crewCompletionTime: 10
+  countdownDuration: 25
+  crewRequiredToComplete: 1
+  crewCompletionTime: 15
   successDelta:
     food: 0
     crew: 0
@@ -39,6 +39,14 @@ MonoBehaviour:
   - {x: -0.5, y: 5}
   - {x: 1.5, y: 5}
   - {x: 3.5, y: 5}
+  - {x: 1, y: 5}
+  - {x: 2, y: 5}
+  - {x: 0, y: 5}
+  - {x: -1, y: 5}
+  - {x: 1, y: -5}
+  - {x: 2, y: -5}
+  - {x: 0, y: -5}
+  - {x: -1, y: -5}
   canSpawnRandomly: 1
-  spawnWeight: 5
+  spawnWeight: 3
   onlyOneAtATime: 0

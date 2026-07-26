@@ -26,7 +26,7 @@ MonoBehaviour:
   failureDelta:
     food: 0
     crew: 0
-    shipHP: -5
+    shipHP: -8
     navProgress: 0
   panelPrefab: {fileID: 1748887300811757037, guid: 6a04bf1b5733030429b0f3caa2348a15, type: 3}
   worldObjectPrefab: {fileID: 6451933085745357331, guid: 0d35e522f3a2c07dfae22d02784e065c, type: 3}
