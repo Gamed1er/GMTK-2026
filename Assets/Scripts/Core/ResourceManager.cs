@@ -28,6 +28,10 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] private float startShipHP = 100f;
     [SerializeField] private float maxShipHP = 100f;
 
+    [Header("Voyage / Navigation")]
+    [Tooltip("抵達新大陸所需的天數，航行進度 = 目前天數 / 目標天數")]
+    [SerializeField] private int targetDays = 10;
+
     [Header("Daily Consumption")]
     [SerializeField] private int foodPerCrewPerDay = 10;
 
@@ -36,7 +40,15 @@ public class ResourceManager : MonoBehaviour
     public int Food { get; private set; }
     public int Crew { get; private set; }
     public float ShipHP { get; private set; }
-    public float NavProgress { get; private set; } // 0–100
+
+    /// <summary>目前天數（代表航行進度），從 1 開始，每天結束會遞增</summary>
+    public float NavProgress { get; private set; }
+
+    /// <summary>目標天數，NavProgress 達到（大於等於）此值即抵達新大陸</summary>
+    public int TargetDays => targetDays;
+
+    /// <summary>還剩幾天抵達目標（最少為 0）</summary>
+    public int RemainingDays => Mathf.Max(0, targetDays - Mathf.CeilToInt(NavProgress));
 
     // 每日追蹤（結算用）
     public float DayHPDelta { get; private set; } = 0f;
@@ -56,7 +68,7 @@ public class ResourceManager : MonoBehaviour
         Food = startFood;
         Crew = startCrew;
         ShipHP = startShipHP;
-        NavProgress = 0f;
+        NavProgress = 1f;
     }
 
     // ── Public API ────────────────────────────────────────
@@ -66,10 +78,11 @@ public class ResourceManager : MonoBehaviour
         Food = Mathf.Max(0, Food + delta.food);
         Crew = Mathf.Max(0, Crew + delta.crew);
         ShipHP = Mathf.Clamp(ShipHP + delta.shipHP, 0f, maxShipHP);
-        NavProgress = Mathf.Clamp(NavProgress + delta.navProgress, 0f, 100f);
+        NavProgress += delta.navProgress;
         DayHPDelta += delta.shipHP; // 累積每日 HP 變化
 
         OnResourceChanged?.Invoke();
+        CheckGameOverConditions();
 
         // 通知 CrewManager 同步船員數量
         if (delta.crew != 0)
@@ -117,7 +130,7 @@ public class ResourceManager : MonoBehaviour
             GameManager.Instance.TriggerGameOver(GameOverReason.NoFood);
         else if (ShipHP <= 0)
             GameManager.Instance.TriggerGameOver(GameOverReason.ShipSunk);
-        else if (NavProgress >= 100f)
+        else if (NavProgress >= targetDays)
             GameManager.Instance.TriggerGameOver(GameOverReason.Victory);
         // CaptainDead 由 MinigameManager 打海盜失敗時主動呼叫
     }

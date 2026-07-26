@@ -40,16 +40,16 @@ public class DaySummaryUI : MonoBehaviour
         var mm = MinigameManager.Instance;
         var gm = GameManager.Instance;
         bool zh = gm.lang == Language.ZH;
-
+        int remainingDays = ResourceManager.Instance.RemainingDays;
+        
         // 第 n 天
         dayText.text = zh
             ? $"第 {gm.DayCount} 天"
             : $"Day {gm.DayCount}";
 
-        // 航行進度
+        // 航行進度（改為天數呈現）
         navProgressText.text = zh
-            ? $"航行進度 {rm.NavProgress:F0}%"
-            : $"Navigation {rm.NavProgress:F0}%";
+            ? $"還剩 {remainingDays} 天" : $"{remainingDays} days left";
 
         // 人頭數
         crewText.text = zh
