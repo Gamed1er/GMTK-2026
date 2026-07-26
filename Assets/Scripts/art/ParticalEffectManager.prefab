@@ -47,3 +47,5 @@ MonoBehaviour:
   effects:
   - effectName: fire
     prefab: {fileID: 8301192033001931014, guid: 1df49187cf6b63748883b43777562c74, type: 3}
+  - effectName: water
+    prefab: {fileID: 8301192033001931014, guid: 1df49187cf6b63748883b43777562c74, type: 3}
