@@ -304,7 +304,8 @@ MonoBehaviour:
   dayDuration: 60
   lang: 0
   dayStartMusic: {fileID: 8300000, guid: ed5f7c3c81acbf04a9b67ece593f9864, type: 3}
-  dayStartMusicVolume: 1
+  dayStartMusicVolume: 0
+  gameOverSceneName: GameOver
 --- !u!4 &229837034
 Transform:
   m_ObjectHideFlags: 0
@@ -358,7 +359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allMinigameData:
-  - {fileID: 11400000, guid: 1851b6cf92dcdee468b4fc80dcb7ef6b, type: 2}
+  - {fileID: 11400000, guid: 62da62e0107bfac418d33a4321d92a01, type: 2}
   minSpawnInterval: 3
   maxSpawnInterval: 5
   noSpawnThreshold: 10
