@@ -63,7 +63,7 @@ public class NightPhaseUI : MonoBehaviour
     {
         exitButton.gameObject.SetActive(false);
 
-        bool zh = GameManager.Instance.lang == Language.ZH;
+        bool zh = LocalizationManager.Instance.CurrentLanguage == Language.ZH;
         exitLabel.text = zh ? "下一天" : "Next Day";
 
         nightPanel.SetActive(true);
