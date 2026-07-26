@@ -130,12 +130,16 @@ public class MinigameManager : MonoBehaviour
             var m = ActiveMinigames[i];
             if (m.IsCompleted) continue;
 
-            // 倒數計時
-            m.Timer -= Time.deltaTime;
-            if (m.Timer <= 0f)
+            // 有足夠船員執行時（HasEnoughCrew，含玩家接手），倒數暫停，
+            // 只有在沒有船員/玩家執行時 Timer 才會遞減
+            if (!m.HasEnoughCrew)
             {
-                ResolveMinigame(m, success: false);
-                continue;
+                m.Timer -= Time.deltaTime;
+                if (m.Timer <= 0f)
+                {
+                    ResolveMinigame(m, success: false);
+                    continue;
+                }
             }
 
             // 玩家接手時跳過船員進度計算

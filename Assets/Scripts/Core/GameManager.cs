@@ -30,10 +30,25 @@ public class GameManager : MonoBehaviour
 
     public Language lang;
 
+    [Header("Audio")]
+    [Tooltip("白天開始時播放的音樂（單次播放，不循環）")]
+    [SerializeField] private AudioClip dayStartMusic;
+    [Tooltip("白天開始音樂音量")]
+    [Range(0f, 1f)]
+    [SerializeField] private float dayStartMusicVolume = 1f;
+
+    private AudioSource audioSource;
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.loop = false;
+        audioSource.playOnAwake = false;
     }
 
     private void Start() => StartDay();
@@ -53,8 +68,19 @@ public class GameManager : MonoBehaviour
         CurrentPhase = GamePhase.Day;
         DayTimer = dayDuration;
         ResourceManager.Instance.ResetDayTracking();
+        PlayDayStartMusic();
         OnPhaseChanged?.Invoke(GamePhase.Day);
         OnDayStarted?.Invoke(DayCount);
+    }
+
+    private void PlayDayStartMusic()
+    {
+        if (dayStartMusic == null || audioSource == null) return;
+
+        audioSource.loop = false; // 確保單次播放，不循環
+        audioSource.clip = dayStartMusic;
+        audioSource.volume = dayStartMusicVolume;
+        audioSource.Play();
     }
 
     private void EndDay()

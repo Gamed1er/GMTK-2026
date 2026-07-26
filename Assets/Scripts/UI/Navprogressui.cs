@@ -3,8 +3,8 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// 航行進度 UI：顯示進度條、icon 跟著進度移動、剩餘進度數字（100 → 0，整數）
-/// Navigation progress UI: progress bar, icon follows progress, remaining number (100 → 0, integer)
+/// 航行進度 UI：顯示進度條、icon 跟著進度移動、剩餘天數文字
+/// Navigation progress UI: progress bar, icon follows progress, remaining days text
 /// </summary>
 public class NavProgressUI : MonoBehaviour
 {
@@ -19,7 +19,7 @@ public class NavProgressUI : MonoBehaviour
     [SerializeField] private RectTransform trackRect;
 
     [Header("Text")]
-    [Tooltip("顯示剩餘進度數字（100 開始遞減，整數）")]
+    [Tooltip("顯示剩餘天數")]
     [SerializeField] private TextMeshProUGUI remainingText;
 
     private void Start()
@@ -40,27 +40,29 @@ public class NavProgressUI : MonoBehaviour
     {
         if (ResourceManager.Instance == null) return;
 
-        float progress = ResourceManager.Instance.NavProgress; // 0–100
+        float progress = ResourceManager.Instance.NavProgress;   // 目前天數
+        int targetDays = ResourceManager.Instance.TargetDays;    // 目標天數
+        float t = targetDays > 0 ? Mathf.Clamp01(progress / targetDays) : 1f;
 
-        // 進度條（Image Fill Amount 為 0–1）
+        // 進度條（Image Fill Amount 為 0–1，邏輯不變）
         if (progressFillImage != null)
-            progressFillImage.fillAmount = progress / 100f;
+            progressFillImage.fillAmount = t;
 
-        // Icon 跟著進度沿 trackRect 左右移動
+        // Icon 跟著進度沿 trackRect 左右移動（邏輯不變）
         if (iconRect != null && trackRect != null)
         {
             float trackWidth = trackRect.rect.width;
-            float t = Mathf.Clamp01(progress / 100f);
 
             float x = -trackWidth * 0.5f + trackWidth * t + trackRect.anchoredPosition.x;
             iconRect.anchoredPosition = new Vector2(x, iconRect.anchoredPosition.y);
         }
 
-        // 剩餘進度（100 開始取整數遞減）
+        // 剩餘天數
         if (remainingText != null)
         {
-            int remaining = Mathf.RoundToInt(100f - progress);
-            remainingText.text = remaining.ToString();
+            int remainingDays = ResourceManager.Instance.RemainingDays;
+            bool isZh = GameManager.Instance != null && GameManager.Instance.lang == Language.ZH;
+            remainingText.text = isZh ? $"還剩 {remainingDays} 天" : $"{remainingDays} days left";
         }
     }
 }
