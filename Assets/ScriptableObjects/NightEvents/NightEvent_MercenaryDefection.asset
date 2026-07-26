@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_MercenaryDefection
+  m_EditorClassIdentifier: 
+  type: 26
+  titleZH: "\u50AD\u5175\u7684\u6295\u8AA0"
+  titleEN: Mercenary Defection
+  descriptionZH: "\u4E00\u6279\u50AD\u5175\u4E3B\u52D5\u6295\u9760\u4F60\u7684\u8239\u968A\uFF0C\u4ED6\u5011\u8981\u6C42\u98DF\u7269\u8207\u4FEE\u8239\u916C\u52DE\u3002\n\n[\u96C7\u7528]
+    \u8239\u54E1 +4 / \u98DF\u7269 -30 / \u8239\u9AD4 -20\n[\u62D2\u7D55] \u8239\u9AD4
+    -5"
+  descriptionEN: "A band of mercenaries offers to join your crew \u2014 for food
+    and ship repairs as payment.\n\n[Hire] Crew +4 / Food -30 / Ship HP -20\n[Decline]
+    Ship HP -5"
+  acceptLabelZH: "\u96C7\u7528"
+  acceptLabelEN: Hire
+  rejectLabelZH: "\u62D2\u7D55"
+  rejectLabelEN: Decline
+  acceptDelta:
+    food: -30
+    crew: 4
+    shipHP: -20
+    navProgress: 0
+  rejectDelta:
+    food: 0
+    crew: 0
+    shipHP: -5
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_SlaveMarket
+  m_EditorClassIdentifier: 
+  type: 8
+  titleZH: "\u5974\u96B8\u5E02\u5834\u7684\u4EA4\u6613"
+  titleEN: The Slave Market Deal
+  descriptionZH: "\u9644\u8FD1\u7684\u6E2F\u53E3\u6709\u500B\u5730\u4E0B\u5974\u96B8\u5E02\u5834\uFF0C\u4ED6\u5011\u7528\u5EC9\u50F9\u52DE\u5DE5\u63DB\u53D6\u4F60\u7684\u8239\u9AD4\u96F6\u4EF6\u3002\n\n[\u4EA4\u6613]
+    \u8239\u54E1 +10 / \u8239\u9AD4 -30\n[\u62D2\u7D55] \u8239\u9AD4 -10 / \u8239\u54E1
+    +2"
+  descriptionEN: 'A black market near port offers labor for ship parts. Dirty business,
+    but effective.
+
+
+    [Trade] Crew +10 / Ship HP -30
+
+    [Refuse] Ship HP -10
+    / Crew +2'
+  acceptLabelZH: "\u4EA4\u6613"
+  acceptLabelEN: Trade
+  rejectLabelZH: "\u62D2\u7D55"
+  rejectLabelEN: Refuse
+  acceptDelta:
+    food: 0
+    crew: 10
+    shipHP: -30
+    navProgress: 0
+  rejectDelta:
+    food: 0
+    crew: 2
+    shipHP: -10
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

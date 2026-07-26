@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_DraculaFeast
+  m_EditorClassIdentifier: 
+  type: 24
+  titleZH: "\u5FB7\u53E4\u62C9\u7684\u76DB\u5BB4"
+  titleEN: Dracula's Feast
+  descriptionZH: "\u4E00\u540D\u84BC\u767D\u8CB4\u65CF\u4F86\u8A2A\uFF0C\u4EE5\u5927\u91CF\u98DF\u7269\u63DB\u53D6\u8239\u54E1\u7684\u300C\u9BAE\u8840\u300D\uFF0C\u4E26\u7B54\u61C9\u4F60\u4E0D\u6703\u50B7\u53CA\u6027\u547D\u3002\n\n[\u540C\u610F]
+    \u98DF\u7269 +50 / \u8239\u54E1 -6\n[\u62D2\u7D55] \u8239\u54E1 -1 / \u98DF\u7269
+    +5"
+  descriptionEN: "A pale nobleman visits, offering food in exchange for the crew's
+    \"blood\" \u2014 just a little, he insists.\n\n[Agree] Food +50 / Crew -6\n[Refuse]
+    Crew -1 / Food +5"
+  acceptLabelZH: "\u540C\u610F"
+  acceptLabelEN: Agree
+  rejectLabelZH: "\u62D2\u7D55"
+  rejectLabelEN: Refuse
+  acceptDelta:
+    food: 50
+    crew: -6
+    shipHP: 0
+    navProgress: 0
+  rejectDelta:
+    food: 5
+    crew: -1
+    shipHP: 0
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

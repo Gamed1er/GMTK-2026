@@ -84,7 +84,7 @@ public class MinigameManager : MonoBehaviour
     private int spawnWaveCount = 0; // 本日已生成幾波
 
     [Header("Spawn Timing")]
-    [SerializeField] private float noSpawnThreshold = 10f; // 最後幾秒不刷新
+    [SerializeField] private float spawnTimeBuffer = 5f; // TotalWorkRequired + 此值 = 不再刷新該事件的剩餘時間門檻
 
     // ── Lifecycle ─────────────────────────────────────────
 
@@ -108,13 +108,15 @@ public class MinigameManager : MonoBehaviour
 
     private void HandlePhaseChanged(GamePhase phase)
     {
-        if (phase == GamePhase.Night) FailAllActiveMinigames();
         if (phase == GamePhase.Day)
         {
             DayFailCount = 0;
             spawnWaveCount = 0;
         }
     }
+
+    /// <summary>白天結束時由 GameManager.EndDay 呼叫，在結算畫面出現前結算所有未完成任務</summary>
+    public void FailAllOnEndDay() => FailAllActiveMinigames();
 
     private void Update()
     {
@@ -124,8 +126,7 @@ public class MinigameManager : MonoBehaviour
         nextSpawnTimer -= Time.deltaTime;
         if (nextSpawnTimer <= 0f)
         {
-            if (GameManager.Instance.DayTimer > noSpawnThreshold)
-                TrySpawnWave();
+            TrySpawnWave();
             ResetSpawnTimer();
         }
 
@@ -222,10 +223,7 @@ public class MinigameManager : MonoBehaviour
     private void TrySpawnWave()
     {
         // 暖機邏輯
-        int count;
-        if (spawnWaveCount < 2)       count = 2;
-        else if (spawnWaveCount < 4)  count = UnityEngine.Random.Range(2, 5); // 2~4
-        else                           count = UnityEngine.Random.Range(2, 7); // 2~6
+        int count = UnityEngine.Random.Range(1, 4); // 每波 1~3 個，無暖機
 
         spawnWaveCount++;
 
@@ -243,6 +241,10 @@ public class MinigameManager : MonoBehaviour
             if (!d.canSpawnRandomly) continue;
             if (d.spawnPoints == null || d.spawnPoints.Length == 0) continue;
             if (d.onlyOneAtATime && ActiveMinigames.Exists(m => m.Data.type == d.type && !m.IsCompleted)) continue;
+
+            // 若剩餘時間不夠完成此任務，跳過
+            float timeNeeded = d.crewRequiredToComplete * d.crewCompletionTime + spawnTimeBuffer;
+            if (GameManager.Instance.DayTimer < timeNeeded) continue;
 
             foreach (var point in d.spawnPoints)
             {

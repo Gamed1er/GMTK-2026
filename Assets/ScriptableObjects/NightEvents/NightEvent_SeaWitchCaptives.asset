@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_SeaWitchCaptives
+  m_EditorClassIdentifier: 
+  type: 27
+  titleZH: "\u6D77\u5996\u7684\u4FD8\u865C"
+  titleEN: The Sea Witch's Prisoners
+  descriptionZH: "\u4F60\u767C\u73FE\u6D77\u5996\u6B63\u5728\u56DA\u7981\u4E00\u6279\u8239\u54E1\uFF0C\u82E5\u596A\u56DE\u4ED6\u5011\uFF0C\u6D77\u5996\u6703\u653B\u64CA\u8239\u8EAB\u3002\n\n[\u596A\u56DE]
+    \u8239\u54E1 +6 / \u8239\u9AD4 -40 / \u98DF\u7269 -10\n[\u653E\u68C4] \u8239\u9AD4
+    -5"
+  descriptionEN: 'You spot a sea witch holding captives. Rescuing them means taking
+    hull damage in the fight.
+
+
+    [Rescue] Crew +6 / Ship HP -40 / Food -10
+
+    [Flee]
+    Ship HP -5'
+  acceptLabelZH: "\u596A\u56DE"
+  acceptLabelEN: Rescue
+  rejectLabelZH: "\u653E\u68C4"
+  rejectLabelEN: Flee
+  acceptDelta:
+    food: -10
+    crew: 6
+    shipHP: -40
+    navProgress: 0
+  rejectDelta:
+    food: 0
+    crew: 0
+    shipHP: -5
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

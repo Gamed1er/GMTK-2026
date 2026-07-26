@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_WarBoys
+  m_EditorClassIdentifier: 
+  type: 28
+  titleZH: "\u8352\u91CE\u7684\u6230\u722D\u7537\u5B69"
+  titleEN: The War Boys
+  descriptionZH: "\u4E00\u7FA4\u8352\u91CE\u4E2D\u7684\u72C2\u6230\u58EB\u9858\u610F\u52A0\u5165\u4F60\u7684\u8239\u968A\uFF0C\u4F46\u4ED6\u5011\u98DF\u91CF\u5DE8\u5927\u3002\n\n[\u63A5\u53D7]
+    \u8239\u54E1 +5 / \u98DF\u7269 -40\n[\u62D2\u7D55] \u8239\u9AD4 -5"
+  descriptionEN: "A band of wild warriors from the wastelands wishes to join \u2014
+    but they eat like a small army.\n\n[Accept] Crew +5 / Food -40\n[Decline] Ship
+    HP -5"
+  acceptLabelZH: "\u63A5\u53D7"
+  acceptLabelEN: Accept
+  rejectLabelZH: "\u62D2\u7D55"
+  rejectLabelEN: Decline
+  acceptDelta:
+    food: -40
+    crew: 5
+    shipHP: 0
+    navProgress: 0
+  rejectDelta:
+    food: 0
+    crew: 0
+    shipHP: -5
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1
