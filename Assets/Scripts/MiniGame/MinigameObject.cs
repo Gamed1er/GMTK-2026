@@ -112,7 +112,7 @@ public class MinigameObject : MonoBehaviour
 
         Vector3 scale = maskTransform.localScale;
         if (fillVertically)
-            scale.y = amount * 2;
+            scale.y = amount * 2 * 4.25f;
         else
             scale.x = amount;
         maskTransform.localScale = scale;
