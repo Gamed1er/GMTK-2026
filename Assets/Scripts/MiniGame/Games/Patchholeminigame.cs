@@ -11,8 +11,17 @@ using System.Collections.Generic;
 public class PatchHoleMinigame : MonoBehaviour, IMinigamePanel
 {
     [Header("Nail Prefab / Container")]
-    [SerializeField] private RectTransform nailContainer;   // 釘子生成範圍（面板內的一個 RectTransform）
+    [SerializeField] private RectTransform nailContainer;   // 釘子生成範圍（面板內的一個 RectTransform，通常跟洞的圖片同大小同位置）
     [SerializeField] private NailButton nailPrefab;          // 掛有 NailButton.cs 的 Prefab
+
+    [Header("Hole Shape Mask（非矩形範圍）")]
+    [Tooltip("洞的形狀遮罩圖：白色/不透明 = 可生成範圍，黑色/透明 = 不可生成。\n" +
+             "貼圖尺寸不需要跟 nailContainer 一致，取樣時會依比例換算。\n" +
+             "需在 Import Settings 開啟 Read/Write Enabled，否則無法在執行時讀取像素。")]
+    [SerializeField] private Texture2D holeShapeMask;
+    [Tooltip("判定為「可生成」的最低 Alpha 閾值（0~1）")]
+    [Range(0f, 1f)]
+    [SerializeField] private float maskAlphaThreshold = 0.5f;
 
     [Header("Nail Count By Difficulty")]
     [Tooltip("難度 0 時的最小/最大釘子數")]
@@ -28,6 +37,8 @@ public class PatchHoleMinigame : MonoBehaviour, IMinigamePanel
     [SerializeField] private float edgePadding = 40f;
     [Tooltip("找不重疊位置的最大嘗試次數，超過就直接放（避免無限迴圈）")]
     [SerializeField] private int maxPlacementAttempts = 30;
+    [Tooltip("生成位置往上偏移的像素量（正值 = 往上移）")]
+    [SerializeField] private float spawnYOffset = 0f;
 
     [Header("Nail Hit Settings")]
     [Tooltip("每根釘子需要點擊的次數")]
@@ -50,6 +61,10 @@ public class PatchHoleMinigame : MonoBehaviour, IMinigamePanel
 
         int nailCount = CalculateNailCount(instance.Difficulty);
         List<Vector2> positions = GenerateNonOverlappingPositions(nailCount);
+
+        // 生成位置整體往上偏移（例如讓釘子貼合圖片中洞口實際稍微偏上的位置）
+        for (int i = 0; i < positions.Count; i++)
+            positions[i] = new Vector2(positions[i].x, positions[i].y + spawnYOffset);
 
         remainingNails = nailCount;
 
@@ -77,7 +92,7 @@ public class PatchHoleMinigame : MonoBehaviour, IMinigamePanel
         return Random.Range(min, max + 1); // Range(int,int) 為左閉右開，+1 讓 max 可被抽到
     }
 
-    // ── Position Generation（避免重疊）────────────────────
+    // ── Position Generation（依遮罩形狀，避免重疊）────────
 
     private List<Vector2> GenerateNonOverlappingPositions(int count)
     {
@@ -86,6 +101,9 @@ public class PatchHoleMinigame : MonoBehaviour, IMinigamePanel
         Rect bounds = nailContainer.rect;
         float halfW = bounds.width * 0.5f - edgePadding;
         float halfH = bounds.height * 0.5f - edgePadding;
+
+        // 沒有設定遮罩時，退回原本的矩形範圍隨機（向下相容）
+        bool useMask = holeShapeMask != null;
 
         for (int i = 0; i < count; i++)
         {
@@ -99,6 +117,10 @@ public class PatchHoleMinigame : MonoBehaviour, IMinigamePanel
                     Random.Range(-halfH, halfH)
                 );
 
+                // 遮罩檢查：候選點必須落在洞的形狀內（例如破洞的白色/不透明區域）
+                if (useMask && !IsInsideHoleShape(candidate, bounds))
+                    continue;
+
                 if (IsFarEnoughFromExisting(candidate, positions))
                 {
                     placed = true;
@@ -106,14 +128,36 @@ public class PatchHoleMinigame : MonoBehaviour, IMinigamePanel
                 }
             }
 
-            // 嘗試多次仍找不到夠遠的位置，就直接使用最後一次的候選位置（避免卡住）
+            // 嘗試多次仍找不到合適位置，就直接使用最後一次的候選位置（避免卡住）
             positions.Add(candidate);
 
             if (!placed)
-                Debug.LogWarning($"[PatchHoleMinigame] 第 {i} 根釘子在 {maxPlacementAttempts} 次嘗試內找不到不重疊位置，改用最後嘗試的座標。");
+                Debug.LogWarning($"[PatchHoleMinigame] 第 {i} 根釘子在 {maxPlacementAttempts} 次嘗試內找不到符合形狀且不重疊的位置，改用最後嘗試的座標。");
         }
 
         return positions;
+    }
+
+    /// <summary>
+    /// 判斷 nailContainer 局部座標系（中心為原點）中的候選點，
+    /// 是否落在 holeShapeMask 圖片的「可生成」區域內（依 Alpha 閾值判定）。
+    /// 座標換算：候選點相對 nailContainer 的比例位置 → 對應到貼圖的 UV → 讀取像素。
+    /// </summary>
+    private bool IsInsideHoleShape(Vector2 localPoint, Rect containerBounds)
+    {
+        if (holeShapeMask == null) return true;
+
+        // 把 candidate（以容器中心為原點）轉成 0~1 的 UV（左下角為 0,0，符合 Texture2D 座標習慣）
+        float u = (localPoint.x - containerBounds.xMin) / containerBounds.width;
+        float v = (localPoint.y - containerBounds.yMin) / containerBounds.height;
+
+        if (u < 0f || u > 1f || v < 0f || v > 1f) return false;
+
+        int px = Mathf.Clamp(Mathf.RoundToInt(u * (holeShapeMask.width - 1)), 0, holeShapeMask.width - 1);
+        int py = Mathf.Clamp(Mathf.RoundToInt(v * (holeShapeMask.height - 1)), 0, holeShapeMask.height - 1);
+
+        float alpha = holeShapeMask.GetPixel(px, py).a;
+        return alpha >= maskAlphaThreshold;
     }
 
     private bool IsFarEnoughFromExisting(Vector2 candidate, List<Vector2> existing)
