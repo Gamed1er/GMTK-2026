@@ -91,21 +91,27 @@ public class CrewManager : MonoBehaviour
         {
             int last = allCrew.Count - 1;
             var crew = allCrew[last];
-            allCrew.RemoveAt(last);   // 先移除，避免 OnDisable → UnregisterCrew 重複移除
+            allCrew.RemoveAt(last);
             Destroy(crew.gameObject);
         }
 
         // 增加：生成新船員 GameObject（晚上事件補充船員用）
-        while (allCrew.Count < newCount)
+        if (allCrew.Count < newCount)
         {
             if (crewPrefab == null)
             {
-                Debug.LogWarning("[CrewManager] crewPrefab 未設定，無法生成新船員！請在 Inspector 指定。");
-                break;
+                Debug.LogWarning("[CrewManager] crewPrefab 未設定！請在 Inspector 指定。");
+                return;
             }
-            Vector2 pos = spawnCenter + Random.insideUnitCircle * spawnSpread;
-            Instantiate(crewPrefab, pos, Quaternion.identity);
-            // CrewMember.Start() 會自動呼叫 RegisterCrew，不需手動 Add
+
+            int toSpawn = newCount - allCrew.Count;
+            for (int i = 0; i < toSpawn; i++)
+            {
+                Vector2 pos = spawnCenter + Random.insideUnitCircle * spawnSpread;
+                var go = Instantiate(crewPrefab, pos, Quaternion.identity);
+                var newCrew = go.GetComponent<CrewMember>();
+                if (newCrew != null) RegisterCrew(newCrew);
+            }
         }
     }
 

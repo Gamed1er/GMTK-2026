@@ -53,6 +53,15 @@ public class CheatCode : MonoBehaviour
                     Debug.Log("[Cheat] SHIP");
                 }
             },
+            new Sequence
+            {
+                keys   = new[] { KeyCode.T, KeyCode.A, KeyCode.S, KeyCode.K },
+                action = () =>
+                {
+                    var nightUI = FindObjectOfType<NightPhaseUI>();
+                    nightUI?.CheatAddEventCard();
+                }
+            },
         };
     }
 

@@ -54,6 +54,24 @@ public class NightEventManager : MonoBehaviour
         Debug.Log($"[NightEventManager] Rejected: {data.type}");
     }
 
+    /// <summary>作弊用：從全事件池加權隨機抽一個</summary>
+    public NightEventData CheatPickOneEvent()
+    {
+        if (allEvents == null || allEvents.Count == 0) return null;
+
+        float total = 0f;
+        foreach (var e in allEvents) total += e.spawnWeight;
+
+        float roll = UnityEngine.Random.Range(0f, total);
+        float cumulative = 0f;
+        foreach (var e in allEvents)
+        {
+            cumulative += e.spawnWeight;
+            if (roll <= cumulative) return e;
+        }
+        return allEvents[allEvents.Count - 1];
+    }
+
     // ── Internal ──────────────────────────────────────────
 
     private void PickEvents()

@@ -52,6 +52,10 @@ public class NightPhaseUI : MonoBehaviour
     };
 
     private readonly List<GameObject> spawnedCards = new();
+    private int pendingCards = 0; // 還未選擇的事件卡數量
+
+    /// <summary>是否還在選事件階段（作弊碼用）</summary>
+    public bool IsEventPhaseActive => eventPanel != null && eventPanel.activeSelf;
 
     // ── Lifecycle ─────────────────────────────────────────
 
@@ -106,22 +110,52 @@ public class NightPhaseUI : MonoBehaviour
     {
         foreach (var card in spawnedCards) Destroy(card);
         spawnedCards.Clear();
+        pendingCards = 0;
 
         foreach (var data in NightEventManager.Instance.CurrentNightEvents)
         {
-            var go = Instantiate(eventCardPrefab, cardContainer);
-            go.SetActive(true); // 確保啟用後再呼叫 Init，否則 Coroutine 無法啟動
-            go.GetComponent<NightEventCardUI>().Init(data, OnCardResolved);
-            spawnedCards.Add(go);
+            SpawnOneCard(data);
         }
+    }
+
+    private void SpawnOneCard(NightEventData data)
+    {
+        var go = Instantiate(eventCardPrefab, cardContainer);
+        go.SetActive(true);
+        go.GetComponent<NightEventCardUI>().Init(data, OnCardResolved);
+        spawnedCards.Add(go);
+        pendingCards++;
     }
 
     private void OnCardResolved()
     {
-        // 事件選完 → 關 EventPanel，顯示離開按鈕 + 隨機提示
+        pendingCards--;
+        if (pendingCards > 0) return; // 還有卡片未選完
+
+        // 全部選完 → 關 EventPanel，顯示離開按鈕 + 隨機提示
         eventPanel.SetActive(false);
         exitButton.gameObject.SetActive(true);
         ShowRandomHint();
+    }
+
+    /// <summary>作弊：在選事件階段新增一張隨機事件卡</summary>
+    public void CheatAddEventCard()
+    {
+        if (!IsEventPhaseActive)
+        {
+            Debug.Log("[Cheat] TASK：目前不在事件選擇階段，無效。");
+            return;
+        }
+
+        var data = NightEventManager.Instance?.CheatPickOneEvent();
+        if (data == null)
+        {
+            Debug.LogWarning("[Cheat] TASK：抽不到事件（事件池為空？）");
+            return;
+        }
+
+        SpawnOneCard(data);
+        Debug.Log($"[Cheat] TASK：新增事件卡 {data.type}");
     }
 
     private void ShowRandomHint()
