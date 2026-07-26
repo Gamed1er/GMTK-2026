@@ -305,6 +305,8 @@ MonoBehaviour:
   lang: 0
   dayStartMusic: {fileID: 8300000, guid: ed5f7c3c81acbf04a9b67ece593f9864, type: 3}
   dayStartMusicVolume: 0
+  nightBGM: {fileID: 0}
+  nightBGMVolume: 0.8
   gameOverSceneName: GameOver
 --- !u!4 &229837034
 Transform:
@@ -359,10 +361,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allMinigameData:
-  - {fileID: 11400000, guid: 1851b6cf92dcdee468b4fc80dcb7ef6b, type: 2}
+  - {fileID: 11400000, guid: 2995e95c0d710474daedb6eb2c94b132, type: 2}
   minSpawnInterval: 3
   maxSpawnInterval: 5
-  noSpawnThreshold: 10
+  spawnTimeBuffer: 5
 --- !u!114 &229837038
 MonoBehaviour:
   m_ObjectHideFlags: 0
