@@ -68,7 +68,7 @@ public class ResourceManager : MonoBehaviour
         Food = startFood;
         Crew = startCrew;
         ShipHP = startShipHP;
-        NavProgress = 1f;
+        NavProgress = 0f;
     }
 
     // ── Public API ────────────────────────────────────────
@@ -133,5 +133,10 @@ public class ResourceManager : MonoBehaviour
         else if (NavProgress >= targetDays)
             GameManager.Instance.TriggerGameOver(GameOverReason.Victory);
         // CaptainDead 由 MinigameManager 打海盜失敗時主動呼叫
+    }
+
+    public void NextDay()
+    {
+        NavProgress++;
     }
 }
