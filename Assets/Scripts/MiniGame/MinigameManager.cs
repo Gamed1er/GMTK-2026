@@ -18,7 +18,12 @@ public class MinigameInstance
     public Vector2 SpawnPoint;     // 佔用的 spawn point（結算時釋放）
     public Vector3 WorldPosition => new Vector3(SpawnPoint.x, SpawnPoint.y, 0f);
 
-    public bool HasEnoughCrew => AssignedCrew.Count >= Data.crewRequiredToComplete || IsPlayerAssigned;
+    /// <summary>crewRequiredToComplete == 0 時只有船長能做，船員不算</summary>
+    public bool CrewAllowed => Data.crewRequiredToComplete > 0;
+
+    public bool HasEnoughCrew =>
+        IsPlayerAssigned ||
+        (CrewAllowed && AssignedCrew.Count >= Data.crewRequiredToComplete);
 
     // 船員工作進度（0 → 1）
     public float CrewWorkProgress { get; set; } = 0f;
