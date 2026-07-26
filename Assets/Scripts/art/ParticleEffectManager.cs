@@ -60,6 +60,32 @@ public class ParticleEffectManager : MonoBehaviour
             return null;
         }
 
-        return Instantiate(prefab, position, Quaternion.identity);
+        GameObject effectObject = Instantiate(
+            prefab,
+            position,
+            Quaternion.identity
+        );
+
+        ParticleSystem particleSystem =
+            effectObject.GetComponent<ParticleSystem>();
+
+        if (particleSystem == null)
+        {
+            Debug.LogWarning(
+                $"Particle Effect '{effectName}' prefab 沒有 ParticleSystem。",
+                effectObject
+            );
+
+            Destroy(effectObject);
+            return null;
+        }
+
+        particleSystem.Clear();
+        particleSystem.Play();
+
+        // 粒子播放完後自動刪除
+        Destroy(effectObject, particleSystem.main.duration + particleSystem.main.startLifetime.constantMax);
+
+        return effectObject;
     }
 }
