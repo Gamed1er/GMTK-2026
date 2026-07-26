@@ -1,13 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections;
 
 /// <summary>
 /// 單個海盜。在指定範圍內以隨機方向移動，碰到邊界會反彈。
-/// 被點擊指定次數後死亡，回報給 FightPirateMinigame。
+/// 被點擊指定次數後死亡，回報給 FightPirateMinigame，並播放搖晃+淡出效果後才真正銷毀。
 /// </summary>
 [RequireComponent(typeof(Button))]
 [RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(CanvasGroup))]
 public class PirateUnit : MonoBehaviour
 {
     [Header("Visual")]
@@ -17,6 +19,14 @@ public class PirateUnit : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float minSpeed = 60f;  // 每秒移動像素
     [SerializeField] private float maxSpeed = 140f;
+
+    [Header("Defeat Effect（搖晃 + 淡出）")]
+    [Tooltip("擊敗後搖晃+淡出的總時長（秒）")]
+    [SerializeField] private float defeatEffectDuration = 0.5f;
+    [Tooltip("搖晃的左右擺動幅度（像素）")]
+    [SerializeField] private float shakeMagnitude = 15f;
+    [Tooltip("搖晃頻率（每秒擺動次數）")]
+    [SerializeField] private float shakeFrequency = 25f;
 
     [Header("Audio")]
     [Tooltip("每次點擊（攻擊）播放的音效")]
@@ -34,6 +44,7 @@ public class PirateUnit : MonoBehaviour
     private RectTransform moveBounds;   // 移動範圍（通常等於容器）
     private Button button;
     private AudioSource audioSource;
+    private CanvasGroup canvasGroup;
 
     private Vector2 velocity;
     private float halfWidth;
@@ -53,6 +64,7 @@ public class PirateUnit : MonoBehaviour
         rt = GetComponent<RectTransform>();
         button = GetComponent<Button>();
         audioSource = GetComponent<AudioSource>();
+        canvasGroup = GetComponent<CanvasGroup>();
         button.onClick.AddListener(OnClicked);
 
         moveBounds = bounds;
@@ -60,6 +72,9 @@ public class PirateUnit : MonoBehaviour
         this.onDefeated = onDefeated;
         currentHits = 0;
         isDead = false;
+
+        if (canvasGroup != null)
+            canvasGroup.alpha = 1f;
 
         rt.anchoredPosition = startPos;
 
@@ -135,6 +150,8 @@ public class PirateUnit : MonoBehaviour
     {
         isDead = true;
         button.interactable = false;
+        if (canvasGroup != null)
+            canvasGroup.blocksRaycasts = false;
 
         // 用 PlayClipAtPoint 播放擊敗音效，避免這個物件被 Destroy 後音效被截斷
         AudioClip clip = defeatSfx != null ? defeatSfx : hitSfx;
@@ -145,7 +162,38 @@ public class PirateUnit : MonoBehaviour
             AudioSource.PlayClipAtPoint(clip, playPos, volume);
         }
 
+        // 立刻回報擊敗（讓 FightPirateMinigame 更新剩餘數量/判定完成），
+        // 但物件本身延後到搖晃+淡出播完才真正銷毀
         onDefeated?.Invoke(this);
+        StartCoroutine(DefeatEffectThenDestroy());
+    }
+
+    private IEnumerator DefeatEffectThenDestroy()
+    {
+        Vector2 basePos = rt.anchoredPosition;
+        float elapsed = 0f;
+
+        while (elapsed < defeatEffectDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / defeatEffectDuration);
+
+            // 搖晃：左右來回擺動，隨時間衰減（越接近結束幅度越小）
+            float damper = 1f - t;
+            float shakeOffsetX = Mathf.Sin(elapsed * shakeFrequency) * shakeMagnitude * damper;
+            rt.anchoredPosition = basePos + new Vector2(shakeOffsetX, 0f);
+
+            // 淡出：alpha 從 1 線性降到 0
+            if (canvasGroup != null)
+                canvasGroup.alpha = 1f - t;
+
+            yield return null;
+        }
+
+        rt.anchoredPosition = basePos;
+        if (canvasGroup != null)
+            canvasGroup.alpha = 0f;
+
         Destroy(gameObject);
     }
 
