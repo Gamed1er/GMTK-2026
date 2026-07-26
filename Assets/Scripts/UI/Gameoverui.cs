@@ -104,9 +104,9 @@ public class GameOverUI : MonoBehaviour
 
     private bool IsZh()
     {
-        if (GameManager.Instance != null)
+        //if (GameManager.Instance != null)
             return LocalizationManager.IsZH;
-        return fallbackLanguage == Language.ZH;
+        //return fallbackLanguage == Language.ZH;
     }
 
     private void ApplyText(GameOverReason reason)
@@ -132,9 +132,9 @@ public class GameOverUI : MonoBehaviour
                                                     : "Reached the New World and started a new life.\nTIP: Well done! Try sailing even further next time.",
                 GameOverReason.NoFood      => isZh ? "糧盡絕望，糧倉空空如也，全員終究化為海上的孤魂。\n提示： 船員每日皆需消耗口糧。適度裁減人員能降低消耗，避免全員覆滅。"  
                                                     : "Starved to death amidst the boundless sea. The pantry is empty; everyone has turned into drifting souls.\nTIP: Crew members consume rations daily. Reducing headcount lowers consumption and prevents total annihilation.",
-                GameOverReason.ShipSunk    => isZh ? "戰力全無，海盜登船血洗，甲板上無人逃過一劫。\n提示： 海盜可不講道義。白兵戰時，船員就是船長最強的盾牌。"              
+                GameOverReason.CaptainDead    => isZh ? "戰力全無，海盜登船血洗，甲板上無人逃過一劫。\n提示： 海盜可不講道義。白兵戰時，船員就是船長最強的盾牌。"              
                                                     : "Captured and slaughtered by pirates due to a lack of defenders.\nTIP: Pirates have no code. During deck combat, crew members are your best meat shields.",
-                GameOverReason.CaptainDead => isZh ? "船體解體，殘骸漂至荒島，餘生只能與孤島相伴。\n提示： 沒人能靠一片木板游過汪洋。請隨時留意船體耐久度。"            
+                GameOverReason.ShipSunk => isZh ? "船體解體，殘骸漂至荒島，餘生只能與孤島相伴。\n提示： 沒人能靠一片木板游過汪洋。請隨時留意船體耐久度。"            
                                                     : "The shattered ship wrecked upon a deserted island.\nTIP: No captain can swim across the ocean on a single plank. Always keep an eye on ship durability.",
                 _ => ""
             };
@@ -148,9 +148,9 @@ public class GameOverUI : MonoBehaviour
                                                     : "Reached the New World and started a new life.\nTIP: Well done! Try sailing even further next time.",
                 GameOverReason.NoFood      => isZh ? "糧盡絕望，糧倉空空如也，全員終究化為海上的孤魂。\n提示： 船員每日皆需消耗口糧。適度裁減人員能降低消耗，避免全員覆滅。"  
                                                     : "Starved to death amidst the boundless sea. The pantry is empty; everyone has turned into drifting souls.\nTIP: Crew members consume rations daily. Reducing headcount lowers consumption and prevents total annihilation.",
-                GameOverReason.ShipSunk    => isZh ? "戰力全無，海盜登船血洗，甲板上無人逃過一劫。\n提示： 海盜可不講道義。白兵戰時，船員就是船長最強的盾牌。"              
+                GameOverReason.CaptainDead    => isZh ? "戰力全無，海盜登船血洗，甲板上無人逃過一劫。\n提示： 海盜可不講道義。白兵戰時，船員就是船長最強的盾牌。"              
                                                     : "Captured and slaughtered by pirates due to a lack of defenders.\nTIP: Pirates have no code. During deck combat, crew members are your best meat shields.",
-                GameOverReason.CaptainDead => isZh ? "船體解體，殘骸漂至荒島，餘生只能與孤島相伴。\n提示： 沒人能靠一片木板游過汪洋。請隨時留意船體耐久度。"            
+                GameOverReason.ShipSunk => isZh ? "船體解體，殘骸漂至荒島，餘生只能與孤島相伴。\n提示： 沒人能靠一片木板游過汪洋。請隨時留意船體耐久度。"            
                                                     : "The shattered ship wrecked upon a deserted island.\nTIP: No captain can swim across the ocean on a single plank. Always keep an eye on ship durability.",
                 _ => ""
             };
