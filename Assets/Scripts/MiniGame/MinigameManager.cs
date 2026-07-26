@@ -145,15 +145,20 @@ public class MinigameManager : MonoBehaviour
             ResetSpawnTimer();
         }
 
-        // 更新所有倒數 + 船員工作進度
+         // 更新所有倒數 + 船員工作進度
         for (int i = ActiveMinigames.Count - 1; i >= 0; i--)
         {
             var m = ActiveMinigames[i];
             if (m.IsCompleted) continue;
 
-            // 有足夠船員執行時（HasEnoughCrew，含玩家接手），倒數暫停，
-            // 只有在沒有船員/玩家執行時 Timer 才會遞減
-            if (!m.HasEnoughCrew)
+            // 玩家接手，或有船員實際在工作（有進度貢獻）時，倒數暫停；
+            // 不需要滿足 crewRequiredToComplete 人數，只要有人在做就暫停。
+            // 注意：CrewAllowed == false（只有船長能做）時 WorkingCrewCount 恆為 0，
+            // 所以這類任務仍維持「只有玩家接手才暫停」的原邏輯。
+            int working = m.WorkingCrewCount(m.AssignedCrew);
+            bool hasProgress = m.IsPlayerAssigned || working > 0;
+
+            if (!hasProgress)
             {
                 m.Timer -= Time.deltaTime;
                 if (m.Timer <= 0f)
@@ -167,7 +172,6 @@ public class MinigameManager : MonoBehaviour
             if (m.IsPlayerAssigned) continue;
 
             // 船員工作進度：每秒貢獻 workingCrew 個 crew-second
-            int working = m.WorkingCrewCount(m.AssignedCrew);
             if (working > 0)
             {
                 m.CrewWorkProgress += working * Time.deltaTime;
