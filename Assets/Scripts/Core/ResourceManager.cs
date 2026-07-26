@@ -138,5 +138,6 @@ public class ResourceManager : MonoBehaviour
     public void NextDay()
     {
         NavProgress++;
+        OnResourceChanged?.Invoke();
     }
 }
