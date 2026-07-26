@@ -1,18 +1,4 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
-/// <summary>
-/// 主選單：點畫面任何位置就切換到下一個場景
-/// Main menu: click anywhere on screen to load the next scene
-/// </summary>
-public class MainMenu : MonoBehaviour
-{
-    [Tooltip("要切換到的場景名稱（需已加入 Build Settings）")]
-    [SerializeField] private string sceneToLoad;
-
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-            SceneManager.LoadScene(sceneToLoad);
-    }
-}
+// 此腳本原本的「點畫面任意位置跳場景」邏輯已移除。
+// 請改用 MainMenuUI.cs 的 Play 按鈕控制場景切換。
+// This script is intentionally left empty. Use MainMenuUI.cs instead.
+public class MainMenu : UnityEngine.MonoBehaviour { }

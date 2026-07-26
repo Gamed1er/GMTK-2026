@@ -105,7 +105,7 @@ public class GameOverUI : MonoBehaviour
     private bool IsZh()
     {
         if (GameManager.Instance != null)
-            return GameManager.Instance.lang == Language.ZH;
+            return LocalizationManager.IsZH;
         return fallbackLanguage == Language.ZH;
     }
 

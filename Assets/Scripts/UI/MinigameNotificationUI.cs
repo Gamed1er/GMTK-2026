@@ -25,7 +25,7 @@ public class MinigameNotificationUI : MonoBehaviour
 
     private void OnResolved(MinigameInstance minigame, bool success)
     {
-        bool zh = GameManager.Instance.lang == Language.ZH;
+        bool zh = LocalizationManager.IsZH;
 
         string taskName = zh ? minigame.Data.nameCN : minigame.Data.nameEN;
         string text = success

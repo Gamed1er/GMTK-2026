@@ -346,7 +346,7 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
     {
         if (hintText == null) return;
 
-        bool isZh = GameManager.Instance.lang == Language.ZH;
+        bool isZh = LocalizationManager.IsZH;
         bool isFishInZone = IsFishInZone();
 
         if (isFishInZone)

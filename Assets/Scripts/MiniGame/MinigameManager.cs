@@ -44,10 +44,10 @@ public class MinigameInstance
     public string GetStatusText()
     {
         if (HasEnoughCrew)
-            if(GameManager.Instance.lang == Language.ZH) return "員工工作中";
+            if(LocalizationManager.IsZH) return "員工工作中";
             else return "Crew Working";
         else
-            if(GameManager.Instance.lang == Language.ZH) return "需要更多員工";
+            if(LocalizationManager.IsZH) return "需要更多員工";
             else return "Need More Crew";
     }
 }

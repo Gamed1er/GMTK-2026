@@ -135,7 +135,7 @@ public class FightPirateMinigame : MonoBehaviour, IMinigamePanel
     {
         if (remainingText == null) return;
 
-        bool isZh = GameManager.Instance.lang == Language.ZH;
+        bool isZh = LocalizationManager.IsZH;
         remainingText.text = isZh
             ? $"還需擊敗 {remainingPirates} 個海盜"
             : $"{remainingPirates} pirates left";

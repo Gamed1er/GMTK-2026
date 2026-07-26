@@ -42,7 +42,7 @@ public class DaySummaryUI : MonoBehaviour
         var rm = ResourceManager.Instance;
         var mm = MinigameManager.Instance;
         var gm = GameManager.Instance;
-        bool zh = gm.lang == Language.ZH;
+        bool zh = LocalizationManager.IsZH;
         int remainingDays = ResourceManager.Instance.RemainingDays;
         
         // 第 n 天

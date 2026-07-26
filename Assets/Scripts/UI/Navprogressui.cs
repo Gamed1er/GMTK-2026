@@ -61,7 +61,7 @@ public class NavProgressUI : MonoBehaviour
         if (remainingText != null)
         {
             int remainingDays = ResourceManager.Instance.RemainingDays;
-            bool isZh = GameManager.Instance != null && GameManager.Instance.lang == Language.ZH;
+            bool isZh = GameManager.Instance != null && LocalizationManager.IsZH;
             remainingText.text = isZh ? $"還剩 {remainingDays} 天" : $"{remainingDays} days left";
         }
     }

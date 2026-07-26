@@ -36,7 +36,7 @@ public class NightEventCardUI : MonoBehaviour
         rt         = GetComponent<RectTransform>();
         data       = eventData;
         onResolved = resolvedCallback;
-        bool zh    = GameManager.Instance.lang == Language.ZH;
+        bool zh    = LocalizationManager.IsZH;
 
         titleText.text       = zh ? data.titleZH       : data.titleEN;
         descriptionText.text = zh ? data.descriptionZH : data.descriptionEN;

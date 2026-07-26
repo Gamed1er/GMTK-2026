@@ -14,6 +14,9 @@ public class LocalizationManager : MonoBehaviour
 
     public Language CurrentLanguage { get; private set; } = Language.EN;
 
+    /// <summary>快捷判斷：目前語言是否為中文</summary>
+    public static bool IsZH => Instance != null && Instance.CurrentLanguage == Language.ZH;
+
     public event Action OnLanguageChanged;
 
     // ── String Table ──────────────────────────────────────
@@ -49,6 +52,26 @@ public class LocalizationManager : MonoBehaviour
 
         // 晚上事件按鈕
         ["night.continue"]       = ("Continue",          "繼續航行"),
+
+        // 主選單
+        ["menu.settings"]        = ("Settings",          "設定"),
+        ["menu.language"]        = ("中文 / EN",          "中文 / EN"),
+        ["menu.close"]           = ("Close",             "關閉"),
+        ["menu.bgm"]             = ("BGM",               "背景音樂"),
+        ["menu.sfx"]             = ("SFX",               "音效"),
+        ["menu.play"]            = ("Game Start",        "開始遊戲"),
+        ["menu.settingstitle"]   = ("Settings",          "設定"),
+        ["menu.language.en"]     = ("Language(English)", "Language(English)"),
+        ["menu.language.zh"]     = ("Language(中文)",    "Language(中文)"),
+
+        // 製作者名單
+        ["credits.studio"]       = ("Made by NCU Game Creator",              "本作品由中央大學創遊社製作"),
+        ["credits.hayu"]         = ("HAYU — Lead Designer",                 "HAYU — 主企劃"),
+        ["credits.huan"]         = ("Huan — Lead Artist, VFX",             "Huan — 主美術、特效"),
+        ["credits.gdnb"]         = ("GDNB — Lead Programmer, Art Support",  "遊戲亡 — 主程式、副美術"),
+        ["credits.ibu"]          = ("Ibuprofen — Associate Programmer",     "Ibuprofen — 副程式"),
+        ["credits.dirty"]        = ("DirtyShow — Music Composer",           "髒雪 — 配樂"),
+        // credits.thanks / credits.anthropic 已移除
     };
 
     // ── Lifecycle ─────────────────────────────────────────
@@ -57,6 +80,7 @@ public class LocalizationManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     // ── Public API ────────────────────────────────────────

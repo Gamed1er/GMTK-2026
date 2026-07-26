@@ -40,8 +40,6 @@ public class GameManager : MonoBehaviour
     public event Action OnNightStarted;
     public event Action<GameOverReason> OnGameOver;
 
-    public Language lang;
-
     [Header("Audio")]
     [SerializeField] private AudioClip dayStartMusic;
     [Range(0f, 1f)]
@@ -71,7 +69,28 @@ public class GameManager : MonoBehaviour
         nightAudioSource.playOnAwake = false;
     }
 
-    private void Start() => StartDay();
+    private void Start()
+    {
+        // 訂閱音量管理器，讓 BGM 音量即時同步
+        if (AudioVolumeManager.Instance != null)
+            AudioVolumeManager.Instance.OnBGMChanged += OnBGMVolumeChanged;
+
+        StartDay();
+    }
+
+    private void OnDestroy()
+    {
+        if (AudioVolumeManager.Instance != null)
+            AudioVolumeManager.Instance.OnBGMChanged -= OnBGMVolumeChanged;
+    }
+
+    private void OnBGMVolumeChanged(float vol)
+    {
+        if (audioSource != null && audioSource.isPlaying)
+            audioSource.volume = dayStartMusicVolume * vol;
+        if (nightAudioSource != null && nightAudioSource.isPlaying)
+            nightAudioSource.volume = nightBGMVolume * vol;
+    }
 
     private void Update()
     {
@@ -98,17 +117,19 @@ public class GameManager : MonoBehaviour
     private void PlayDayStartMusic()
     {
         if (dayStartMusic == null || audioSource == null) return;
+        float bgmVol = AudioVolumeManager.Instance?.BGMVolume ?? 1f;
         audioSource.loop = false;
         audioSource.clip = dayStartMusic;
-        audioSource.volume = dayStartMusicVolume;
+        audioSource.volume = dayStartMusicVolume * bgmVol;
         audioSource.Play();
     }
 
     private void PlayNightBGM()
     {
         if (nightBGM == null || nightAudioSource == null) return;
+        float bgmVol = AudioVolumeManager.Instance?.BGMVolume ?? 1f;
         nightAudioSource.clip = nightBGM;
-        nightAudioSource.volume = nightBGMVolume;
+        nightAudioSource.volume = nightBGMVolume * bgmVol;
         nightAudioSource.Play();
     }
 

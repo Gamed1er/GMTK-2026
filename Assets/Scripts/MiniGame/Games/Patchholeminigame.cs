@@ -185,7 +185,7 @@ public class PatchHoleMinigame : MonoBehaviour, IMinigamePanel
     {
         if (remainingText == null) return;
 
-        bool isZh = GameManager.Instance.lang == Language.ZH;
+        bool isZh = LocalizationManager.IsZH;
         remainingText.text = isZh
             ? $"還需要 {remainingNails} 個釘子"
             : $"{remainingNails} nails left";

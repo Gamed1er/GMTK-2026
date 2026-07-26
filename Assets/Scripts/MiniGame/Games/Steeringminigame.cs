@@ -230,7 +230,7 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
         int loops = Mathf.Min(CurrentLoops, requiredLoops);
         int remainingLoops = Mathf.Max(0, requiredLoops - loops);
 
-        bool isZh = GameManager.Instance.lang == Language.ZH;
+        bool isZh = LocalizationManager.IsZH;
         bool isLeft = targetDirection == SteerDirection.Left;
 
         if (isZh)

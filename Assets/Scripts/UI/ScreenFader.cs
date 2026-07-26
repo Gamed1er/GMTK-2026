@@ -35,7 +35,7 @@ public class ScreenFader : MonoBehaviour
     /// <summary>淡出 → 顯示文字 → 淡入（轉換到白天用）</summary>
     public void FadeToDay(int dayNumber, Action onMidpoint)
     {
-        bool zh = GameManager.Instance.lang == Language.ZH;
+        bool zh = LocalizationManager.IsZH;
         string text = zh ? $"第 {dayNumber} 天　白天" : $"Day {dayNumber}  —  Daytime";
         StartCoroutine(FadeRoutine(onMidpoint, text));
     }
@@ -43,7 +43,7 @@ public class ScreenFader : MonoBehaviour
     /// <summary>淡出 → 顯示文字 → 淡入（轉換到晚上用）</summary>
     public void FadeToNight(int dayNumber, Action onMidpoint)
     {
-        bool zh = GameManager.Instance.lang == Language.ZH;
+        bool zh = LocalizationManager.IsZH;
         string text = zh ? $"第 {dayNumber} 天　夜晚" : $"Day {dayNumber}  —  Night";
         StartCoroutine(FadeRoutine(onMidpoint, text));
     }

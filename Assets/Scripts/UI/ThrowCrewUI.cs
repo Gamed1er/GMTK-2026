@@ -62,7 +62,7 @@ public class ThrowCrewUI : MonoBehaviour
 
     private void Refresh()
     {
-        bool zh = GameManager.Instance.lang == Language.ZH;
+        bool zh = LocalizationManager.IsZH;
         int maxAllowed = Mathf.Max(0, ResourceManager.Instance.Crew - 1);
 
         titleText.text = zh ? "丟人下海" : "Throw Crew Overboard";
