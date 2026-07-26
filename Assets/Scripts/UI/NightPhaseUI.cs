@@ -70,14 +70,13 @@ public class NightPhaseUI : MonoBehaviour
         exitLabel.text = zh ? "離開" : "Leave";
 
         nightPanel.SetActive(true);
-        eventPanel.SetActive(false); // 等 OnEventsReady 再開
     }
 
     /// <summary>NightEventManager 抽完事件後才生成卡片</summary>
     private void OnEventsReady()
     {
+        eventPanel.SetActive(true); // 先開 Panel，卡片才能啟動 Coroutine
         SpawnEventCards();
-        eventPanel.SetActive(true);
     }
 
     private void SpawnEventCards()

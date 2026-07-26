@@ -21,12 +21,12 @@ public class NightEventManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-    }
 
-    private void Start()
-    {
+        // Awake 訂閱確保在 NightPhaseUI.Start 之前執行，避免事件順序競爭
         GameManager.Instance.OnNightStarted += OnNightStarted;
     }
+
+    private void Start() { } // 保留空 Start 避免 Unity 警告
 
     private void OnDestroy()
     {
