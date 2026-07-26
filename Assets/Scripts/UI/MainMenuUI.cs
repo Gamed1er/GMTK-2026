@@ -134,6 +134,7 @@ public class MainMenuUI : MonoBehaviour
             $"{loc.Get("credits.huan")}\n" +
             $"{loc.Get("credits.gdnb")}\n" +
             $"{loc.Get("credits.ibu")}\n" +
-            $"{loc.Get("credits.dirty")}";
+            $"{loc.Get("credits.dirty")}\n" +
+            $"{loc.Get("credits.egg")}";
     }
 }
