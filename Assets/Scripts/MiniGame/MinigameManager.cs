@@ -223,9 +223,9 @@ public class MinigameManager : MonoBehaviour
     {
         // 暖機邏輯
         int count;
-        if (spawnWaveCount < 2)       count = 1;
-        else if (spawnWaveCount < 4)  count = UnityEngine.Random.Range(1, 3); // 1~2
-        else                           count = UnityEngine.Random.Range(1, 4); // 1~3
+        if (spawnWaveCount < 2)       count = 2;
+        else if (spawnWaveCount < 4)  count = UnityEngine.Random.Range(2, 5); // 2~4
+        else                           count = UnityEngine.Random.Range(2, 7); // 2~6
 
         spawnWaveCount++;
 
