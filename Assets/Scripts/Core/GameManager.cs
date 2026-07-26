@@ -15,12 +15,24 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Day Settings")]
-    [SerializeField] private float dayDuration = 60f; // 白天持續秒數
+    [SerializeField] private float dayDuration = 60f;
+
+    [Header("每日小遊戲生成設定")]
+    [Tooltip("第 n 天用 index n-1；超出 List 則用最後一筆")]
+    [SerializeField] private System.Collections.Generic.List<DaySpawnConfig> dayConfigs;
 
     public GamePhase CurrentPhase { get; private set; }
     public float DayTimer { get; private set; }
     public float DayDuration => dayDuration;
     public int DayCount { get; private set; } = 1;
+
+    /// <summary>取得當天的生成設定，超出 List 用最後一筆；List 為空回傳 null</summary>
+    public DaySpawnConfig GetCurrentDayConfig()
+    {
+        if (dayConfigs == null || dayConfigs.Count == 0) return null;
+        int idx = Mathf.Min(DayCount - 1, dayConfigs.Count - 1);
+        return dayConfigs[idx];
+    }
 
     public event Action<GamePhase> OnPhaseChanged;
     public event Action<int> OnDayStarted;       // int = day number
@@ -115,6 +127,21 @@ public class GameManager : MonoBehaviour
 
         ResourceManager.Instance.ApplyDailyConsumption();
         OnDayEnded?.Invoke();
+    }
+
+    /// <summary>開發用作弊：跳過目前階段</summary>
+    public void CheatSkipPhase()
+    {
+        if (CurrentPhase == GamePhase.Day)
+        {
+            Debug.Log("[Cheat] 跳過白天");
+            DayTimer = 0f; // 讓 Update 自然觸發 EndDay
+        }
+        else if (CurrentPhase == GamePhase.Night)
+        {
+            Debug.Log("[Cheat] 跳過夜晚");
+            EndNight();
+        }
     }
 
     // ── Night ─────────────────────────────────────────────

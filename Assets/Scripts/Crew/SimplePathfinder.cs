@@ -30,6 +30,21 @@ public class SimplePathfinder : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+
+        // referenceTilemap 未設定時自動抓第一個 wallTilemap，或場景任意 Tilemap
+        if (referenceTilemap == null && wallTilemaps != null)
+            foreach (var tm in wallTilemaps)
+                if (tm != null) { referenceTilemap = tm; break; }
+
+        if (referenceTilemap == null)
+            referenceTilemap = FindObjectOfType<Tilemap>();
+
+        if (referenceTilemap == null)
+        {
+            Debug.LogError("[SimplePathfinder] 找不到任何 Tilemap，請在 Inspector 設定 referenceTilemap。");
+            return;
+        }
+
         BakeGrid();
     }
 

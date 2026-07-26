@@ -63,9 +63,11 @@ public class MinigameManager : MonoBehaviour
     [Header("Minigame Configs")]
     [SerializeField] private List<MinigameData> allMinigameData;
 
-    [Header("Spawn Settings")]
-    [SerializeField] private float minSpawnInterval = 3f;
-    [SerializeField] private float maxSpawnInterval = 5f;
+    [Header("Spawn Settings（無 DaySpawnConfig 時的 fallback）")]
+    [SerializeField] private float defaultMinInterval = 3f;
+    [SerializeField] private float defaultMaxInterval = 5f;
+    [SerializeField] private int   defaultMinCount    = 1;
+    [SerializeField] private int   defaultMaxCount    = 3;
 
     public List<MinigameInstance> ActiveMinigames { get; private set; } = new();
 
@@ -84,7 +86,15 @@ public class MinigameManager : MonoBehaviour
     private int spawnWaveCount = 0; // 本日已生成幾波
 
     [Header("Spawn Timing")]
-    [SerializeField] private float spawnTimeBuffer = 5f; // TotalWorkRequired + 此值 = 不再刷新該事件的剩餘時間門檻
+    [SerializeField] private float spawnTimeBuffer = 5f;
+
+    [Header("音效")]
+    [SerializeField] private AudioClip successSFX;
+    [SerializeField] private float successVolume = 1.6f;
+    [SerializeField] private AudioClip failSFX;
+    [SerializeField] private float failVolume = 2.0f;
+
+    private AudioSource audioSource;
 
     // ── Lifecycle ─────────────────────────────────────────
 
@@ -92,12 +102,16 @@ public class MinigameManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
     }
 
     private void Start()
     {
         GameManager.Instance.OnPhaseChanged += HandlePhaseChanged;
-        ResetSpawnTimer();
+        nextSpawnTimer = 0.5f; // 第一波快速出現
     }
 
     private void OnDestroy()
@@ -112,6 +126,7 @@ public class MinigameManager : MonoBehaviour
         {
             DayFailCount = 0;
             spawnWaveCount = 0;
+            nextSpawnTimer = 0.5f; // 每天開始也快速出現第一波
         }
     }
 
@@ -174,7 +189,7 @@ public class MinigameManager : MonoBehaviour
         {
             Id = nextInstanceId++,
             Data = data,
-            Difficulty = CurrentDifficulty,
+            Difficulty = RollDifficulty(),
             Timer = data.countdownDuration,
             SpawnPoint = spawnPoint
         };
@@ -210,9 +225,18 @@ public class MinigameManager : MonoBehaviour
         // 釋放 spawn point
         occupiedPoints.Remove(m.SpawnPoint);
 
-        // 釋放船員
-        foreach (var crew in m.AssignedCrew)
+        // 釋放船員（先複製再清空，避免 FreeCrewMember → UnassignFromCurrentTask 在迭代中修改集合）
+        var crewToFree = new System.Collections.Generic.List<CrewMember>(m.AssignedCrew);
+        m.AssignedCrew.Clear();
+        foreach (var crew in crewToFree)
             CrewManager.Instance.FreeCrewMember(crew);
+
+        // 播放音效
+        if (audioSource != null)
+        {
+            if (success && successSFX != null) audioSource.PlayOneShot(successSFX, successVolume);
+            else if (!success && failSFX != null) audioSource.PlayOneShot(failSFX, failVolume);
+        }
 
         OnMinigameResolved?.Invoke(m, success);
         ActiveMinigames.Remove(m);
@@ -222,8 +246,10 @@ public class MinigameManager : MonoBehaviour
 
     private void TrySpawnWave()
     {
-        // 暖機邏輯
-        int count = UnityEngine.Random.Range(1, 4); // 每波 1~3 個，無暖機
+        var cfg = GameManager.Instance.GetCurrentDayConfig();
+        int min = cfg != null ? cfg.minSpawnCount : defaultMinCount;
+        int max = cfg != null ? cfg.maxSpawnCount : defaultMaxCount;
+        int count = UnityEngine.Random.Range(min, max + 1);
 
         spawnWaveCount++;
 
@@ -233,6 +259,8 @@ public class MinigameManager : MonoBehaviour
 
     private void TrySpawnRandom()
     {
+        var cfg = GameManager.Instance.GetCurrentDayConfig();
+
         // 收集所有「可生成」的 (data, point) 組合
         var candidates = new List<(MinigameData data, Vector2 point, float weight)>();
 
@@ -246,10 +274,14 @@ public class MinigameManager : MonoBehaviour
             float timeNeeded = d.crewRequiredToComplete * d.crewCompletionTime + spawnTimeBuffer;
             if (GameManager.Instance.DayTimer < timeNeeded) continue;
 
+            // 本日權重：有 config 用 config，否則用 MinigameData 自身的 spawnWeight
+            float weight = cfg != null ? cfg.GetWeight(d.type) : d.spawnWeight;
+            if (weight <= 0f) continue; // 權重為 0 → 本日不生成
+
             foreach (var point in d.spawnPoints)
             {
                 if (!occupiedPoints.Contains(point))
-                    candidates.Add((d, point, d.spawnWeight));
+                    candidates.Add((d, point, weight));
             }
         }
 
@@ -278,8 +310,24 @@ public class MinigameManager : MonoBehaviour
             ResolveMinigame(ActiveMinigames[i], success: false);
     }
 
+    /// <summary>
+    /// 依當天日期計算難度範圍，隨機回傳 0~5 的整數難度。
+    /// 最低難度 = min(max(0, day / 2), 3)
+    /// 最高難度 = min(day + 1, 5)
+    /// </summary>
+    private int RollDifficulty()
+    {
+        int day     = GameManager.Instance.DayCount;
+        int minDiff = Mathf.Min(Mathf.Max(0, day / 2), 3);
+        int maxDiff = Mathf.Min(day + 1, 5);
+        return UnityEngine.Random.Range(minDiff, maxDiff + 1); // 上限含入
+    }
+
     private void ResetSpawnTimer()
     {
-        nextSpawnTimer = UnityEngine.Random.Range(minSpawnInterval, maxSpawnInterval);
+        var cfg = GameManager.Instance?.GetCurrentDayConfig();
+        float min = cfg != null ? cfg.minSpawnInterval : defaultMinInterval;
+        float max = cfg != null ? cfg.maxSpawnInterval : defaultMaxInterval;
+        nextSpawnTimer = UnityEngine.Random.Range(min, max);
     }
 }

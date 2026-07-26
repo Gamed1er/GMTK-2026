@@ -7,7 +7,7 @@ from pathlib import Path
 
 folder = Path(__file__).parent
 
-m4a_files = list(folder.rglob("*.m4a"))
+m4a_files = list(folder.rglob("*.ogg"))
 
 if not m4a_files:
     print("找不到任何 .m4a 檔案")

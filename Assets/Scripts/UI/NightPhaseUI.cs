@@ -84,6 +84,7 @@ public class NightPhaseUI : MonoBehaviour
         foreach (var data in NightEventManager.Instance.CurrentNightEvents)
         {
             var go = Instantiate(eventCardPrefab, cardContainer);
+            go.SetActive(true); // 確保啟用後再呼叫 Init，否則 Coroutine 無法啟動
             go.GetComponent<NightEventCardUI>().Init(data, OnCardResolved);
             spawnedCards.Add(go);
         }

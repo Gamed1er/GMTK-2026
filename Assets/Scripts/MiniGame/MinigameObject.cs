@@ -61,6 +61,11 @@ public class MinigameObject : MonoBehaviour
     [Tooltip("勾選則用縱向（scale.y）模擬 fill，否則用橫向（scale.x）")]
     [SerializeField] private bool fillVertically = false;
 
+    [Header("工作特效（留空則不播）")]
+    [Tooltip("船員工作中每隔一段時間播放的粒子效果名稱，對應 ParticleEffectManager 的 effectName")]
+    [SerializeField] private string workingParticleName = "";
+    [SerializeField] private float  particleInterval    = 0.5f;
+
     [Header("Off-Screen Clamp（視野外時移到邊緣顯示）")]
     [Tooltip("夾到邊緣時，距離螢幕邊界內縮多少視口比例（0~0.5），避免完全貼邊")]
     [SerializeField, Range(0f, 0.45f)] private float viewportEdgePadding = 0.05f;
@@ -69,7 +74,8 @@ public class MinigameObject : MonoBehaviour
 
     private MinigameInstance myInstance;
     private Camera mainCamera;
-    private bool isOnScreen = true; // 目前 SpawnPoint 是否在畫面內，決定能否互動
+    private bool isOnScreen = true;
+    private float particleTimer = 0f;
 
     private SpriteRenderer[] allRenderers;
 
@@ -120,7 +126,9 @@ public class MinigameObject : MonoBehaviour
 
     private void UpdateVisual()
     {
-        bool isWorking = myInstance.HasEnoughCrew;
+        // ★ 修改：只有船員實際抵達並進入 Working 狀態才顯示「工作中」
+        bool isWorking = myInstance.AssignedCrew.Exists(
+            c => c != null && c.IsWorking && c.AssignedMinigame == myInstance);
 
         SetActiveSafe(countdownBackgroundRenderer, !isWorking);
         SetActiveSafe(countdownFillRenderer, !isWorking);
@@ -135,11 +143,23 @@ public class MinigameObject : MonoBehaviour
         if (isWorking)
         {
             float total = myInstance.TotalWorkRequired;
-            float progress = total > 0f ? 1 - myInstance.CrewWorkProgress / total : 0f;
+            float progress = total > 0f ? 1f - myInstance.CrewWorkProgress / total : 0f;
             SetFill(workingFillMaskTransform, Mathf.Clamp01(progress));
+
+            // ★ 工作粒子效果（補洞填 "water"，滅火填 "fire"）
+            if (!string.IsNullOrEmpty(workingParticleName) && ParticleEffectManager.Instance != null)
+            {
+                particleTimer -= Time.deltaTime;
+                if (particleTimer <= 0f)
+                {
+                    particleTimer = particleInterval;
+                    ParticleEffectManager.Instance.Play(workingParticleName, myInstance.WorldPosition);
+                }
+            }
         }
         else
         {
+            particleTimer = 0f; // 不工作時重設，讓下次立刻播
             float total = myInstance.Data.countdownDuration;
             float progress = total > 0f ? myInstance.Timer / total : 0f;
             SetFill(countdownFillMaskTransform, Mathf.Clamp01(progress));
