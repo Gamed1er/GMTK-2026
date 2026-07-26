@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 927050973439743692}
   - component: {fileID: 7189949312454527056}
   - component: {fileID: 3380482375904428931}
+  - component: {fileID: 5156033608236982185}
   m_Layer: 5
   m_Name: PirateUnit
   m_TagString: Untagged
@@ -137,8 +138,11 @@ MonoBehaviour:
   pirateImage: {fileID: 5921437429595014953}
   hitStageSprites:
   - {fileID: 21300000, guid: 3056016d6cceac34583b9461deded1af, type: 3}
-  minSpeed: 200
-  maxSpeed: 300
+  minSpeed: 400
+  maxSpeed: 600
+  defeatEffectDuration: 0.5
+  shakeMagnitude: 15
+  shakeFrequency: 25
   hitSfx: {fileID: 8300000, guid: 850f8689d5212ed4892d87ede11eaedd, type: 3}
   defeatSfx: {fileID: 8300000, guid: 850f8689d5212ed4892d87ede11eaedd, type: 3}
   hitSfxVolume: 1
@@ -239,3 +243,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!225 &5156033608236982185
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8168286179982160750}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
