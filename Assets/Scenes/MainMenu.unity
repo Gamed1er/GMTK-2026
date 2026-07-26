@@ -763,7 +763,7 @@ MonoBehaviour:
   closeButton: {fileID: 538806122}
   closeLabel: {fileID: 41203629}
   gameSceneName: Main
-  menuBGM: {fileID: 8300000, guid: 91cb01808f5915602a4414a424862b74, type: 3}
+  menuBGM: {fileID: 8300000, guid: 24459ffa4c971bc46bb58ac7f50d7076, type: 3}
   menuBGMVolume: 1
   fadeOutDuration: 0.5
 --- !u!82 &325306421

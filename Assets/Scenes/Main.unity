@@ -2482,7 +2482,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4db0b7142103698338ee12be1fe2f3b2, type: 2}
   dayStartMusic: {fileID: 8300000, guid: 7e90787048743749d95667ff33347e73, type: 3}
   dayStartMusicVolume: 0.5
-  nightBGM: {fileID: 8300000, guid: 91cb01808f5915602a4414a424862b74, type: 3}
+  nightBGM: {fileID: 8300000, guid: 24459ffa4c971bc46bb58ac7f50d7076, type: 3}
   nightBGMVolume: 0.5
   gameOverSceneName: GameOver
 --- !u!4 &229837034
