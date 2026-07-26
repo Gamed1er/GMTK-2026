@@ -24,6 +24,8 @@ public class CrewMember : MonoBehaviour
     private List<Vector2> currentPath = new();
     private int pathIndex = 0;
     private float wanderTimer = 0f;
+    private float wanderTimeout = 0f;
+    private const float WanderTimeLimit = 2f;
     private bool isDragging = false;
 
     private CrewAnimatorController crewAnim;
@@ -69,6 +71,16 @@ public class CrewMember : MonoBehaviour
             case CrewState.Wandering:
                 if (pathIndex >= currentPath.Count)
                 {
+                    SetState(CrewState.Idle);
+                    wanderTimer = Random.Range(wanderIntervalMin, wanderIntervalMax);
+                    break;
+                }
+                wanderTimeout -= Time.deltaTime;
+                if (wanderTimeout <= 0f)
+                {
+                    // 超時：取消遊走，待機到下一次
+                    currentPath.Clear();
+                    pathIndex = 0;
                     SetState(CrewState.Idle);
                     wanderTimer = Random.Range(wanderIntervalMin, wanderIntervalMax);
                     break;
@@ -127,6 +139,7 @@ public class CrewMember : MonoBehaviour
         {
             currentPath = path;
             pathIndex = 0;
+            wanderTimeout = WanderTimeLimit;
             SetState(CrewState.Wandering);
         }
         else

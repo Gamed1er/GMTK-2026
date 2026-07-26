@@ -43,6 +43,10 @@ public class PlayerController : MonoBehaviour
         // 切換動畫
         if (animator != null)
             animator.SetBool("isWalking", moveInput != Vector2.zero);
+
+        // DEBUG：按 H 印出位置
+        if (Input.GetKeyDown(KeyCode.H))
+            Debug.Log($"[DEBUG] 玩家位置：{transform.position}");
     }
 
     private void FixedUpdate()
