@@ -18,6 +18,6 @@ MonoBehaviour:
   maxSpawnCount: 3
   steeringWeight: 1
   fishingWeight: 1
-  patchHoleWeight: 1
-  fightPirateWeight: 1
-  firefightingWeight: 1
+  patchHoleWeight: 3
+  fightPirateWeight: 3
+  firefightingWeight: 3

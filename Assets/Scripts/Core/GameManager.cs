@@ -75,7 +75,11 @@ public class GameManager : MonoBehaviour
         if (AudioVolumeManager.Instance != null)
             AudioVolumeManager.Instance.OnBGMChanged += OnBGMVolumeChanged;
 
-        StartDay();
+        // 第一天用 FadeFromBlack：直接從黑幕顯示「第 1 天」後淡入，再開始遊戲
+        if (ScreenFader.Instance != null)
+            ScreenFader.Instance.FadeFromBlack(DayCount, StartDay);
+        else
+            StartDay();
     }
 
     private void OnDestroy()

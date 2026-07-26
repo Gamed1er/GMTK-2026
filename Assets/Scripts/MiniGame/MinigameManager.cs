@@ -231,11 +231,12 @@ public class MinigameManager : MonoBehaviour
         foreach (var crew in crewToFree)
             CrewManager.Instance.FreeCrewMember(crew);
 
-        // 播放音效
+        // 播放音效（乘上 SFX 音量滑桿）
         if (audioSource != null)
         {
-            if (success && successSFX != null) audioSource.PlayOneShot(successSFX, successVolume);
-            else if (!success && failSFX != null) audioSource.PlayOneShot(failSFX, failVolume);
+            float sfxVol = AudioVolumeManager.Instance?.SFXVolume ?? 1f;
+            if (success && successSFX != null) audioSource.PlayOneShot(successSFX, successVolume * sfxVol);
+            else if (!success && failSFX != null) audioSource.PlayOneShot(failSFX, failVolume * sfxVol);
         }
 
         OnMinigameResolved?.Invoke(m, success);

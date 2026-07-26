@@ -26,6 +26,29 @@ public class NightPhaseUI : MonoBehaviour
     [SerializeField] private Button          exitButton;
     [SerializeField] private TextMeshProUGUI exitLabel;
 
+    [Header("提示文字（和離開按鈕同步顯示/隱藏）")]
+    [SerializeField] private TextMeshProUGUI hintLabel;
+
+    private static readonly string[] hintsZH =
+    {
+        "提示：你可以拖動船員讓他更加「快速」的移動",
+        "提示：船員越多、消耗的食物越多",
+        "提示：釣魚事件是為數不多的增加食物手段",
+        "提示：標注為藍色圖示的任務代表船員正在執行",
+        "提示：海盜其實沒有採木板處刑的環節，船長想殺人都直接把人丟下去",
+        "提示：這艘船其實不是海盜船",
+    };
+
+    private static readonly string[] hintsEN =
+    {
+        "Tip: You can drag crew members to move them faster",
+        "Tip: More crew means more food consumption per day",
+        "Tip: Fishing is one of the few ways to gain food",
+        "Tip: Tasks with a blue icon have a crew member working on them",
+        "Tip: Pirates don't actually plank-walk anyone — the captain just throws them overboard",
+        "Tip: This ship is actually not a pirate ship",
+    };
+
     private readonly List<GameObject> spawnedCards = new();
 
     // ── Lifecycle ─────────────────────────────────────────
@@ -35,6 +58,7 @@ public class NightPhaseUI : MonoBehaviour
         nightPanel.SetActive(false);
         eventPanel.SetActive(false);
         exitButton.gameObject.SetActive(false);
+        if (hintLabel != null) hintLabel.gameObject.SetActive(false);
 
         if (NightEventManager.Instance == null)
         {
@@ -92,15 +116,25 @@ public class NightPhaseUI : MonoBehaviour
 
     private void OnCardResolved()
     {
-        // 事件選完 → 關 EventPanel，直接顯示離開按鈕
+        // 事件選完 → 關 EventPanel，顯示離開按鈕 + 隨機提示
         eventPanel.SetActive(false);
         exitButton.gameObject.SetActive(true);
+        ShowRandomHint();
+    }
+
+    private void ShowRandomHint()
+    {
+        if (hintLabel == null) return;
+        string[] hints = LocalizationManager.IsZH ? hintsZH : hintsEN;
+        hintLabel.text = hints[UnityEngine.Random.Range(0, hints.Length)];
+        hintLabel.gameObject.SetActive(true);
     }
 
     private void OnExit()
     {
         nightPanel.SetActive(false);
         exitButton.gameObject.SetActive(false);
+        if (hintLabel != null) hintLabel.gameObject.SetActive(false);
         ScreenFader.Instance.FadeToDay(GameManager.Instance.DayCount + 1, GameManager.Instance.EndNight);
     }
 }
