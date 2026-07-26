@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  workRange: 1
+  workRange: 1.5
   wanderRadius: 4
   wanderIntervalMin: 1.5
   wanderIntervalMax: 3.5
@@ -225,6 +225,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: af61c1d25bfe7132fbe89750de1e8771, type: 3}
   - {fileID: 8300000, guid: e3e8e1adf88b8e64b9ccb2f8ad32c8f5, type: 3}
   - {fileID: 8300000, guid: c363e21c6deca717a80999ee29c0b07b, type: 3}
+  screamSounds: []
+  screamFadeDuration: 1.5
 --- !u!1 &3358104519004810005
 GameObject:
   m_ObjectHideFlags: 0

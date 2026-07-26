@@ -22,16 +22,16 @@ MonoBehaviour:
     food: 0
     crew: 0
     shipHP: 0
-    navProgress: 5
+    navProgress: 0.5
   failureDelta:
     food: 0
     crew: 0
     shipHP: 0
-    navProgress: -5
+    navProgress: -0.5
   panelPrefab: {fileID: 2982232481384933966, guid: 1e3c2daee9a5fcd4ab93a7cfb8cc1058, type: 3}
   worldObjectPrefab: {fileID: 6451933085745357331, guid: 0d35e522f3a2c07dfae22d02784e065c, type: 3}
   spawnPoints:
   - {x: -25, y: 0}
   canSpawnRandomly: 1
   spawnWeight: 100
-  onlyOneAtATime: 0
+  onlyOneAtATime: 1

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a464f1cb81c7555abbec4264fc4b0b38, type: 3}
-  m_Name: Steeringminigame 1
+  m_Name: FireFighting
   m_EditorClassIdentifier: 
   type: 5
   nameEN: FireFighting
@@ -21,17 +21,26 @@ MonoBehaviour:
   successDelta:
     food: 0
     crew: 0
-    shipHP: 0
-    navProgress: 5
+    shipHP: 0.5
+    navProgress: 0
   failureDelta:
     food: 0
     crew: 0
-    shipHP: 0
-    navProgress: -5
+    shipHP: -5
+    navProgress: 0
   panelPrefab: {fileID: 1748887300811757037, guid: 6a04bf1b5733030429b0f3caa2348a15, type: 3}
   worldObjectPrefab: {fileID: 6451933085745357331, guid: 0d35e522f3a2c07dfae22d02784e065c, type: 3}
   spawnPoints:
-  - {x: -25, y: 0}
+  - {x: 3, y: -1}
+  - {x: 1.7, y: 2}
+  - {x: 14, y: 1.5}
+  - {x: 25, y: 0}
+  - {x: 19, y: -2}
+  - {x: 2, y: -1}
+  - {x: -4, y: 4.5}
+  - {x: -18, y: 2}
+  - {x: -23, y: 2.5}
+  - {x: -23, y: -1}
   canSpawnRandomly: 1
-  spawnWeight: 100
+  spawnWeight: 10
   onlyOneAtATime: 0

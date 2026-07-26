@@ -24,8 +24,10 @@ public class CrewMember : MonoBehaviour
     private List<Vector2> currentPath = new();
     private int pathIndex = 0;
     private float wanderTimer = 0f;
-    private float wanderTimeout = 0f;
-    private const float WanderTimeLimit = 2f;
+    private Vector2 lastPosition;
+    private float stuckTimer = 0f;
+    private const float StuckCheckInterval = 0.1f;
+    private const float StuckThreshold = 0.01f; // 位移小於此值視為卡住
     private bool isDragging = false;
 
     private CrewAnimatorController crewAnim;
@@ -75,15 +77,20 @@ public class CrewMember : MonoBehaviour
                     wanderTimer = Random.Range(wanderIntervalMin, wanderIntervalMax);
                     break;
                 }
-                wanderTimeout -= Time.deltaTime;
-                if (wanderTimeout <= 0f)
+                stuckTimer -= Time.deltaTime;
+                if (stuckTimer <= 0f)
                 {
-                    // 超時：取消遊走，待機到下一次
-                    currentPath.Clear();
-                    pathIndex = 0;
-                    SetState(CrewState.Idle);
-                    wanderTimer = Random.Range(wanderIntervalMin, wanderIntervalMax);
-                    break;
+                    if (Vector2.Distance(transform.position, lastPosition) < StuckThreshold)
+                    {
+                        // 卡住：取消遊走，待機到下一次
+                        currentPath.Clear();
+                        pathIndex = 0;
+                        SetState(CrewState.Idle);
+                        wanderTimer = Random.Range(wanderIntervalMin, wanderIntervalMax);
+                        break;
+                    }
+                    lastPosition = transform.position;
+                    stuckTimer   = StuckCheckInterval;
                 }
                 FollowPath();
                 break;
@@ -137,9 +144,10 @@ public class CrewMember : MonoBehaviour
         var path = FindWanderPath(target);
         if (path != null && path.Count > 0)
         {
-            currentPath = path;
-            pathIndex = 0;
-            wanderTimeout = WanderTimeLimit;
+            currentPath  = path;
+            pathIndex    = 0;
+            lastPosition = transform.position;
+            stuckTimer   = StuckCheckInterval;
             SetState(CrewState.Wandering);
         }
         else
