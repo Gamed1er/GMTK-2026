@@ -253,11 +253,7 @@ public class MinigameObject : MonoBehaviour
     {
         if (myInstance == null || myInstance.IsCompleted) return;
  
-        if (myInstance.IsPlayerAssigned)
-        {
-            Debug.Log("[MinigameObject] 玩家正在執行這個小遊戲，暫時無法點擊。");
-            return;
-        }
+        if (MinigameUIManager.Instance != null && MinigameUIManager.Instance.IsPanelOpen) return;
 
         if (!isOnScreen)
         {

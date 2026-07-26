@@ -19,6 +19,9 @@ public class MinigameUIManager : MonoBehaviour
     private GameObject currentPanel; // 目前開著的面板
     private MinigameInstance currentInstance; // 目前面板對應的小遊戲實例
 
+    /// <summary>目前是否有任何小遊戲面板開著（供 MinigameObject 判斷是否可點擊）</summary>
+    public bool IsPanelOpen => currentPanel != null;
+
     // ── Lifecycle ─────────────────────────────────────────
 
     private void Awake()
