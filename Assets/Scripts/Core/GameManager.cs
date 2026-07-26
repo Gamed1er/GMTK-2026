@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
         PlayDayStartMusic();
         OnPhaseChanged?.Invoke(GamePhase.Day);
         OnDayStarted?.Invoke(DayCount);
+        //TriggerGameOver(GameOverReason.Victory); // test
     }
 
     private void PlayDayStartMusic()
@@ -110,11 +111,19 @@ public class GameManager : MonoBehaviour
 
     // ── Game Over ─────────────────────────────────────────
 
+    [Header("Scenes")]
+    [Tooltip("結局場景名稱（需已加入 Build Settings）")]
+    [SerializeField] private string gameOverSceneName = "GameOver";
+
     public void TriggerGameOver(GameOverReason reason)
     {
         if (CurrentPhase == GamePhase.GameOver) return;
         CurrentPhase = GamePhase.GameOver;
         Debug.Log($"[GameManager] Game Over: {reason}");
+
+        GameOverContext.SetReason(reason);
         OnGameOver?.Invoke(reason);
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene(gameOverSceneName);
     }
 }
