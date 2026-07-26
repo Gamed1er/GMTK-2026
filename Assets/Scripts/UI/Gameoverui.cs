@@ -133,10 +133,10 @@ public class GameOverUI : MonoBehaviour
             // 備援文字：LocalizationManager 在本 Scene 不存在時使用
             resultText.text = reason switch
             {
-                GameOverReason.Victory     => isZh ? "抵達新大陸！"        : "You reached the New World!",
-                GameOverReason.NoFood      => isZh ? "糧食耗盡，全員餓死"  : "The crew starved at sea.",
-                GameOverReason.ShipSunk    => isZh ? "船沉了"              : "The ship sank.",
-                GameOverReason.CaptainDead => isZh ? "船長陣亡"            : "The captain has fallen.",
+                GameOverReason.Victory     => isZh ? "嘗試航行更遠吧"        : "You reached the New World!",
+                GameOverReason.NoFood      => isZh ? "船員每天都要吃口糧，減少人口就能減少口糧消耗，避免全員餓死的慘劇。"  : "The crew starved at sea.",
+                GameOverReason.ShipSunk    => isZh ? "海盜可不會講道義！甲板交戰時，船員就是船長最好的肉盾。"              : "The ship sank.",
+                GameOverReason.CaptainDead => isZh ? "再強大的船長也無法光靠一塊木板游過汪洋。請隨時檢查船體耐久度。"            : "The captain has fallen.",
                 _ => ""
             };
         }
