@@ -145,8 +145,8 @@ MonoBehaviour:
   shakeFrequency: 25
   hitSfx: {fileID: 8300000, guid: 850f8689d5212ed4892d87ede11eaedd, type: 3}
   defeatSfx: {fileID: 8300000, guid: 850f8689d5212ed4892d87ede11eaedd, type: 3}
-  hitSfxVolume: 1
-  defeatSfxVolume: 0.6
+  hitSfxVolume: 0.4
+  defeatSfxVolume: 0.4
 --- !u!82 &3380482375904428931
 AudioSource:
   m_ObjectHideFlags: 0
