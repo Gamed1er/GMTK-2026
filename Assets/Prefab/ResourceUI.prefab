@@ -290,6 +290,10 @@ MonoBehaviour:
   crewText: {fileID: 1269299697383434188}
   shipHPText: {fileID: 6253018372503469549}
   clockHand: {fileID: 4113305536792472003}
+  floatingTextPrefab: {fileID: 5204920244903950749, guid: c9fecdf985ad7124e9a00edb978806e4, type: 3}
+  foodFloatAnchor: {fileID: 4460788335752958544}
+  crewFloatAnchor: {fileID: 2303742179418142894}
+  shipHPFloatAnchor: {fileID: 7104635242992174340}
 --- !u!114 &5766583568976744328
 MonoBehaviour:
   m_ObjectHideFlags: 0

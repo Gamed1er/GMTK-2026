@@ -385,7 +385,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 5555
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b8f31a44b29d60f888f92cb601c227bc, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 25658faca90de6e4cab4244bccf116d7, type: 2}
   m_sharedMaterial: {fileID: -4661264108782483815, guid: b8f31a44b29d60f888f92cb601c227bc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -449,7 +449,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &22081666
@@ -2480,9 +2480,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f579f7e36e414d729ab386f789a6535a, type: 2}
   - {fileID: 11400000, guid: 4db0b7142103698338ee12be1fe2f3b2, type: 2}
   dayStartMusic: {fileID: 8300000, guid: 7b709ac485c0a824f81268c95ef409fe, type: 3}
-  dayStartMusicVolume: 1
+  dayStartMusicVolume: 0.5
   nightBGM: {fileID: 8300000, guid: 7b709ac485c0a824f81268c95ef409fe, type: 3}
-  nightBGMVolume: 1
+  nightBGMVolume: 0.5
   gameOverSceneName: GameOver
 --- !u!4 &229837034
 Transform:
@@ -6853,7 +6853,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 30
+  m_Spacing: 60
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -25871,7 +25871,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4dcfa653e076a84d9a60dfe4231f20d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effects: []
+  effects:
+  - effectName: water
+    prefab: {fileID: 4394197850082445332, guid: 7c43ba1683f15a048b01d1e9c579070c, type: 3}
 --- !u!114 &1847263157
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -26,6 +26,10 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
     [Header("Difficulty")]
     [SerializeField] private int baseLoops = 3; // 基礎圈數
 
+    [Header("轉錯方向懲罰")]
+    [Tooltip("轉錯方向時，扣除已累積角度的倍率（1 = 反向扣回等量角度，可設更高做更重的懲罰）")]
+    [SerializeField] private float wrongDirectionPenaltyMultiplier = 1f;
+
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI progressText;   
     [SerializeField] private TextMeshProUGUI directionText;  
@@ -145,6 +149,12 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
             accumulatedDegrees += Mathf.Abs(deltaAngle);
             UpdateDirectionText();
             CheckComplete();
+        }
+        else
+        {
+            // 轉錯方向：扣回已累積角度作為懲罰（允許變負，代表倒退圈數）
+            accumulatedDegrees -= Mathf.Abs(deltaAngle) * wrongDirectionPenaltyMultiplier;
+            UpdateDirectionText();
         }
     }
 
