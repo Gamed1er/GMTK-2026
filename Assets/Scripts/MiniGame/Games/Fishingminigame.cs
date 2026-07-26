@@ -62,6 +62,8 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
     [Header("Completion")]
     [Tooltip("需要圈住魚累積停留的秒數")]
     [SerializeField] private float requiredHoldTime = 3f;
+    [Tooltip("魚離開範圍時，每秒減少多少進度秒數（而不是直接重置歸零）")]
+    [SerializeField] private float holdDecayRate = 1f;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI hintText; // 顯示「按空白鍵拉」
@@ -203,7 +205,9 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
         }
         else
         {
-            holdTimer = 0f; // 魚離開範圍就重置倒數
+            // 魚離開範圍時，進度緩慢減少而不是直接歸零
+            holdTimer -= holdDecayRate * Time.deltaTime;
+            if (holdTimer < 0f) holdTimer = 0f;
         }
 
         UpdateHintText();
@@ -349,15 +353,10 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
         bool isZh = LocalizationManager.IsZH;
         bool isFishInZone = IsFishInZone();
 
-        if (isFishInZone)
-        {
-            float remaining = Mathf.Max(0f, requiredHoldTime - holdTimer);
-            hintText.text = isZh ? $"按空白鍵拉 {remaining:F1}s" : $"Press Space {remaining:F1}s";
-        }
-        else
-        {
-            hintText.text = isZh ? "按空白鍵拉" : "Press Space";
-        }
+
+        float remaining = Mathf.Max(0f, requiredHoldTime - holdTimer);
+        hintText.text = isZh ? $"按空白鍵拉 {remaining:F1}s" : $"Press Space {remaining:F1}s";
+
     }
 
     // ── Audio ─────────────────────────────────────────────
