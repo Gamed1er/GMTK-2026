@@ -385,5 +385,8 @@ public class FishingMinigame : MonoBehaviour, IMinigamePanel
         progressFillImage.fillAmount = Mathf.Clamp01(progress);
     }
 
-
+    public void Abandon()
+    {
+        MinigameManager.Instance.AbandonMinigame(myInstance);
+    }
 }

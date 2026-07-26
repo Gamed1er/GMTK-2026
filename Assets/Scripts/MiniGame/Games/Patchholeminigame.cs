@@ -206,4 +206,9 @@ public class PatchHoleMinigame : MonoBehaviour, IMinigamePanel
             if (n != null) Destroy(n.gameObject);
         nails.Clear();
     }
+
+    public void Abandon()
+    {
+        MinigameManager.Instance.AbandonMinigame(myInstance);
+    }
 }

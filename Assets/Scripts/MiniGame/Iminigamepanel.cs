@@ -5,4 +5,10 @@
 public interface IMinigamePanel
 {
     void Init(MinigameInstance instance);
+
+    /// <summary>
+    /// 玩家主動放棄這個小遊戲（例如按下「放棄」按鈕）。
+    /// 視同失敗，套用 failureDelta，並關閉面板。
+    /// </summary>
+    void Abandon();
 }

@@ -248,4 +248,9 @@ public class SteeringMinigame : MonoBehaviour, IMinigamePanel, IPointerDownHandl
         else
             directionText.text = isLeft ? $"Turn Left {remainingLoops} more" : $"Turn Right {remainingLoops} more";
     }
+
+    public void Abandon()
+    {
+        MinigameManager.Instance.AbandonMinigame(myInstance);
+    }
 }
