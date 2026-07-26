@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.Collections;
 
 /// <summary>
 /// 主選單 UI 控制器。
@@ -19,6 +20,7 @@ using TMPro;
 ///    ├─ CreditsText      (TMP)
 ///    └─ CloseButton      (Button + TMP)
 /// </summary>
+[RequireComponent(typeof(AudioSource))]
 public class MainMenuUI : MonoBehaviour
 {
     [Header("主選單按鈕")]
@@ -43,7 +45,24 @@ public class MainMenuUI : MonoBehaviour
     [Header("場景")]
     [SerializeField] private string gameSceneName = "Main";
 
+    [Header("Menu BGM")]
+    [SerializeField] private AudioClip menuBGM;
+    [Range(0f, 1f)]
+    [SerializeField] private float menuBGMVolume = 1f;
+    [Tooltip("按下 Play 切場景前的淡出時間（秒），0 表示不淡出直接切換")]
+    [SerializeField] private float fadeOutDuration = 0.5f;
+
+    private AudioSource audioSource;
+
     // ── Lifecycle ─────────────────────────────────────────
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
+        audioSource.clip = menuBGM;
+    }
 
     private void Start()
     {
@@ -68,20 +87,75 @@ public class MainMenuUI : MonoBehaviour
         if (LocalizationManager.Instance != null)
             LocalizationManager.Instance.OnLanguageChanged += RefreshAll;
 
+        // BGM 音量即時同步
+        if (AudioVolumeManager.Instance != null)
+            AudioVolumeManager.Instance.OnBGMChanged += OnBGMVolumeChanged;
+
         RefreshAll();
+        PlayMenuBGM();
     }
 
     private void OnDestroy()
     {
         if (LocalizationManager.Instance != null)
             LocalizationManager.Instance.OnLanguageChanged -= RefreshAll;
+
+        if (AudioVolumeManager.Instance != null)
+            AudioVolumeManager.Instance.OnBGMChanged -= OnBGMVolumeChanged;
+    }
+
+    // ── BGM ───────────────────────────────────────────────
+
+    private void PlayMenuBGM()
+    {
+        if (menuBGM == null || audioSource == null) return;
+
+        float bgmVol = AudioVolumeManager.Instance != null
+            ? AudioVolumeManager.Instance.BGMVolume
+            : 1f;
+
+        audioSource.volume = menuBGMVolume * bgmVol;
+
+        if (!audioSource.isPlaying)
+            audioSource.Play();
+    }
+
+    private void OnBGMVolumeChanged(float vol)
+    {
+        // 淡出過程中不要被音量變化打斷（用 isPlaying 判斷即可，簡單起見直接覆蓋）
+        if (audioSource != null)
+            audioSource.volume = menuBGMVolume * vol;
+    }
+
+    private IEnumerator FadeOutAndLoadScene()
+    {
+        float startVolume = audioSource.volume;
+        float elapsed = 0f;
+
+        while (elapsed < fadeOutDuration)
+        {
+            elapsed += Time.deltaTime;
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, elapsed / fadeOutDuration);
+            yield return null;
+        }
+
+        audioSource.volume = 0f;
+        SceneManager.LoadScene(gameSceneName);
     }
 
     // ── Handlers ──────────────────────────────────────────
 
     private void OnPlay()
     {
-        SceneManager.LoadScene(gameSceneName);
+        if (fadeOutDuration > 0f && audioSource != null && audioSource.isPlaying)
+        {
+            playButton.interactable = false; // 防止淡出期間重複點擊
+            StartCoroutine(FadeOutAndLoadScene());
+        }
+        else
+        {
+            SceneManager.LoadScene(gameSceneName);
+        }
     }
 
     private void OnOpenSettings()
