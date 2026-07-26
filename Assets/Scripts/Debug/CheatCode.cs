@@ -1,47 +1,85 @@
 using UnityEngine;
+using System;
 
 /// <summary>
-/// 開發用作弊碼。
-/// 在遊戲中依序按下 S → K → I → P 即可跳過目前階段（白天/夜晚）。
-/// 掛在任意常駐 GameObject 上（例如 GameManager）。
+/// 開發用作弊碼（支援多組序列同時偵測）。
+///
+/// 目前支援：
+///   S → K → I → P  跳過目前階段（白天/夜晚）
+///   F → O → O → D  食物設成 100000
+///   S → H → I → P  船血量與上限設成 100000
 /// </summary>
 public class CheatCode : MonoBehaviour
 {
-    private static readonly KeyCode[] k_Sequence =
-    {
-        KeyCode.S, KeyCode.K, KeyCode.I, KeyCode.P
-    };
+    // ── 序列定義 ──────────────────────────────────────────
 
-    private int _progress = 0;   // 目前已輸入到第幾個字元
+    private class Sequence
+    {
+        public KeyCode[] keys;
+        public Action    action;
+        public int       progress;
+    }
+
+    private Sequence[] sequences;
+
+    private void Awake()
+    {
+        sequences = new[]
+        {
+            new Sequence
+            {
+                keys   = new[] { KeyCode.S, KeyCode.K, KeyCode.I, KeyCode.P },
+                action = () =>
+                {
+                    GameManager.Instance?.CheatSkipPhase();
+                    Debug.Log("[Cheat] SKIP");
+                }
+            },
+            new Sequence
+            {
+                keys   = new[] { KeyCode.F, KeyCode.O, KeyCode.O, KeyCode.D },
+                action = () =>
+                {
+                    ResourceManager.Instance?.CheatSetFood();
+                    Debug.Log("[Cheat] FOOD");
+                }
+            },
+            new Sequence
+            {
+                keys   = new[] { KeyCode.S, KeyCode.H, KeyCode.I, KeyCode.P },
+                action = () =>
+                {
+                    ResourceManager.Instance?.CheatSetShipHP();
+                    Debug.Log("[Cheat] SHIP");
+                }
+            },
+        };
+    }
+
+    // ── Update ────────────────────────────────────────────
 
     private void Update()
     {
-        // 有任何非預期的字母鍵被按下時，重設進度（避免誤觸累積）
-        if (Input.anyKeyDown)
+        if (!Input.anyKeyDown) return;
+
+        foreach (var seq in sequences)
         {
-            KeyCode expected = k_Sequence[_progress];
+            KeyCode expected = seq.keys[seq.progress];
 
             if (Input.GetKeyDown(expected))
             {
-                _progress++;
-                if (_progress >= k_Sequence.Length)
+                seq.progress++;
+                if (seq.progress >= seq.keys.Length)
                 {
-                    _progress = 0;
-                    Activate();
+                    seq.progress = 0;
+                    seq.action?.Invoke();
                 }
             }
             else
             {
-                // 按錯了：重設，但如果按的剛好是序列第一個，從 1 開始
-                _progress = Input.GetKeyDown(k_Sequence[0]) ? 1 : 0;
+                // 按錯：重設；若剛好是該序列第一個鍵，從 1 開始
+                seq.progress = Input.GetKeyDown(seq.keys[0]) ? 1 : 0;
             }
         }
-    }
-
-    private void Activate()
-    {
-        if (GameManager.Instance == null) return;
-        GameManager.Instance.CheatSkipPhase();
-        Debug.Log("[Cheat] SKIP 作弊碼觸發");
     }
 }

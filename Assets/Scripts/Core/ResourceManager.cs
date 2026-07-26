@@ -100,6 +100,25 @@ public class ResourceManager : MonoBehaviour
         CheckGameOverConditions();
     }
 
+    // ── Cheat API ─────────────────────────────────────────
+
+    /// <summary>作弊：食物設成 100000</summary>
+    public void CheatSetFood()
+    {
+        Food = 100000;
+        OnResourceChanged?.Invoke();
+        Debug.Log("[Cheat] 食物設為 100000");
+    }
+
+    /// <summary>作弊：船血量與上限都設成 100000</summary>
+    public void CheatSetShipHP()
+    {
+        maxShipHP = 100000f;
+        ShipHP    = 100000f;
+        OnResourceChanged?.Invoke();
+        Debug.Log("[Cheat] 船血量與上限設為 100000");
+    }
+
     /// <summary>每天結束時自動扣食物</summary>
     public void ApplyDailyConsumption()
     {
