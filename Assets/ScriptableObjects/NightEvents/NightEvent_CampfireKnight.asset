@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_CampfireKnight
+  m_EditorClassIdentifier: 
+  type: 13
+  titleZH: "\u71DF\u706B\u65C1\u7684\u9A0E\u58EB"
+  titleEN: Knight by the Campfire
+  descriptionZH: "\u4E00\u540D\u9A0E\u58EB\u5728\u5CB8\u908A\u7684\u71DF\u706B\u65C1\u4F11\u606F\uFF0C\u9858\u610F\u4EE5\u6B66\u529B\u63DB\u53D6\u98DF\u7269\u4FDD\u8B77\u4F60\u7684\u8239\u968A\u3002\n\n[\u96C7\u7528]
+    \u8239\u54E1 +1 / \u98DF\u7269 -20\n[\u62D2\u7D55] \u98DF\u7269 -5"
+  descriptionEN: "A lone knight resting by a beachside fire offers to protect the
+    fleet \u2014 for a price in food.\n\n[Hire] Crew +1 / Food -20\n[Decline] Food
+    -5"
+  acceptLabelZH: "\u96C7\u7528"
+  acceptLabelEN: Hire
+  rejectLabelZH: "\u62D2\u7D55"
+  rejectLabelEN: Decline
+  acceptDelta:
+    food: -20
+    crew: 1
+    shipHP: 0
+    navProgress: 0
+  rejectDelta:
+    food: -5
+    crew: 0
+    shipHP: 0
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

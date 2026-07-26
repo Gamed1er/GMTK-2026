@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_WagonRebellion
+  m_EditorClassIdentifier: 
+  type: 29
+  titleZH: "\u5C3E\u7BC0\u8ECA\u5EC2\u7684\u53DB\u4E82"
+  titleEN: The Cargo Deck Rebellion
+  descriptionZH: "\u88AB\u56DA\u7981\u5728\u4E0B\u5C64\u7532\u677F\u7684\u4E00\u6279\u5974\u5DE5\u767C\u52D5\u53DB\u4E82\uFF0C\u4ED6\u5011\u8868\u793A\u9858\u610F\u6548\u529B\u63DB\u53D6\u81EA\u7531\u3002\n\n[\u91CB\u653E]
+    \u8239\u54E1 +6 / \u98DF\u7269 -50\n[\u93AE\u58D3] \u8239\u9AD4 -20 / \u8239\u54E1
+    -1"
+  descriptionEN: "Enslaved workers in the lower deck rise up \u2014 they'll serve
+    willingly if freed.\n\n[Free Them] Crew +6 / Food -50\n[Suppress] Ship HP -20
+    / Crew -1"
+  acceptLabelZH: "\u91CB\u653E"
+  acceptLabelEN: Free Them
+  rejectLabelZH: "\u93AE\u58D3"
+  rejectLabelEN: Suppress
+  acceptDelta:
+    food: -50
+    crew: 6
+    shipHP: 0
+    navProgress: 0
+  rejectDelta:
+    food: 0
+    crew: -1
+    shipHP: -20
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

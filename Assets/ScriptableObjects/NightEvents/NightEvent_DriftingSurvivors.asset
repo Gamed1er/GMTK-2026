@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_DriftingSurvivors
+  m_EditorClassIdentifier: 
+  type: 25
+  titleZH: "\u6F02\u6D41\u7684\u5016\u5B58\u8005"
+  titleEN: Drifting Survivors
+  descriptionZH: "\u4E00\u7FA4\u6F02\u6D41\u7684\u5016\u5B58\u8005\u5728\u6D77\u4E0A\u88AB\u4F60\u767C\u73FE\uFF0C\u4ED6\u5011\u8EAB\u4E0A\u6C92\u6709\u98DF\u7269\uFF0C\u82E5\u52A0\u5165\u4F60\u7684\u8239\u54E1\u6703\u6D88\u8017\u5927\u91CF\u7CE7\u98DF\u3002\n\n[\u6551\u8D77]
+    \u8239\u54E1 +5 / \u98DF\u7269 -60\n[\u7121\u8996] \u98DF\u7269 -5"
+  descriptionEN: 'A group of drifting survivors is spotted at sea. They carry no
+    food, and rescuing them will drain supplies.
+
+
+    [Rescue] Crew +5 / Food -60
+
+    [Ignore]
+    Food -5'
+  acceptLabelZH: "\u6551\u8D77"
+  acceptLabelEN: Rescue
+  rejectLabelZH: "\u7121\u8996"
+  rejectLabelEN: Ignore
+  acceptDelta:
+    food: -60
+    crew: 5
+    shipHP: 0
+    navProgress: 0
+  rejectDelta:
+    food: -5
+    crew: 0
+    shipHP: 0
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

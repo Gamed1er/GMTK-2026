@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_TribeWedding
+  m_EditorClassIdentifier: 
+  type: 10
+  titleZH: "\u7570\u65CF\u806F\u59FB"
+  titleEN: The Tribal Marriage
+  descriptionZH: "\u4E00\u500B\u6D77\u5CF6\u65CF\u7FA4\u8868\u793A\uFF0C\u82E5\u9001\u4E0A\u5E7E\u540D\u8239\u54E1\u5B9A\u5C45\uFF0C\u4ED6\u5011\u4FBF\u63D0\u4F9B\u8C50\u76DB\u98DF\u7269\u4F5C\u70BA\u7B54\u8B1D\u3002\n\n[\u7B54\u61C9]
+    \u98DF\u7269 +30 / \u8239\u54E1 -4\n[\u5A49\u62D2] \u8239\u54E1 -1 / \u98DF\u7269
+    +5"
+  descriptionEN: 'A coastal tribe offers plentiful food if you give them a few crew
+    members to settle.
+
+
+    [Agree] Food +30 / Crew -4
+
+    [Decline] Crew -1 /
+    Food +5'
+  acceptLabelZH: "\u7B54\u61C9"
+  acceptLabelEN: Agree
+  rejectLabelZH: "\u5A49\u62D2"
+  rejectLabelEN: Decline
+  acceptDelta:
+    food: 30
+    crew: -4
+    shipHP: 0
+    navProgress: 0
+  rejectDelta:
+    food: 5
+    crew: -1
+    shipHP: 0
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

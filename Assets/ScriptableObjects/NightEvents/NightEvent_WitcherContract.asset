@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_WitcherContract
+  m_EditorClassIdentifier: 
+  type: 14
+  titleZH: "\u7375\u9B54\u4EBA\u7684\u59D4\u8A17"
+  titleEN: The Monster Hunter's Request
+  descriptionZH: "\u4E00\u540D\u81EA\u7A31\u7375\u9B54\u4EBA\u7684\u7537\u5B50\u62FF\u8457\u4E00\u5305\u91D1\u5E63\u4E0A\u8239\uFF0C\u8868\u793A\u9644\u8FD1\u6709\u6D77\u602A\uFF0C\u9858\u610F\u51FA\u4EFB\u52D9\u63DB\u5F97\u98DF\u7269\u3002\n\n[\u51FA\u64CA]
+    \u98DF\u7269 +30 / \u8239\u54E1 -4\n[\u62D2\u7D55] \u8239\u9AD4 -10"
+  descriptionEN: "A self-proclaimed Witcher boards with gold in hand \u2014 there's
+    a sea monster nearby, and he needs your crew.\n\n[Hunt] Food +30 / Crew -4\n[Refuse]
+    Ship HP -10"
+  acceptLabelZH: "\u51FA\u64CA"
+  acceptLabelEN: Hunt
+  rejectLabelZH: "\u62D2\u7D55"
+  rejectLabelEN: Refuse
+  acceptDelta:
+    food: 30
+    crew: -4
+    shipHP: 0
+    navProgress: 0
+  rejectDelta:
+    food: 0
+    crew: 0
+    shipHP: -10
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

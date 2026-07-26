@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_PaleBlood
+  m_EditorClassIdentifier: 
+  type: 20
+  titleZH: "\u84BC\u767D\u4E4B\u8840"
+  titleEN: The Medical Ship
+  descriptionZH: "\u4E00\u8258\u767D\u8272\u8239\u96BB\u9760\u8FD1\uFF0C\u4E0A\u9762\u6709\u4EBA\u8868\u793A\u80FD\u63D0\u4F9B\u5927\u91CF\u98DF\u7269\u2014\u2014\u4F46\u9700\u8981\u5E7E\u540D\u8239\u54E1\u7559\u5728\u4ED6\u5011\u7684\u8239\u4E0A\u4F5C\u70BA\u300C\u4EA4\u63DB\u300D\u3002\n\n[\u540C\u610F]
+    \u98DF\u7269 +40 / \u8239\u54E1 -5\n[\u62D2\u7D55] \u8239\u54E1 -1"
+  descriptionEN: "A pale vessel draws near \u2014 they offer food aplenty, but want
+    a few crew as \"collateral.\"\n\n[Agree] Food +40 / Crew -5\n[Refuse] Crew -1"
+  acceptLabelZH: "\u540C\u610F"
+  acceptLabelEN: Agree
+  rejectLabelZH: "\u62D2\u7D55"
+  rejectLabelEN: Refuse
+  acceptDelta:
+    food: 40
+    crew: -5
+    shipHP: 0
+    navProgress: 0
+  rejectDelta:
+    food: 0
+    crew: -1
+    shipHP: 0
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

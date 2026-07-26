@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_TiredCraftsman
+  m_EditorClassIdentifier: 
+  type: 7
+  titleZH: "\u75B2\u618A\u7684\u5DE5\u5320"
+  titleEN: The Exhausted Repairman
+  descriptionZH: "\u4E00\u540D\u75B2\u618A\u4E0D\u582A\u7684\u5DE5\u5320\u6F02\u4E0A\u7532\u677F\uFF0C\u8868\u793A\u9858\u610F\u4FEE\u7E55\u8239\u9AD4\uFF0C\u4F46\u689D\u4EF6\u662F\u8981\u5148\u9935\u98FD\u4ED6\u3002\n\n[\u63A5\u53D7]
+    \u8239\u9AD4 +30 / \u98DF\u7269 -40\n[\u62D2\u7D55] \u98DF\u7269 -5"
+  descriptionEN: "An exhausted craftsman drifts onto deck and offers to repair the
+    hull \u2014 but demands to be fed first.\n\n[Accept] Ship HP +30 / Food -40\n[Drive
+    Away] Food -5"
+  acceptLabelZH: "\u63A5\u53D7"
+  acceptLabelEN: Accept
+  rejectLabelZH: "\u8D95\u8D70"
+  rejectLabelEN: Drive Away
+  acceptDelta:
+    food: -40
+    crew: 0
+    shipHP: 30
+    navProgress: 0
+  rejectDelta:
+    food: -5
+    crew: 0
+    shipHP: 0
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

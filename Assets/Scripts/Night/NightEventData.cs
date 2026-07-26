@@ -2,12 +2,40 @@ using UnityEngine;
 
 public enum NightEventType
 {
-    AttackShip,       // 攻擊其他船
-    HireRepairman,    // 修船工
-    SellPartsForCrew, // 賣零件換人
-    SellPartsForFood, // 賣零件換食物
-    TradeCrewForFood, // 拿人換食物
-    CrewAsBomb,       // 拿人當武器
+    AttackShip,          // 攻擊其他船
+    HireRepairman,       // 修船工
+    SellPartsForCrew,    // 賣零件換人
+    SellPartsForFood,    // 賣零件換食物
+    TradeCrewForFood,    // 拿人換食物
+    CrewAsBomb,          // 拿人當武器
+
+    // ── 新增 26 個事件 ──────────────────────────────
+    FogShip,             // 迷霧中的孤船
+    TiredCraftsman,      // 疲憊的工匠
+    SlaveMarket,         // 奴隸市場的交易
+    StarvedChoice,       // 飢餓的抉擇
+    TribeWedding,        // 異族聯姻
+    DesperationBomb,     // 絕望的肉彈
+    HoldSecret,          // 陰暗艙底的秘密
+    CampfireKnight,      // 營火旁的騎士
+    WitcherContract,     // 獵魔人的委託
+    CursedGold,          // 受到詛咒的金幣
+    ArrowKneeGuard,      // 膝蓋中箭的衛兵
+    GollumRing,          // 咕嚕的指環
+    GoldenTreeGift,      // 黃金樹的恩賜
+    WinterComing,        // 凜冬將至
+    PaleBlood,           // 蒼白之血
+    LeapOfFaith,         // 信仰之躍
+    YahahaTrial,         // 呀哈哈的考驗
+    DragonRoast,         // 烤肉的訣竅
+    DraculaFeast,        // 德古拉的盛宴
+    DriftingSurvivors,   // 漂流的倖存者
+    MercenaryDefection,  // 傭兵的投誠
+    SeaWitchCaptives,    // 海妖的俘虜
+    WarBoys,             // 荒野的戰爭男孩
+    WagonRebellion,      // 尾節車廂的叛亂
+    PrisonSurvivors,     // 監獄的倖存者
+    ShelterDwellers,     // 避難所的居民
 }
 
 /// <summary>

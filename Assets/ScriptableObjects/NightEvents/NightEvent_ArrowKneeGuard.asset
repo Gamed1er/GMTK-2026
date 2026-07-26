@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_ArrowKneeGuard
+  m_EditorClassIdentifier: 
+  type: 16
+  titleZH: "\u819D\u84CB\u4E2D\u7BAD\u7684\u885B\u5175"
+  titleEN: The Arrow-Knee Guard
+  descriptionZH: "\u4E00\u540D\u66FE\u662F\u885B\u5175\u7684\u50B7\u60A3\u6F02\u5230\u8239\u908A\uFF0C\u8868\u793A\u53EA\u8981\u88DC\u7D66\u98DF\u7269\u5C31\u80FD\u4FEE\u7406\u8239\u96BB\u3002\n\n[\u63A5\u53D7]
+    \u8239\u9AD4 +20 / \u98DF\u7269 -30\n[\u62D2\u7D55] \u98DF\u7269 -5"
+  descriptionEN: 'A wounded former guard drifts to the ship and offers to repair
+    the hull in exchange for food.
+
+
+    [Accept] Ship HP +20 / Food -30
+
+    [Decline]
+    Food -5'
+  acceptLabelZH: "\u63A5\u53D7"
+  acceptLabelEN: Accept
+  rejectLabelZH: "\u62D2\u7D55"
+  rejectLabelEN: Decline
+  acceptDelta:
+    food: -30
+    crew: 0
+    shipHP: 20
+    navProgress: 0
+  rejectDelta:
+    food: -5
+    crew: 0
+    shipHP: 0
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1

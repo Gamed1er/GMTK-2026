@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61629476597408d8f847e7c115405796, type: 3}
+  m_Name: NightEvent_WinterComing
+  m_EditorClassIdentifier: 
+  type: 19
+  titleZH: "\u51DC\u51AC\u5C07\u81F3"
+  titleEN: Winter Is Coming
+  descriptionZH: "\u7A81\u7136\u7684\u98A8\u66B4\u4F86\u81E8\uFF0C\u6D77\u6D6A\u6253\u58DE\u4E86\u8239\u7684\u4E00\u90E8\u5206\uFF0C\u98DF\u7269\u4E5F\u88AB\u6D77\u6C34\u6D78\u6FD5\u3002\n\n[\u786C\u6490]
+    \u8239\u9AD4 -20 / \u98DF\u7269 -20\n[\u8F49\u5411\u907F\u958B] \u8239\u54E1
+    -2"
+  descriptionEN: "A sudden storm strikes \u2014 waves damage the hull and seawater
+    ruins part of the food stores.\n\n[Push Through] Ship HP -20 / Food -20\n[Change
+    Course] Crew -2"
+  acceptLabelZH: "\u786C\u6490"
+  acceptLabelEN: Push Through
+  rejectLabelZH: "\u8F49\u5411"
+  rejectLabelEN: Change Course
+  acceptDelta:
+    food: -20
+    crew: 0
+    shipHP: -20
+    navProgress: 0
+  rejectDelta:
+    food: 0
+    crew: -2
+    shipHP: 0
+    navProgress: 0
+  spawnWeight: 1
+  canReject: 1
