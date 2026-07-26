@@ -756,7 +756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be82d30159e7e4df48a91b8f74f71de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayDuration: 90
+  dayDuration: 20
   lang: 1
   dayStartMusic: {fileID: 8300000, guid: ed5f7c3c81acbf04a9b67ece593f9864, type: 3}
   dayStartMusicVolume: 1
