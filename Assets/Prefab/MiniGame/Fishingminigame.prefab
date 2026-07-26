@@ -464,9 +464,9 @@ MonoBehaviour:
   riseSpeed: 350
   gravity: 700
   maxFallSpeed: 500
-  baseZoneHeightRatio: 0.35
-  zoneHeightRatioPerDifficulty: 0.05
-  minZoneHeightRatio: 0.15
+  baseZoneHeightRatio: 0.45
+  zoneHeightRatioPerDifficulty: 0.03
+  minZoneHeightRatio: 0.3
   minZoneBottomRatio: 0
   topPaddingRatio: 0.8
   requiredHoldTime: 3
