@@ -94,6 +94,6 @@ public class DaySummaryUI : MonoBehaviour
     {
         panel.SetActive(false);
         // 淡出 → StartNight（NightPhaseUI 監聽 OnNightStarted 後顯示） → 淡入
-        ScreenFader.Instance.FadeOutThenIn(GameManager.Instance.StartNight);
+        ScreenFader.Instance.FadeToNight(GameManager.Instance.DayCount, GameManager.Instance.StartNight);
     }
 }

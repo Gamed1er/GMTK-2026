@@ -15,7 +15,7 @@ MonoBehaviour:
   type: 0
   nameEN: Steering
   nameCN: "\u958B\u8239"
-  countdownDuration: 20
+  countdownDuration: 30
   crewRequiredToComplete: 0
   crewCompletionTime: 5
   successDelta:

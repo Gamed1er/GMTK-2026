@@ -19,7 +19,7 @@ MonoBehaviour:
   crewRequiredToComplete: 1
   crewCompletionTime: 15
   successDelta:
-    food: 40
+    food: 10
     crew: 0
     shipHP: 0
     navProgress: 0

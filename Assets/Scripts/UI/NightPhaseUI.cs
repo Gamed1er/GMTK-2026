@@ -22,9 +22,6 @@ public class NightPhaseUI : MonoBehaviour
     [SerializeField] private Transform   cardContainer;
     [SerializeField] private GameObject  eventCardPrefab;
 
-    [Header("丟人下海")]
-    [SerializeField] private ThrowCrewUI throwCrewUI;
-
     [Header("離開按鈕（右下角，最後才顯示）")]
     [SerializeField] private Button          exitButton;
     [SerializeField] private TextMeshProUGUI exitLabel;
@@ -94,14 +91,8 @@ public class NightPhaseUI : MonoBehaviour
 
     private void OnCardResolved()
     {
-        // 單一事件：選完立刻關 EventPanel，開 ThrowCrewPanel
+        // 事件選完 → 關 EventPanel，直接顯示離開按鈕
         eventPanel.SetActive(false);
-        throwCrewUI.Show(OnThrowCrewDone);
-    }
-
-    private void OnThrowCrewDone()
-    {
-        // 丟人完（確認或跳過）→ 顯示離開按鈕
         exitButton.gameObject.SetActive(true);
     }
 
@@ -109,6 +100,6 @@ public class NightPhaseUI : MonoBehaviour
     {
         nightPanel.SetActive(false);
         exitButton.gameObject.SetActive(false);
-        ScreenFader.Instance.FadeOutThenIn(GameManager.Instance.EndNight);
+        ScreenFader.Instance.FadeToDay(GameManager.Instance.DayCount + 1, GameManager.Instance.EndNight);
     }
 }

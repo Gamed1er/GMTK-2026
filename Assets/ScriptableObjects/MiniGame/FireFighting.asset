@@ -16,7 +16,7 @@ MonoBehaviour:
   nameEN: FireFighting
   nameCN: "\u6EC5\u706B"
   countdownDuration: 20
-  crewRequiredToComplete: 0
+  crewRequiredToComplete: 1
   crewCompletionTime: 5
   successDelta:
     food: 0

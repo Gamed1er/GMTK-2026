@@ -98,7 +98,7 @@ public class ResourceUIManager : MonoBehaviour
             int days = rm.EstimatedDaysOfFood();
             string daysLabel = loc != null ? loc.Get("ui.days") : "days";
             //foodDaysText.text = $"{label}: {days} {daysLabel}";
-            foodDaysText.text = $"{days} days";
+            foodDaysText.text = $"{days} days ({rm.Food})";
         }
 
         // 船員人數
