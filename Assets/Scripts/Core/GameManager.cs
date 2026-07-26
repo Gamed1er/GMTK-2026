@@ -146,11 +146,17 @@ public class GameManager : MonoBehaviour
 
     private void EndDay()
     {
+        // 若已達到航行目標，直接結束遊戲，不進入夜晚
+        if (ResourceManager.Instance.RemainingDays <= 0)
+        {
+            TriggerGameOver(GameOverReason.Victory);
+            return;
+        }
         CurrentPhase = GamePhase.Night;
 
         // 結算畫面出現前先判斷所有未完成任務為失敗
         MinigameManager.Instance?.FailAllOnEndDay();
-
+        
         ResourceManager.Instance.ApplyDailyConsumption();
         OnDayEnded?.Invoke();
     }

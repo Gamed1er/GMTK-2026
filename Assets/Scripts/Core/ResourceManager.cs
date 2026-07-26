@@ -149,7 +149,7 @@ public class ResourceManager : MonoBehaviour
             GameManager.Instance.TriggerGameOver(GameOverReason.NoFood);
         else if (ShipHP <= 0)
             GameManager.Instance.TriggerGameOver(GameOverReason.ShipSunk);
-        else if (NavProgress >= targetDays)
+        else if (NavProgress > targetDays)
             GameManager.Instance.TriggerGameOver(GameOverReason.Victory);
         // CaptainDead 由 MinigameManager 打海盜失敗時主動呼叫
     }
@@ -158,5 +158,6 @@ public class ResourceManager : MonoBehaviour
     {
         NavProgress++;
         OnResourceChanged?.Invoke();
+        CheckGameOverConditions();
     }
 }
