@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minSpawnInterval: 22.5
   maxSpawnInterval: 27.5
-  minSpawnCount: 8
+  minSpawnCount: 10
   maxSpawnCount: 12
   steeringWeight: 1
   fishingWeight: 1
   patchHoleWeight: 5
-  fightPirateWeight: 10
+  fightPirateWeight: 12
   firefightingWeight: 5

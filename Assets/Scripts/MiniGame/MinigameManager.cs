@@ -321,8 +321,8 @@ public class MinigameManager : MonoBehaviour
     private int RollDifficulty()
     {
         int day     = GameManager.Instance.DayCount;
-        int minDiff = Mathf.Min(Mathf.Max(0, day / 2), 3);
-        int maxDiff = Mathf.Min(day + 1, 5);
+        int minDiff = Mathf.Min(Mathf.Max(0, day / 5), 3);
+        int maxDiff = Mathf.Min(day / 3 + 1, 3);
         return UnityEngine.Random.Range(minDiff, maxDiff + 1); // 上限含入
     }
 

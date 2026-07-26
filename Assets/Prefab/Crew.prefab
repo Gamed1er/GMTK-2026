@@ -224,7 +224,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5e04e1645115d8465850466014471b99, type: 3}
   - {fileID: 8300000, guid: af61c1d25bfe7132fbe89750de1e8771, type: 3}
   - {fileID: 8300000, guid: e3e8e1adf88b8e64b9ccb2f8ad32c8f5, type: 3}
-  - {fileID: 8300000, guid: c363e21c6deca717a80999ee29c0b07b, type: 3}
   screamSounds: []
   screamFadeDuration: 1.5
 --- !u!1 &3358104519004810005
