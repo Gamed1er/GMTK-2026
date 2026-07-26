@@ -303,6 +303,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dayDuration: 60
   lang: 0
+  dayStartMusic: {fileID: 8300000, guid: ed5f7c3c81acbf04a9b67ece593f9864, type: 3}
+  dayStartMusicVolume: 1
 --- !u!4 &229837034
 Transform:
   m_ObjectHideFlags: 0
