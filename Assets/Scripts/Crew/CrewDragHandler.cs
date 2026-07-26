@@ -218,6 +218,9 @@ public class CrewDragHandler : MonoBehaviour,
 
         transform.localScale = Vector3.zero;
 
+        // 水花粒子
+        ParticleEffectManager.Instance?.Play("water", transform.position);
+
         // 等音效播完再銷毀（最多等 2 秒）
         float waitTime = audioSource.isPlaying ? Mathf.Min(audioSource.clip != null ? audioSource.clip.length : 0f, 2f) : 0f;
         yield return new WaitForSeconds(waitTime);
