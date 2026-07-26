@@ -167,12 +167,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nailContainer: {fileID: 1907509545386531259}
   nailPrefab: {fileID: 4246528902445618718, guid: 19d3fff823ce72e47a2102a61c45c942, type: 3}
+  holeShapeMask: {fileID: 2800000, guid: dca861a220c986b479aabbbdec846345, type: 3}
+  maskAlphaThreshold: 0.003
   baseMinNails: 3
   baseMaxNails: 3
   nailsPerDifficulty: 1
   minNailSpacing: 50
   edgePadding: 50
   maxPlacementAttempts: 30
+  spawnYOffset: 80
   hitsPerNail: 3
   remainingText: {fileID: 9088146468782098846}
 --- !u!1 &8052902695628940131
