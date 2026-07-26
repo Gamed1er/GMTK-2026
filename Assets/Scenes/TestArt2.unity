@@ -842,6 +842,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dayDuration: 1
   lang: 1
+  dayStartMusic: {fileID: 0}
+  dayStartMusicVolume: 1
 --- !u!4 &229837034
 Transform:
   m_ObjectHideFlags: 0
@@ -915,6 +917,7 @@ MonoBehaviour:
   startCrew: 1
   startShipHP: 100
   maxShipHP: 100
+  targetDays: 10
   foodPerCrewPerDay: 10
 --- !u!114 &229837039
 MonoBehaviour:
