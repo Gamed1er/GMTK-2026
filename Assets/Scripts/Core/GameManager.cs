@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
         PlayDayStartMusic();
         OnPhaseChanged?.Invoke(GamePhase.Day);
         OnDayStarted?.Invoke(DayCount);
-        TriggerGameOver(GameOverReason.Victory); // test
+        //TriggerGameOver(GameOverReason.Victory); // test
     }
 
     private void PlayDayStartMusic()
