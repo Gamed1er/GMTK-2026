@@ -156,4 +156,9 @@ public class FightPirateMinigame : MonoBehaviour, IMinigamePanel
             if (p != null) Destroy(p.gameObject);
         pirates.Clear();
     }
+
+    public void Abandon()
+    {
+        MinigameManager.Instance.AbandonMinigame(myInstance);
+    }
 }

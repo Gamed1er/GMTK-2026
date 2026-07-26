@@ -205,6 +205,8 @@ public class MinigameManager : MonoBehaviour
 
     /// <summary>小遊戲完成（由 UI/玩家呼叫）</summary>
     public void CompleteMinigame(MinigameInstance m) => ResolveMinigame(m, success: true);
+    /// <summary>小遊戲被玩家放棄（由面板呼叫），視同失敗</summary>
+    public void AbandonMinigame(MinigameInstance m) => ResolveMinigame(m, success: false);
 
     /// <summary>依類型取得 MinigameData（供 CrewManager 使用）</summary>
     public MinigameData GetMinigameData(MinigameType type) =>

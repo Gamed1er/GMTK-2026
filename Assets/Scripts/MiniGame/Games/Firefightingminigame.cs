@@ -249,4 +249,9 @@ public class FirefightingMinigame : MonoBehaviour, IMinigamePanel
             if (f != null) Destroy(f.gameObject);
         activeFires.Clear();
     }
+
+    public void Abandon()
+    {
+        MinigameManager.Instance.AbandonMinigame(myInstance);
+    }
 }
