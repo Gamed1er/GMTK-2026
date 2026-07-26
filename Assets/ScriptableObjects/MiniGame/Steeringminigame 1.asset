@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a464f1cb81c7555abbec4264fc4b0b38, type: 3}
-  m_Name: Steeringminigame
+  m_Name: Steeringminigame 1
   m_EditorClassIdentifier: 
   type: 0
   nameEN: TestName
@@ -31,7 +31,7 @@ MonoBehaviour:
   panelPrefab: {fileID: 2982232481384933966, guid: 1e3c2daee9a5fcd4ab93a7cfb8cc1058, type: 3}
   worldObjectPrefab: {fileID: 6451933085745357331, guid: 0d35e522f3a2c07dfae22d02784e065c, type: 3}
   spawnPoints:
-  - {x: 2, y: 2}
+  - {x: -25, y: 0}
   canSpawnRandomly: 1
   spawnWeight: 1
   onlyOneAtATime: 0
