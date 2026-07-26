@@ -9,8 +9,8 @@ public class TilemapManager : MonoBehaviour
 {
     public static TilemapManager Instance { get; private set; }
 
-    [SerializeField] private Tilemap groundTilemap;
-    [SerializeField] private Tilemap wallTilemap;
+    [SerializeField] private Tilemap   groundTilemap;
+    [SerializeField] private Tilemap[] wallTilemaps;   // 把所有 Wall 層都拖進來（含 Wall Inv）
 
     private void Awake()
     {
@@ -26,8 +26,14 @@ public class TilemapManager : MonoBehaviour
 
     public bool IsWall(Vector2 worldPos)
     {
-        Vector3Int cell = wallTilemap.WorldToCell(worldPos);
-        return wallTilemap.HasTile(cell);
+        if (wallTilemaps == null) return false;
+        foreach (var wall in wallTilemaps)
+        {
+            if (wall == null) continue;
+            Vector3Int cell = wall.WorldToCell(worldPos);
+            if (wall.HasTile(cell)) return true;
+        }
+        return false;
     }
 
     /// <summary>從 worldPos 向外 BFS 找最近的 Ground tile 中心點</summary>
