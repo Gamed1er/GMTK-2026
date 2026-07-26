@@ -16,7 +16,7 @@ public class ScreenFader : MonoBehaviour
     [SerializeField] private Image             fadeImage;
     [SerializeField] private TextMeshProUGUI   phaseText;   // 黑幕子物件的 TMP
     [SerializeField] private float             fadeDuration     = 0.5f;
-    [SerializeField] private float             textHoldDuration = 0.8f; // 文字停留時間
+    [SerializeField] private float             textHoldDuration = 1f;  // 文字停留時間
 
     private void Awake()
     {
@@ -46,6 +46,14 @@ public class ScreenFader : MonoBehaviour
         bool zh = LocalizationManager.IsZH;
         string text = zh ? $"第 {dayNumber} 天　夜晚" : $"Day {dayNumber}  —  Night";
         StartCoroutine(FadeRoutine(onMidpoint, text));
+    }
+
+    /// <summary>場景剛載入時用：直接從全黑開始顯示文字，再淡入（第一天用）</summary>
+    public void FadeFromBlack(int dayNumber, Action onMidpoint)
+    {
+        bool zh = LocalizationManager.IsZH;
+        string text = zh ? $"第 {dayNumber} 天　白天" : $"Day {dayNumber}  —  Daytime";
+        StartCoroutine(FadeInOnlyRoutine(onMidpoint, text));
     }
 
     /// <summary>無文字版（保留相容性）</summary>
@@ -78,6 +86,32 @@ public class ScreenFader : MonoBehaviour
         yield return new WaitForSeconds(textHoldDuration);
 
         // 淡入（文字跟著消失）
+        yield return StartCoroutine(FadeWithText(1f, 0f));
+
+        if (phaseText != null) phaseText.gameObject.SetActive(false);
+        fadeImage.gameObject.SetActive(false);
+    }
+
+    /// <summary>場景剛載入，直接從黑幕顯示文字後淡入</summary>
+    private IEnumerator FadeInOnlyRoutine(Action onMidpoint, string label)
+    {
+        // 直接置為全黑（MainMenu 淡出後場景通常已是黑的，這裡做保險）
+        SetAlpha(1f);
+        fadeImage.gameObject.SetActive(true);
+
+        if (phaseText != null && !string.IsNullOrEmpty(label))
+        {
+            phaseText.text = label;
+            Color c = phaseText.color; c.a = 1f; phaseText.color = c;
+            phaseText.gameObject.SetActive(true);
+        }
+
+        // ★ 在第一個 yield 之前呼叫 StartDay()，確保 DayTimer 在同一幀就設好，
+        //   避免 Update() 看到 DayTimer=0 誤觸 EndDay()
+        onMidpoint?.Invoke();
+
+        yield return new WaitForSeconds(textHoldDuration);
+
         yield return StartCoroutine(FadeWithText(1f, 0f));
 
         if (phaseText != null) phaseText.gameObject.SetActive(false);

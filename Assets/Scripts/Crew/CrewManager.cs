@@ -8,6 +8,12 @@ public class CrewManager : MonoBehaviour
 {
     public static CrewManager Instance { get; private set; }
 
+    [Header("Crew Spawning（晚上事件增加船員用）")]
+    [SerializeField] private GameObject crewPrefab;
+    [Tooltip("新船員出現的中心座標")]
+    [SerializeField] private Vector2 spawnCenter = Vector2.zero;
+    [SerializeField] private float spawnSpread = 0.5f;
+
     [Header("Idle Behavior")]
     [Range(0f, 1f)]
     [SerializeField] private float fishingProbability = 0.3f;
@@ -80,12 +86,26 @@ public class CrewManager : MonoBehaviour
 
     public void SyncCrewCount(int newCount)
     {
+        // 減少：刪除多餘船員 GameObject
         while (allCrew.Count > newCount)
         {
             int last = allCrew.Count - 1;
             var crew = allCrew[last];
             allCrew.RemoveAt(last);   // 先移除，避免 OnDisable → UnregisterCrew 重複移除
             Destroy(crew.gameObject);
+        }
+
+        // 增加：生成新船員 GameObject（晚上事件補充船員用）
+        while (allCrew.Count < newCount)
+        {
+            if (crewPrefab == null)
+            {
+                Debug.LogWarning("[CrewManager] crewPrefab 未設定，無法生成新船員！請在 Inspector 指定。");
+                break;
+            }
+            Vector2 pos = spawnCenter + Random.insideUnitCircle * spawnSpread;
+            Instantiate(crewPrefab, pos, Quaternion.identity);
+            // CrewMember.Start() 會自動呼叫 RegisterCrew，不需手動 Add
         }
     }
 
